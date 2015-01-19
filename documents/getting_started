@@ -1,0 +1,19 @@
+Getting Started
+
+- download mysql and mariaDB
+- follow instructions here to create a new user and database: https://wiki.archlinux.org/index.php/MariaDB
+- login with mysql -u 'name' -p
+
+to get started with django:
+https://docs.djangoproject.com/en/1.7/intro/
+
+- create user:
+	manage.py createsuperuser
+- create an app (gives you folder structure with models, views, admin site etc):
+    manage.py startapp 'app'
+    and add 'app' to installed_apps in settings.py
+- create and apply migration after changes in models:
+	manage.py makemigrations
+	(view what changes would be made: manage.py sqlmigrate 'app' '0001')
+	manage.py migrate
+
