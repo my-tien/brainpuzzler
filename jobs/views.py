@@ -1,4 +1,6 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
+from django.shortcuts import render
+
 from django.views.decorators.csrf import csrf_exempt
 
 import hashlib
@@ -9,6 +11,12 @@ from jobs.models import *
 import brainpuzzler.settings as settings
 
 employer_key = '278b1668328e26d793352b3bd40ff35ae9996289d39c444dccdb45b7527f7698'
+
+
+def index(request):
+    context = {'greeting': 'Hello World!'}
+    return render(request, 'jobs/index.html', context)
+
 
 @csrf_exempt
 def job(request, job_id, campaign_id, worker_id):
