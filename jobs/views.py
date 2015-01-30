@@ -20,18 +20,19 @@ def job(request, job_id, campaign_id, worker_id):
     """
     if request.method == 'GET':
         try:
+            submit_path = "http://localhost:8000/jobs/job_1/camp_2/mw_3/"
             requested_job = Job.objects.get(pk=job_id)
             job_archive = requested_job.job_file.name.split('/')[-1][:-6]
             job_for_download = "{0}_{1}_{2}.k.zip".format(job_archive, campaign_id, worker_id)
-            id_card = '{0}\n{1}\n{2}'.format(job_id, campaign_id, worker_id)
+            id_card = '{0}\n{1}\n{2}\n{3}'.format(job_id, submit_path, campaign_id, worker_id)
 
             job_content = BytesIO()
             with zipfile.ZipFile(job_content, 'w') as download_archive, \
                     zipfile.ZipFile(settings.MEDIA_ROOT + requested_job.job_file.name) as job_orig:
-                # add microworker tag containing campaign id and microworker id
+                # add microjob tag containing job id, submit path, campaign id and microworker id
                 annotation = job_orig.read("annotation.xml")
                 download_archive.writestr("annotation.xml", annotation)
-                download_archive.writestr("microworker.txt", id_card)
+                download_archive.writestr("microjob.txt", id_card)
 
             response = HttpResponse(job_content.getvalue(), content_type='application/zip')
             response['Content-Disposition'] = 'attachment; filename=%s' % job_for_download
