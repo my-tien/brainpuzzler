@@ -6,7 +6,7 @@ from io import BytesIO
 import zipfile
 
 from jobs.models import *
-import crowdflow_annotate.settings as settings
+import brainpuzzler.settings as settings
 
 employer_key = '278b1668328e26d793352b3bd40ff35ae9996289d39c444dccdb45b7527f7698'
 
