@@ -28,7 +28,7 @@ def job(request, job_id, campaign_id, worker_id):
     """
     if request.method == 'GET':
         try:
-            submit_path = "http://localhost:8000/jobs/job_1/camp_2/mw_3/"
+            submit_path = "http://brainpuzzler.org/jobs/job_1/camp_2/mw_3/"
             requested_job = Job.objects.get(pk=job_id)
             job_archive = requested_job.job_file.name.split('/')[-1][:-6]
             job_for_download = "{0}_{1}_{2}.k.zip".format(job_archive, campaign_id, worker_id)
@@ -46,7 +46,7 @@ def job(request, job_id, campaign_id, worker_id):
             response['Content-Disposition'] = 'attachment; filename=%s' % job_for_download
             return response
         except Job.DoesNotExist:
-            return HttpResponse("Could not find job with ID %i" % job_id, status=404)
+            return HttpResponse("Could not find job with ID {0}".format(job_id), status=404)
 
     elif request.method == 'POST':
         try:
@@ -61,9 +61,9 @@ def job(request, job_id, campaign_id, worker_id):
             submission.save()
             return HttpResponse(vcode)
         except ValueError:
-            return HttpResponse("The request was not parsed successfully: %s" % request.body, status=400)
+            return HttpResponse("The request was not parsed successfully: {0)".format(request.body), status=400)
         except Job.DoesNotExist:
-            return HttpResponse("Could not find job with ID %i" % job_id, status=404)
+            return HttpResponse("Could not find job with ID {0}".format(job_id), status=404)
 
 
 
