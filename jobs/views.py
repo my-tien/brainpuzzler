@@ -46,7 +46,7 @@ def job(request, job_id, campaign_id, worker_id):
             response['Content-Disposition'] = 'attachment; filename=%s' % job_for_download
             return response
         except Job.DoesNotExist:
-            return HttpResponse("Could not find job with ID {0}".format(job_id), status=404)
+            return error_response(404, "Could not find job with ID {0}".format(job_id))
 
     elif request.method == 'POST':
         try:
@@ -56,15 +56,34 @@ def job(request, job_id, campaign_id, worker_id):
 
             submit_file = request.FILES.get("submit", False)
             if not submit_file:
-                return HttpResponse("No file uploaded.", status=400)
+                return error_response(400, "No file uploaded.")
             submission = Submission(token=vcode, job=finished_job, submit_file=submit_file)
             submission.save()
-            return HttpResponse(vcode)
+            return HttpResponse("verification code: {0}".format(vcode))
         except ValueError:
-            return HttpResponse("The request was not parsed successfully: {0)".format(request.body), status=400)
+            return error_response(400, "The request was not parsed successfully: {0)".format(request.body))
         except Job.DoesNotExist:
-            return HttpResponse("Could not find job with ID {0}".format(job_id), status=404)
+            return error_response(404, "Could not find job with ID {0}".format(job_id))
 
 
+@csrf_exempt
+def job_submit(request, job_id):
+    if request.method == 'POST':
+        try:
+            finished_job = Job.objects.get(pk=job_id)
+            submit_file = request.FILES.get("submit", False)
+            if not submit_file:
+                return error_response(400, "no file uploaded.")
+            submission = Submission(token="none", job=finished_job, submit_file=submit_file)
+            submission.save()
+            return HttpResponse("Your job was successfully submitted.")
+        except ValueError:
+            return error_response(400, "The request was not parsed successfully: {0)".format(request.body))
+        except Job.DoesNotExist:
+            return error_response(404, "Could not find job with ID {0}".format(job_id))
 
 
+def error_response(http_code, message):
+    response = HttpResponse(status=http_code)
+    response['error'] = message
+    return response
