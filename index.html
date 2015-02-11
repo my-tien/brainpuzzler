@@ -2,22 +2,119 @@
 layout: default
 ---
 
-<div class="home">
+<div id="primary">
+    <section id="cover--left">
+        <h1><strong>The Brainpuzzler Project</strong></h1>
+        <p>Brain reconstruction</p>
+    </section>
 
-  <h1 class="page-heading">Posts</h1>
+    <section id="cover--right">
+        <div class="top-skew sideskew"></div>
+        <div class="bottom-skew sideskew"></div>
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+        <a href="#" id="menu_show">
+            <span class="sq_1"></span>
+            <span class="sq_2"></span>
+            <span class="sq_3"></span>
+            <span class="sq_4"></span>
+        </a>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
+        <div class="inside align-center">
+            <div class="inside--cell">
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
+                <h2>Watch our introduction video:</h2>
+
+                <div id="gallery--video">
+                    <a href="https://www.youtube.com/watch?v=BwYAngFIreU" data-poptrox="youtube,800x480" class="image fit thumb"><img src="{{ "/images/thumbnail.png" | prepend: site.baseurl }}" alt="Brainpuzzler Introduction Video"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Content -->
+
+    <section id="content">
+        <div class="inside">
+            <nav id="nav">
+                <ul>
+                    <li><a href="#about" class="button special icon fa-question-circle">About <strong>Brainpuzzler</strong></a></li>
+                    <li><a href="#start" class="button alt icon fa-flag">Getting started</a></li>
+                    <li><a href="#contact" class="button alt icon fa-user">Contact</strong></a></li>
+                </ul>
+            </nav>
+
+            <!-- About -->
+
+            <div id="about" class="part-content">
+                <p>This is the Brainpuzzler project. Our aim is to get a better understanding of brain cell networks.</p>
+
+                <p>With the help of machine learning techniques, we have produced computational attempts on brain reconstruction — a very fast but error-prone approach.</p>
+
+                <p>This is where you step in: Humans have naturally strong pattern recognition capabilities. You can correct the computated results by putting puzzle pieces of it together.</p>
+
+                <p>For this purpose we provide KNOSSOS, a manual brain reconstruction software from the Max Planck Institute for medical research in Heidelberg, Germany.</p>
+
+                <p>Everyone can contribute to this project — without any background in neuroscience!</p>
+            </div>
+
+
+            <!-- Contacts -->
+
+            <div id="start" class="part-content">
+                <h2 class="part-title anims">Get In Touch</h2>
+
+                <form id='contacts_form' action="#" class="contact-list">
+                    <div class="field-row anims">
+                        <input class="form_item" type="text" placeholder="Name" id="name" name="name" />
+                    </div>
+                    <div class="field-row anims">
+                        <input class="form_item" type="email" placeholder="E-mail" id="email" name="email" />
+                    </div>
+                    <div class="field-row row-textarea anims">
+                        <textarea class="form_item" id="message" placeholder="Message" name="message"></textarea>
+                    </div>
+                    <div class="field-row row-submit anims">
+                        <button class="form-submit">Submit<i class="icon-spin2 animate-spin"></i></button>
+                    </div>
+                    <div class="form_results"></div>
+                </form>
+            </div>
+
+
+            <!-- Subscribe -->
+
+            <div id="contact" class="part-content">
+                <div class="row">
+                    <div class="4u">
+                        <img src="{{ "/images/team/my-tien.png" | prepend: site.baseurl }}" alt="My-Tien Nguyen" class="image">
+                    </div>
+
+                    <div class="8u">
+                        <p>This project's developer is <em>My-Tien Nguyen</em>, supported by the <em>Max Planck Institute for Medical Research</em> in <em>Heidelberg, Germany</em>.</p>
+
+                        <p>Write at this e-mail address to get in touch with My-Tien:</p>
+
+                        <p><a href="" class="icon fa-envelope button special">my-tien.nguyen@mpimf-heidelberg.mpg.de</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="site-footer">
+        <ul id="social-links">
+            <li><a href="#"><i class="icon-facebook"></i></a></li><!--
+        --><li><a href="#"><i class="icon-twitter"></i></a></li><!--
+        --><li><a href="#"><i class="icon-gplus-1"></i></a></li><!--
+        --><li><a href="#"><i class="icon-instagramm"></i></a></li><!--
+        --><li><a href="#"><i class="icon-flickr"></i></a></li>
+        </ul>
+    </footer>
+</div>
+
+<div id="background-slideshow">
+<img src="images/cement-vines.jpg" alt="">
+<img src="images/wall-vines.jpg" alt="">
 </div>
