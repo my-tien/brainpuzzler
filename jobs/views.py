@@ -5,6 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 import hashlib
 from io import BytesIO
+import os
+import shutil
+import tempfile
 import zipfile
 
 from jobs.models import *
@@ -27,23 +30,23 @@ def job(request, job_id, campaign_id, worker_id):
     :return: http response or 404 if job with job_id does not exist
     """
     if request.method == 'GET':
-        try:
-            submit_path = "http://brainpuzzler.org/jobs/job_1/camp_2/mw_3/"
-            requested_job = Job.objects.get(pk=job_id)
-            job_archive = requested_job.job_file.name.split('/')[-1][:-6]
-            job_for_download = "{0}_{1}_{2}.k.zip".format(job_archive, campaign_id, worker_id)
-            id_card = '{0}\n{1}\n{2}\n{3}'.format(job_id, submit_path, campaign_id, worker_id)
-
-            job_content = BytesIO()
-            with zipfile.ZipFile(job_content, 'w') as download_archive, \
-                    zipfile.ZipFile(settings.MEDIA_ROOT + requested_job.job_file.name) as job_orig:
-                # add microjob tag containing job id, submit path, campaign id and microworker id
-                annotation = job_orig.read("annotation.xml")
-                download_archive.writestr("annotation.xml", annotation)
-                download_archive.writestr("microjob.txt", id_card)
-
-            response = HttpResponse(job_content.getvalue(), content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename=%s' % job_for_download
+        try:  # we need to edit the microjob.txt to containg the microworker's id and the campaign id
+            # first, copy the job to temporary location
+            job_basename = os.path.basename(Job.objects.get(pk=job_id).job_file.name)
+            job_file = settings.MEDIA_ROOT + job_basename
+            tmp_dir = tempfile.mkdtemp() + "/"  # mkdtemp does not include the trailing slash ...
+            tmp_job = tmp_dir + job_basename
+            shutil.copyfile(job_file, tmp_job)
+            with open(tmp_dir + "microjob.txt", 'w') as microjob_file:  # add personal microjob.txt
+                microjob_file.write('2\nhttp://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/'
+                                    .format(job_id, campaign_id, worker_id))
+            os.system("zip -j {0} {1}microjob.txt".format(tmp_job, tmp_dir))
+            # read the new zip into memory to remove the temporary file
+            with open(tmp_job, 'rb') as tmp_job_file:
+                tmp_job_stream = tmp_job_file.read()
+            shutil.rmtree(tmp_dir)
+            response = HttpResponse(tmp_job_stream, content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename={0}'.format(job_basename)
             return response
         except Job.DoesNotExist:
             return error_response(404, "Could not find job with ID {0}".format(job_id))
