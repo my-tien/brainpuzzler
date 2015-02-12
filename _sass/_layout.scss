@@ -28,32 +28,30 @@ body {
 
 
 #cover--left {
-  left: 0;
-  right: 50%;
-  position: absolute;
-  top: 50%;
+  // left: 0;
+  // right: 50%;
+  // position: absolute;
+  // top: 50%;
+  // text-align: center;
+  // padding-right: 2em;
+  // font-size: 150%;
 
+  display: table;
+  border: 1px solid blue;
+  height: 100%;
+  text-align: center;
+  width: 50%;
 
-  color: $color-accent2-fg;
-  text-align: right;
-  padding-right: 2em;
-  font-size: 150%;
-
-  strong, b {
-    color: $color-accent2-fg-bold;
+  h1, strong {
+    color: white;
   }
 
-  h2, h3, h4, h5, h6 {
-    color: $color-accent2-fg-bold;
-  }
-
-  h1 {
-    color: $color-accent2-fg;
-    font-size: 1.35em;
-    line-height: 1.75em;
-    margin: 0;
+  #footer--left {
+    position: absolute;
+    bottom: 15%;
   }
 }
+
 
 #cover--right {
   @include transition(all .6s ease);
@@ -200,66 +198,17 @@ body {
   }
 }
 
-#start,
 #contact {
   display: none;
 }
 
+
 .part-content {
   margin: 2em 90px 2em 2em;
+  position: absolute;
+  max-height: 100%;
+  overflow: hidden;
 }
-
-// .part-content {
-//   margin: 0 auto;
-//   max-width: 570px;
-//   position: absolute;
-//   top: 199px;
-//   bottom: 80px;
-//   left: 0;
-//   right: 60px;
-//   max-height: 100%;
-//   font-family: 'Open Sans', sans-serif;
-//   color: #fff;
-//   padding: 0px 80px 0;
-//   font-size: 16px;
-//   line-height: 20px;
-//   overflow: hidden;
-//   font-weight: 300;
-// }
-
-// .part-content img {
-//   margin-bottom: 6px;
-//   vertical-align: top;
-//   width: 100%;
-// }
-
-// .part-content p {
-//   margin: 0 0 20px;
-// }
-
-
-// .part-title {
-//   letter-spacing: 5px;
-//   font-size: 38px;
-//   line-height: 48px;
-//   color: #fff;
-//   font-weight: 500;
-//   margin: 0 0 46px 0;
-//   text-align: center;
-//   text-transform: uppercase;
-// }
-
-// .part-content h3 {
-//   font-size: 20px;
-//   line-height: 24px;
-//   font-weight: 500;
-//   letter-spacing: 2px;
-//   margin-bottom: 58px;
-//   text-align: center;
-// }
-
-
-
 
 
 #background-slideshow {
@@ -269,8 +218,7 @@ body {
   left: 0;
   right: 0;
 }
-#background-slideshow:after,
-body.snowflakes:after {
+#background-slideshow:after {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -280,6 +228,7 @@ body.snowflakes:after {
   display: block;
   background: rgba(0, 0, 0, .4);
 }
+
 #background-slideshow .slide {
   position: absolute;
   top: 0;
@@ -288,14 +237,15 @@ body.snowflakes:after {
   right: 0;
   background-position: center center;
   background-size: cover;
-  -webkit-transform: traslateZ(0px);
-  -moz-transform: traslateZ(0px);
-  -ms-transform: traslateZ(0px);
-  -o-transform: traslateZ(0px);
-  transform: traslateZ(0px);
-  -webkit-transform-origin: center center 0;
-  -moz-transform-origin: center center 0;
-  -ms-transform-origin: center center 0;
-  -o-transform-origin: center center 0;
-  transform-origin: center center 0;
 }
+
+
+
+.anims {
+  @include transition(all ease .8s);
+  opacity: 0;
+}
+.anims.visible {
+  opacity: 1;
+}
+

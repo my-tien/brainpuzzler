@@ -132,45 +132,23 @@
         }
 
         if( $('#background-slideshow').length > 0 ) {
-        $('#background-slideshow').kenburnsy({
-            fullscreen: true
-        });
-    }
-
-
+            $('#background-slideshow').kenburnsy({
+                fullscreen: true
+            });
+        }
     });
 })(jQuery);
 
 
-$(window).load(function(){
-    if( $('#countdown-block').length > 0 ) {
-        vertAlign( $('#countdown-block') );
-    }
-});
-
-
-
-
-
-/* Vertical Alignment */
-function vertAlign(elem) {
-    var height = elem.outerHeight();
-
-    elem.css({'marginTop' : -height/2}).fadeIn().addClass('inited');
-}
-
 /* Show steps */
 function steps_show(act) {
-
     if(act) {
         active_part = act;
     }
 
     $(active_part+ ' .anims').each( function(i, el){
-
         setTimeout(function(){
             $(el).addClass('visible');
         }, 100 + ( i * 100 ));
-
     });
 }
