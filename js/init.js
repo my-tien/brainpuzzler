@@ -9,38 +9,13 @@
 	skel.init({
 		reset: 'full',
 		breakpoints: {
-			global: {
-				href: '{{ "/css/style.css" | prepend: site.baseurl }}',
-				containers: 1400,
-				grid: { gutters: ['2em', 0] }
-			},
-			xlarge: {
-				media: '(max-width: 1680px)',
-				href: '{{ "/css/style-xlarge.css" | prepend: site.baseurl }}',
-				containers: 1200
-			},
-			large: {
-				media: '(max-width: 1280px)',
-				href: '{{ "/css/style-large.css" | prepend: site.baseurl }}',
-				containers: 960,
-				grid: { gutters: ['1.5em', 0] },
-				viewport: { scalable: false }
-			},
-			medium: {
-				media: '(max-width: 980px)',
-				href: '{{ "/css/style-medium.css" | prepend: site.baseurl }}',
-				containers: '90%'
-			},
-			small: {
-				media: '(max-width: 736px)',
-				href: '{{ "/css/style-small.css" | prepend: site.baseurl }}',
-				containers: '90%',
-				grid: { gutters: ['1.25em', 0] }
-			},
-			xsmall: {
-				media: '(max-width: 480px)',
-				href: '{{ "/css/style-xsmall.css" | prepend: site.baseurl }}'
-			}
+			global:		{ range: '*', href: '{{ "/css/style.css" | prepend: site.baseurl }}', containers: 1400, grid: { gutters: 50 } },
+			wide:		{ range: '-1680', href: '{{ "/css/style-wide.css | prepend: site.baseurl }}', containers: 1200, grid: { gutters: 40 } },
+			normal:		{ range: '-1280', href: '{{ "/css/style-normal.css | prepend: site.baseurl }}', containers: 960, grid: { gutters: 30 }, viewport: { scalable: false } },
+			narrow:		{ range: '-980', href: '{{ "/css/style-narrow.css | prepend: site.baseurl }}', containers: '95%' },
+			narrower:	{ range: '-840', href: '{{ "/css/style-narrower.css | prepend: site.baseurl }}', containers: '95%!'},
+			mobile:		{ range: '-736', href: '{{ "/css/style-mobile.css | prepend: site.baseurl }}', containers: '90%!', grid: { gutters: 20 } },
+			mobilep:	{ range: '-480', href: '{{ "/css/style-mobilep.css | prepend: site.baseurl }}', containers: '100%' }
 		},
 		// plugins: {
 		// 	layers: {
@@ -93,8 +68,8 @@
             $('#menu_show').click(function() {
                 "use strict";
                 $(this).toggleClass('active');
-                var $feed    = $('#cover--right'),
-                    $content = $('#content');
+                var $feed    = $('#banner__right'),
+                    $content = $('#banner__outside');
 
                 if( !$feed.hasClass('hidden') ) {
                     $feed.addClass('hidden');
@@ -109,8 +84,8 @@
             });
         }
 
-        if( $('#nav').length > 0 ) {
-            $('#nav li a').click(function() {
+        if( $('#nav--sub').length > 0 ) {
+            $('#nav--sub li a').click(function() {
                 "use strict";
 
                 var $th          = $(this),
@@ -131,11 +106,11 @@
             });
         }
 
-        if( $('#background-slideshow').length > 0 ) {
-            $('#background-slideshow').kenburnsy({
-                fullscreen: true
-            });
-        }
+        // if( $('#background-slideshow').length > 0 ) {
+        //     $('#background-slideshow').kenburnsy({
+        //         fullscreen: true
+        //     });
+        // }
     });
 })(jQuery);
 

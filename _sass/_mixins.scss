@@ -10,6 +10,12 @@
     }
 }
 
+@mixin vendor($property, $value) { 
+    @each $vendor in ('-moz-', '-webkit-', '-o-', '-ms-', '') {
+        #{$vendor}#{$property}: #{$vendor}#{$value};
+    }
+}
+
 @mixin vendor-keyframes($name) {
 	@-moz-keyframes #{$name} { @content; }
 	@-webkit-keyframes #{$name} { @content; }

@@ -1,21 +1,25 @@
 ---
 layout: default
 ---
+<div id="header">
+    <nav id="nav"></nav>
+</div>
 
-<div id="primary">
-    <section id="cover--left">
-        <div class="inside--cell">
+<section id="banner">
+    <section id="banner__left">
+        <div class="banner__left--inside">
             <h1><strong>The Brainpuzzler Project</strong></h1>
+            <h2>Connectomics meets micro jobbing</h2>
 
             <div id="footer--left">
-            testi
+                testi
             </div>
         </div>
     </section>
 
-    <section id="cover--right">
-        <div class="top-skew sideskew"></div>
-        <div class="bottom-skew sideskew"></div>
+    <div id="banner__right">
+        <!-- <div class="top-skew sideskew"></div>
+        <div class="bottom-skew sideskew"></div> -->
 
         <a href="#" id="menu_show">
             <span class="sq_1"></span>
@@ -24,66 +28,270 @@ layout: default
             <span class="sq_4"></span>
         </a>
 
-        <div class="inside align-center">
-            <div class="inside--cell">
-
-
-                <h2>Watch our introduction video:</h2>
-
+        <div class="banner__right--inside">
+            <h2>Brainpuzzler <em>Introduction Video</em></h2>
                 <div id="gallery--video">
                     <a href="http://youtu.be/BwYAngFIreU" data-poptrox="youtube,800x480" class="image fit thumb"><img src="{{ "/images/thumbnail.png" | prepend: site.baseurl }}" alt="Brainpuzzler Introduction Video"></a>
                 </div>
-            </div>
+
+            <a href="#" class="button">Learn More</a>
         </div>
-    </section>
+    </div>
+
+<!--
+    <header>
+        <h2>Transparent <em>background</em></h2>
+    </header>
+ -->
 
 
-    <!-- Content -->
 
-    <section id="content">
+    <section id="banner__outside">
         <div class="inside">
-            <nav id="nav">
+            <nav id="nav--sub">
                 <ul>
                     <li><a href="#about" class="button special icon fa-question-circle">About <strong>Brainpuzzler</strong></a></li>
-                    <li><a href="#start" class="button alt icon fa-flag">Getting started</a></li>
                     <li><a href="#contact" class="button alt icon fa-user">Contact</strong></a></li>
                 </ul>
             </nav>
 
             <div id="about" class="part-content">
-                <p>This is the Brainpuzzler project. Our aim is to get a better understanding of brain cell networks.</p>
+                <div class="row 50%">
+                    <div class="12u">
+                        <p>This is the Brainpuzzler project. Our aim is to get a better understanding of brain cell networks.</p>
 
-                <p>With the help of machine learning techniques, we have produced computational attempts on brain reconstruction — a very fast but error-prone approach.</p>
+                        <p>With the help of machine learning techniques, we have produced computational attempts on brain reconstruction — a very fast but error-prone approach.</p>
 
-                <p>This is where you step in: Humans have naturally strong pattern recognition capabilities. You can correct the computated results by putting puzzle pieces of it together.</p>
+                        <p>This is where you step in: Humans have naturally strong pattern recognition capabilities. You can correct the computated results by putting puzzle pieces of it together.</p>
 
-                <p>For this purpose we provide KNOSSOS, a manual brain reconstruction software from the Max Planck Institute for medical research in Heidelberg, Germany.</p>
+                        <p>For this purpose we provide KNOSSOS, a manual brain reconstruction software from the Max Planck Institute for medical research in Heidelberg, Germany.</p>
 
-                <p>Everyone can contribute to this project — without any background in neuroscience!</p>
-
-                <hr>
+                        <p>Everyone can contribute to this project — without any background in neuroscience!</p>
+                    </div>
+                </div>
             </div>
 
             <div id="contact" class="part-content">
-                <div class="row">
-                    <div class="4u">
-                        <img src="{{ "/images/team/my-tien.png" | prepend: site.baseurl }}" alt="My-Tien Nguyen" class="image">
+                <div class="row 50%">
+                    <div class="4u image fit">
+                        <img src="{{ "/images/team/my-tien.png" | prepend: site.baseurl }}" alt="My-Tien Nguyen">
                     </div>
 
                     <div class="8u">
                         <p>This project is developed by My-Tien Nguyen at Max Planck Institute for Medical Research in Heidelberg, Germany. It is for her Bachelor's Thesis in Medical Informatics at Mannheim University of Applied Sciences. </p>
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="12u">
                         <p>You can contact My-Tien through this formular:</p>
-
-                        <p><a href="" class="icon fa-envelope button special">*</a></p>
+                        <form>
+                            <div class="row 50%">
+                                <div class="6u 12u(mobilep)">
+                                    <input type="text" name="name" id="name" placeholder="Name" />
+                                </div>
+                                <div class="6u 12u(mobilep)">
+                                    <input type="email" name="email" id="email" placeholder="Email" />
+                                </div>
+                            </div>
+                            <div class="row 50%">
+                                <div class="12u">
+                                    <textarea name="message" id="message" placeholder="Message" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="row 50%">
+                                <div class="12u">
+                                    <ul class="actions">
+                                        <li><input type="submit" class="button alt" value="Send Message" /></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-</div>
+</section>
 
+<!--
 <div id="background-slideshow">
     <img src="images/cement-vines.jpg" alt="">
     <img src="images/wall-vines.jpg" alt="">
 </div>
+ -->
+<!-- Banner -->
+<!-- <section id="banner">
+    <header>
+        <h2>Transparent <em>background</em></h2>
+    </header>
+</section> -->
+
+<!-- Highlights -->
+<!--     <section class="wrapper style1">
+        <div class="container">
+            <div class="row 200%">
+                <section class="4u 12u(narrower)">
+                    <div class="box highlight">
+                        <i class="icon major fa-paper-plane"></i>
+                        <h3>This Is Important</h3>
+                        <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                    </div>
+                </section>
+                <section class="4u 12u(narrower)">
+                    <div class="box highlight">
+                        <i class="icon major fa-pencil"></i>
+                        <h3>Also Important</h3>
+                        <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                    </div>
+                </section>
+                <section class="4u 12u(narrower)">
+                    <div class="box highlight">
+                        <i class="icon major fa-wrench"></i>
+                        <h3>Probably Important</h3>
+                        <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section> -->
+
+<!--
+    <section class="wrapper style2">
+        <div class="container">
+            <header class="major">
+                <h2>A gigantic heading you can use for whatever</h2>
+                <p>With a much smaller subtitle hanging out just below it</p>
+            </header>
+        </div>
+    </section>
+
+
+    <section class="wrapper style1">
+        <div class="container">
+            <div class="row">
+                <section class="6u 12u(narrower)">
+                    <div class="box post">
+                        <a href="#" class="image left"><img src="images/pic01.jpg" alt="" /></a>
+                        <div class="inner">
+                            <h3>The First Thing</h3>
+                            <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="6u 12u(narrower)">
+                    <div class="box post">
+                        <a href="#" class="image left"><img src="images/pic02.jpg" alt="" /></a>
+                        <div class="inner">
+                            <h3>The Second Thing</h3>
+                            <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section class="6u 12u(narrower)">
+                    <div class="box post">
+                        <a href="#" class="image left"><img src="images/pic03.jpg" alt="" /></a>
+                        <div class="inner">
+                            <h3>The Third Thing</h3>
+                            <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="6u 12u(narrower)">
+                    <div class="box post">
+                        <a href="#" class="image left"><img src="images/pic04.jpg" alt="" /></a>
+                        <div class="inner">
+                            <h3>The Fourth Thing</h3>
+                            <p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="cta" class="wrapper style3">
+        <div class="container">
+            <header>
+                <h2>Are you ready to continue your quest?</h2>
+                <a href="#" class="button">Insert Coin</a>
+            </header>
+        </div>
+    </section>
+
+
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <section class="3u 6u(narrower) 12u$(mobilep)">
+                    <h3>Links to Stuff</h3>
+                    <ul class="links">
+                        <li><a href="#">Mattis et quis rutrum</a></li>
+                        <li><a href="#">Suspendisse amet varius</a></li>
+                        <li><a href="#">Sed et dapibus quis</a></li>
+                        <li><a href="#">Rutrum accumsan dolor</a></li>
+                        <li><a href="#">Mattis rutrum accumsan</a></li>
+                        <li><a href="#">Suspendisse varius nibh</a></li>
+                        <li><a href="#">Sed et dapibus mattis</a></li>
+                    </ul>
+                </section>
+                <section class="3u 6u$(narrower) 12u$(mobilep)">
+                    <h3>More Links to Stuff</h3>
+                    <ul class="links">
+                        <li><a href="#">Duis neque nisi dapibus</a></li>
+                        <li><a href="#">Sed et dapibus quis</a></li>
+                        <li><a href="#">Rutrum accumsan sed</a></li>
+                        <li><a href="#">Mattis et sed accumsan</a></li>
+                        <li><a href="#">Duis neque nisi sed</a></li>
+                        <li><a href="#">Sed et dapibus quis</a></li>
+                        <li><a href="#">Rutrum amet varius</a></li>
+                    </ul>
+                </section>
+                <section class="6u 12u(narrower)">
+                    <h3>Get In Touch</h3>
+                    <form>
+                        <div class="row 50%">
+                            <div class="6u 12u(mobilep)">
+                                <input type="text" name="name" id="name" placeholder="Name" />
+                            </div>
+                            <div class="6u 12u(mobilep)">
+                                <input type="email" name="email" id="email" placeholder="Email" />
+                            </div>
+                        </div>
+                        <div class="row 50%">
+                            <div class="12u">
+                                <textarea name="message" id="message" placeholder="Message" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="row 50%">
+                            <div class="12u">
+                                <ul class="actions">
+                                    <li><input type="submit" class="button alt" value="Send Message" /></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+
+            <ul class="icons">
+                <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+                <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+                <li><a href="#" class="icon fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                <li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
+            </ul>
+
+
+            <div class="copyright">
+                <ul class="menu">
+                    <li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+
+    </div> -->
