@@ -1,14 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-
 from django.views.decorators.csrf import csrf_exempt
 
 import hashlib
-from io import BytesIO
 import os
 import shutil
 import tempfile
-import zipfile
 
 from jobs.models import *
 import brainpuzzler.settings as settings
