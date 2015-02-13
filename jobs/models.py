@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Job(models.Model):
+    chunk_number = models.IntegerField()
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300, blank=True)
     job_file = models.FileField()
@@ -22,7 +23,7 @@ class Submission(models.Model):
 
     token = models.CharField(max_length=100)
     submit_file = models.FileField()
-    job = models.ForeignKey('Job')
+    job = models.ForeignKey('Job', related_name="submission")
     state = models.CharField(choices=JobStates, max_length=2, default=CREATED)
     rating = models.IntegerField(max_length=1, blank=True, null=True)
     upload_date = models.DateTimeField(auto_now_add=True)
