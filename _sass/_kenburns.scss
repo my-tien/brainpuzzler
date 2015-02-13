@@ -1,0 +1,30 @@
+
+
+#background-slideshow {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
+#background-slideshow:after {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: "";
+  display: block;
+  background: rgba(0, 0, 0, .4);
+}
+
+#background-slideshow .slide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-position: center center;
+  background-size: cover;
+}
