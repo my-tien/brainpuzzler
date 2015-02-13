@@ -1,9 +1,10 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 import hashlib
 import os
+import random
 import shutil
 import tempfile
 
@@ -16,6 +17,16 @@ employer_key = '278b1668328e26d793352b3bd40ff35ae9996289d39c444dccdb45b7527f7698
 def index(request):
     context = {'greeting': 'Hello World!'}
     return render(request, 'jobs/index.html', context)
+
+
+def get_job(request, camp_id, mw_id):
+    if request.method == 'GET':
+        try:
+            rand_job = random.choice(Job.objects.filter(submission=None))
+            return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/"
+                            .format(rand_job.number, camp_id, mw_id))
+        except IndexError:
+            return HttpResponse("There are no open jobs left!")
 
 
 @csrf_exempt
