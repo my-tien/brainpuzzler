@@ -68,8 +68,9 @@ def job(request, job_id, campaign_id, worker_id):
             submit_file = request.FILES.get("submit", False)
             if not submit_file:
                 return error_response(400, "No file uploaded.")
-            submission = Submission(token=vcode, job=finished_job, submit_file=submit_file)
-            submission.save()
+            if job_id != -1:  # no need to save tutorial submissions
+                submission = Submission(token=vcode, job=finished_job, submit_file=submit_file)
+                submission.save()
             return HttpResponse("verification code: {0}".format(vcode))
         except ValueError:
             return error_response(400, "The request was not parsed successfully: {0)".format(request.body))
