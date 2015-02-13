@@ -1,21 +1,12 @@
 ---
 layout: default
 ---
-<div id="header">
-   {% include nav.html %}
-</div>
+{% include header.html %}
 
-<section class="wrapper style1">
-    <div class="container">
-        <div id="content">
-            {{ content }}
-        </div>
+<section id="work" class="main style3 primary">
+    <div class="content container">
+        {{ content }}
     </div>
 </section>
 
-<!-- Footer -->
-<div id="footer">
-    <ul class="icons">
-        <li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
-    </ul>
-</div>
+{% include footer.html %}

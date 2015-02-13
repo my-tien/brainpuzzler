@@ -26,16 +26,16 @@ Our goal is to reconstruct as many brain cells, or neurons, as possible. First, 
 
 
 <div class="row">
-<div class="3u image fit">
+<div class="3u">
 Original image
 
-![]({{ "/images/tutorial/neuron_no_mito.PNG" | prepend: site.baseurl }})
+<img src="{{ "/images/tutorial/neuron_no_mito.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
-<div class="3u image fit">
+<div class="3u">
 Highlighted neurons
 
-![]({{ "/images/tutorial/neuron_no_mito_seg.PNG" | prepend: site.baseurl }})
+<img src="{{ "/images/tutorial/neuron_no_mito_seg.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="6u">
@@ -46,12 +46,12 @@ Note, that it is even possible for neurons to enclose other neurons (green and b
 </div>
 
 <div class="row">
-<div class="3u image fit">
-![]({{ "/images/tutorial/neuron_mito.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/neuron_mito.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
-<div class="3u image fit">
-![]({{ "/images/tutorial/neuron_mito_SEG.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/neuron_mito_SEG.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="6u">
@@ -62,12 +62,12 @@ When you see a Mitochondrion, you know that it must be enclosed by a neuron.
 </div>
 
 <div class="row">
-<div class="3u image fit">
-![]({{ "/images/tutorial/neuron_myelin.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/neuron_myelin.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
-<div class="3u image fit">
-![]({{ "/images/tutorial/neuron_myelin_seg.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/neuron_myelin_seg.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="6u">
@@ -77,12 +77,12 @@ Probably, most easily recognizable *are myelinated brain cells* or *axons*. The 
 
 
 <div class="row">
-<div class="3u image fit">
-![]({{ "/images/tutorial/ecs.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/ecs.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
-<div class="3u image fit">
-![]({{ "/images/tutorial/ecs_seg.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/ecs_seg.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="6u">
@@ -109,8 +109,8 @@ Let’s see how we can earn money with this knowledge and KNOSSOS, a free brain 
 
 
 <div class="row">
-<div class="6u image fit">
-![]({{ "/images/tutorial/jobmode_initial.png" | prepend: site.baseurl }})
+<div class="6u">
+<img src="{{ "/images/tutorial/jobmode_initial.png" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="6u">
@@ -123,8 +123,8 @@ The red label in the toolbar reading "`x more left`" shows you how many cases yo
 </div>
 
 <div class="row">
-<div class="4u image fit">
-![]({{ "/images/tutorial/tutorial_pos_z2640.PNG" | prepend: site.baseurl }})
+<div class="4u">
+<img src="{{ "/images/tutorial/tutorial_pos_z2640.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="8u">
@@ -137,8 +137,8 @@ The red label in the toolbar reading "`x more left`" shows you how many cases yo
 5\.  Then press and hold the `[space]` key. This will hide the color overlay to reveal the structure beneath (image right). Remember the note about recognizing moving objects is easy for humans? This is **very** important here. Scroll forwards and
 backwards fast while still holding the space key. You will make out the shape and see, that it is very round. It also contains a mitochondrion. It must be a neuron!
 </div>
-<div class="4u image fit">
-![]({{ "/images/tutorial/tutorial_pos_z2640_hidden.PNG" | prepend: site.baseurl }})
+<div class="4u">
+<img src="{{ "/images/tutorial/tutorial_pos_z2640_hidden.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 </div>
 
@@ -147,18 +147,18 @@ backwards fast while still holding the space key. You will make out the shape an
 6\.  Now again scroll around while pressing and releasing the [space] key repeatedly. This lets you compare the color overlay with the neuron. You will notice, that the shape was not successfully reconstructed:
 </div>
 
-<div class="4u image fit">
-![]({{ "/images/tutorial/tutorial_pos_z2640_neuron_highlight.png" | prepend: site.baseurl }})
+<div class="4u">
+<img src="{{ "/images/tutorial/tutorial_pos_z2640_neuron_highlight.png" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
-<div class="4u image fit">
-![]({{ "/images/tutorial/tutorial_pos_z2640_overlay_errorhighlight.PNG" | prepend: site.baseurl }})
+<div class="4u">
+<img src="{{ "/images/tutorial/tutorial_pos_z2640_overlay_errorhighlight.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 </div>
 
 
 <div class="row">
-<div class="4u image fit">
-![]({{ "/images/tutorial/tutorial_pos_z2640_fixed.PNG" | prepend: site.baseurl }})
+<div class="4u">
+<img src="{{ "/images/tutorial/tutorial_pos_z2640_fixed.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="8u">
@@ -179,8 +179,8 @@ backwards fast while still holding the space key. You will make out the shape an
 10\. Again, the first step is to determine if this is a neuron. Scroll around while pressing/releasing [space]. You will notice the concave shape and thin arms. This most likely is extracellular space. Since we are only interested in neurons, always skip these cases by pressing [N].
 </div>
 
-<div class="4u image fit">
-![]({{ "/images/tutorial/tutorial_ecs_object.PNG" | prepend: site.baseurl }})
+<div class="4u">
+<img src="{{ "/images/tutorial/tutorial_ecs_object.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 </div>
 
@@ -193,12 +193,12 @@ backwards fast while still holding the space key. You will make out the shape an
 
 
 <div class="row">
-<div class="3u image fit">
-![]({{ "/images/tutorial/tutorial_merger_no_overlay_highlighted.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/tutorial_merger_no_overlay_highlighted.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
-<div class="3u image fit">
-![]({{ "/images/tutorial/tutorial_merger_overlay_error_highlighted.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/tutorial_merger_overlay_error_highlighted.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
 <div class="6u">
@@ -207,16 +207,16 @@ We call this a “wrong merger”, it can occur between neurons as well as neuro
 </div>
 
 <div class="row tutorial__box--important">
-<div class="6u image fit">
+<div class="6u">
 When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron’s shape. You don’t need to click “split required >” if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
 </div>
 
-<div class="3u image fit">
-![]({{ "/images/tutorial/no_split1.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/no_split1.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 
-<div class="3u image fit">
-![]({{ "/images/tutorial/no_split2.PNG" | prepend: site.baseurl }})
+<div class="3u">
+<img src="{{ "/images/tutorial/no_split2.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 </div>
 
@@ -228,8 +228,8 @@ When reconstructing neurons, you will notice that puzzle pieces rarely fit perfe
 
 <div class="row">
 
-<div class="6u image fit">
-![]({{ "/images/tutorial/tutorial_verification.PNG" | prepend: site.baseurl }})
+<div class="6u">
+<img src="{{ "/images/tutorial/tutorial_verification.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 <div class="6u">
 Within a week we will validate your work and issue payment for good reconstructions.

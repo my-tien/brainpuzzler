@@ -1,10 +1,37 @@
-#banner {
+#intro {
   z-index: 2;
-  // position: relative;
-  // height: 100%;
-  // min-height: 100%;
-  // overflow: hidden;
 }
+
+.image {
+  border-radius: 4px;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.button.mpi {
+  width: 3em;
+  height: 3em;
+  line-height: 4.5em;
+  padding: 0;
+  background-image: url('images/MPI.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-indent: -10em;
+  overflow: hidden;
+  margin: 0.3em;
+}
+
+
+#contributors, #contact {
+  display: none;
+}
+
 
 #banner__left {
   display: table;
@@ -18,14 +45,15 @@
   vertical-align: middle;
   height: 100%;
   padding-right: 50px;
+
+  span {
+    font-weight: 100;
+  }
 }
 
-.is-loading #banner__right {
-  @include transition(all 0 ease);
-}
 
 #banner__right {
-   @include transition(all .6s ease);
+  @include transition(all .6s ease);
   position: absolute;
   right: 0;
   top: 0;
@@ -33,36 +61,9 @@
   left: 50%;
   width: 50%;
   max-width: 50%;
-  max-height: 100%;
-  background: #212121;
-  background: rgba(27,27,27,0.75);
-  color: #fff;
-  padding: 1.5em 0;
+  // max-height: 100%;
 
-  h2 {
-    display: inline-block;
-    margin: 0;
-    //font-size: 1.25em;
-    font-size: 2.25em;
-    vertical-align: middle;
-
-    em {
-      opacity: 0.75;
-    }
-
-    a {
-      border-bottom-color: transparentize(#fff, 0.5);
-
-      &:hover {
-        border-bottom-color: transparent;
-      }
-    }
-  }
-
-  .button {
-    vertical-align: middle;
-    margin-left: 1em;
-  }
+  // remember to change .menu in style.css
 
   &.hidden {
     @include transition-delay(.3s);
@@ -73,41 +74,6 @@
 }
 
 
-
-.sideskew {
-  @include transform(skew(0, 45deg));
-  @include transition(all .6s ease);
-  position: absolute;
-  margin-top: -30px;
-  top: 0;
-  height: 50%;
-  width: 60px;
-  left: -60px;
-  background: #212121;
-  background: rgba(27,27,27,0.75);
-}
-
-
-
-#banner__right.hidden .sideskew {
-  @include transform(skew(0, 90deg));
-  z-index: -1;
-  left: 0;
-}
-
-#banner__right .bottom-skew {
-  @include transform(skew(0, -45deg));
-  bottom: 0;
-  top: auto;
-  margin-bottom: -30px;
-}
-#banner__right.hidden .sideskew.bottom-skew {
-  @include transform(skew(0, -90deg));
-}
-
-
-
-
 #menu_show {
   margin-top: -10px;
   position: absolute;
@@ -116,76 +82,70 @@
   left: -60px;
   top: 50%;
   z-index: 1;
+
+  span {
+    @include transition(all .4s ease);
+    position: relative;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    display: block;
+    float: left;
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    vertical-align: top;
+  }
+
+  &.active span {
+    @include transform(rotate(45deg));
+  }
+
+  span.sq_1:after {
+    @include transition(opacity .3s);
+    width: 9px;
+    height: 7px;
+    top: 0;
+    opacity: 0;
+    right: -8px;
+    position: absolute;
+    display: block;
+    content: "";
+    background: #fff;
+  }
+
+  &.active span.sq_1:after {
+    @include transition-delay(.2s);
+    opacity: 1;
+  }
 }
-
-#menu_show span {
-  @include transition(all .4s ease);
-  position: relative;
-  margin-bottom: 3px;
-  margin-right: 3px;
-  display: block;
-  float: left;
-  width: 7px;
-  height: 7px;
-  background: #fff;
-  vertical-align: top;
-}
-
-#menu_show.active span {
-  @include transform(rotate(45deg));
-}
-
-#menu_show span.sq_1:after {
-  @include transition(opacity .3s);
-  width: 9px;
-  height: 7px;
-  top: 0;
-  opacity: 0;
-  right: -8px;
-  position: absolute;
-  display: block;
-  content: "";
-  background: #fff;
-}
-
-#menu_show.active span.sq_1:after {
-  @include transition-delay(.2s);
-  opacity: 1;
-}
-
-
 
 
 #banner__outside {
   @include transition(all ease-in-out .8s);
-  position: fixed;
+  position: absolute;
   right: 0;
   left: 100%;
-  width: 50%;
   top: 0;
   bottom: 0;
+  width: 50%;
   background: #2d2e30;
   text-align: left;
   font-size: 80%;
-  color: white;
+
+  &.visible {
+    @include transition-delay(1s);
+    margin-left: 60px;
+    left: 50%;
+  }
 }
 
-#banner__outside.visible {
-  @include transition-delay(1s);
-  margin-left: 60px;
-  left: 50%;
-}
-
-// #banner__outside .inside {
-//   margin: 80px 60px 0 60px;
-//   height: 100%;
-// }
-
-#banner__outside #nav--sub {
+#nav--sub {
   text-align: center;
+  margin: 1em auto;
 
   ul {
     list-style: none;
+    margin: 0;
 
     li {
       display: inline-block;
@@ -193,16 +153,15 @@
   }
 }
 
-#contact {
-  display: none;
-}
-
 .part-content {
-  margin: 2em 90px 2em 2em;
+  // margin: 0 150px 2em 2em;
   position: absolute;
   max-height: 100%;
-  overflow: hidden;
+  // overflow: hidden;
+  // overflow-x: hidden;
   line-height: 1.5em;
+  background: #2d2e30;
+  padding: 0 150px 2em 2em;
 }
 
 
@@ -233,7 +192,6 @@
   background-position: center center;
   background-size: cover;
 }
-
 
 
 .anims {
