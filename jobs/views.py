@@ -22,9 +22,9 @@ def index(request):
 def get_job(request, camp_id, mw_id):
     if request.method == 'GET':
         try:
-            rand_job = random.choice(Job.objects.filter(submission=None))
+            rand_job = random.choice(Job.objects.filter(submission=None).exclude(chunk_number=-1))
             return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/"
-                            .format(rand_job.number, camp_id, mw_id))
+                            .format(rand_job.chunk_number, camp_id, mw_id))
         except IndexError:
             return HttpResponse("There are no open jobs left!")
 
@@ -40,7 +40,7 @@ def job(request, job_id, campaign_id, worker_id):
     if request.method == 'GET':
         try:  # we need to edit the microjob.txt to containg the microworker's id and the campaign id
             # first, copy the job to temporary location
-            job_basename = os.path.basename(Job.objects.get(pk=job_id).job_file.name)
+            job_basename = os.path.basename(Job.objects.get(chunk_number=job_id).job_file.name)
             job_file = settings.MEDIA_ROOT + job_basename
             tmp_dir = tempfile.mkdtemp() + "/"  # mkdtemp does not include the trailing slash ...
             tmp_job = tmp_dir + job_basename
@@ -61,7 +61,7 @@ def job(request, job_id, campaign_id, worker_id):
 
     elif request.method == 'POST':
         try:
-            finished_job = Job.objects.get(pk=job_id)
+            finished_job = Job.objects.get(chunk_number=job_id)
             vcode = 'mw-' + hashlib.sha256("{0}{1}{2}".format(campaign_id, worker_id, employer_key)
                                            .encode('utf-8')).hexdigest()
 
@@ -81,7 +81,7 @@ def job(request, job_id, campaign_id, worker_id):
 def job_submit(request, job_id):
     if request.method == 'POST':
         try:
-            finished_job = Job.objects.get(pk=job_id)
+            finished_job = Job.objects.get(chunk_number=job_id)
             submit_file = request.FILES.get("submit", False)
             if not submit_file:
                 return error_response(400, "no file uploaded.")
