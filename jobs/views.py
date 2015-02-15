@@ -46,8 +46,8 @@ def job(request, job_id, campaign_id, worker_id, rand_key):
             tmp_job = tmp_dir + job_basename
             shutil.copyfile(job_file, tmp_job)
             with open(tmp_dir + "microjob.txt", 'w') as microjob_file:  # add personal microjob.txt
-                microjob_file.write('2\nhttp://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/'
-                                    .format(job_id, campaign_id, worker_id))
+                microjob_file.write('2\nhttp://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}'
+                                    .format(job_id, campaign_id, worker_id, rand_key))
             os.system("zip -j {0} {1}microjob.txt".format(tmp_job, tmp_dir))
             # read the new zip into memory to remove the temporary file
             with open(tmp_job, 'rb') as tmp_job_file:
