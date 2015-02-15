@@ -19,18 +19,18 @@ def index(request):
     return render(request, 'jobs/index.html', context)
 
 
-def get_job(request, camp_id, mw_id):
+def get_job(request, camp_id, mw_id, rand_key):
     if request.method == 'GET':
         try:
             rand_job = random.choice(Job.objects.filter(submission=None).exclude(chunk_number=-1))
-            return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/"
-                            .format(rand_job.chunk_number, camp_id, mw_id))
+            return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}"
+                            .format(rand_job.chunk_number, camp_id, mw_id, rand_key))
         except IndexError:
             return HttpResponse("There are no open jobs left!")
 
 
 @csrf_exempt
-def job(request, job_id, campaign_id, worker_id):
+def job(request, job_id, campaign_id, worker_id, rand_key):
     """
     download a job in form of a .k.zip
     :param request: the http request
@@ -62,7 +62,7 @@ def job(request, job_id, campaign_id, worker_id):
     elif request.method == 'POST':
         try:
             finished_job = Job.objects.get(chunk_number=job_id)
-            vcode = 'mw-' + hashlib.sha256("{0}{1}{2}".format(campaign_id, worker_id, employer_key)
+            vcode = 'mw-' + hashlib.sha256("{0}{1}{2}{3}".format(campaign_id, worker_id, rand_key, employer_key)
                                            .encode('utf-8')).hexdigest()
 
             submit_file = request.FILES.get("submit", False)
