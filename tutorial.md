@@ -163,7 +163,7 @@ backwards fast while still holding the space key. You will make out the shape an
 
 <div class="8u">
 
-7\.  Right click on the two missing puzzle pieces to add them to the reconstruction (image left).
+7\.  Right click on the two missing puzzle pieces to add them to the reconstruction (image left). You can remove accidentally added pieces with \[Shift\] + Right Click.
 
 8\.  Scroll to both ends of your work area to find all mistakes.
 
@@ -227,11 +227,30 @@ When reconstructing neurons, you will notice that puzzle pieces rarely fit perfe
 </div>
 
 <div class="row">
-
 <div class="6u">
 <img src="{{ "/images/tutorial/tutorial_verification.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
 </div>
 <div class="6u">
 Within a week we will validate your work and issue payment for good reconstructions.
+</div>
+</div>
+
+<div class="row">
+<div class="12u">
+KNOSSOS Commands Table
+----------------------
+
+| Command | Function |
+|:--------|:---------|
+| `Mouse scroll` | Move along z-axis
+| `Left click and drag` | Move along x/y-axis
+| `Space` | Hide puzzle overlay
+| `Right click` | Add puzzle piece
+| `Shift + Right click` | Remove puzzle piece
+| `N` | Object finished, go to next one
+| \[<Previous\] button | Go back to previous object
+| \[?>\] button | Wrong piece, go to next
+
+
 </div>
 </div>

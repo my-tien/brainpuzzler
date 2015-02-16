@@ -2,6 +2,7 @@
 
 ---
 
+
 (function($) {
 	$(function() {
         skel.init({
@@ -32,17 +33,6 @@
                     $body.removeClass('is-loading');
                 }, 0);
             });
-
-
-        if($("#menu_toggle").length > 0) {
-            $('#menu_toggle').click(function() {
-                "use strict";
-                $(this).toggleClass('active');
-
-                return false;
-            });
-        }
-
 
 
         if( $('#menu_show').length > 0 ) {
