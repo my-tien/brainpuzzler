@@ -1,3 +1,31 @@
+html, body, main {
+  overflow-x: hidden;
+}
+
+
+#menu_toggle {
+  @include transition(all .6s ease);
+  // margin-top: -10px;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  // left: -60px;
+  left: calc(50% - 40px);
+  top: 50%;
+  z-index: 30;
+  color: #fff;
+
+  &.active {
+    @include transition-delay(.3s);
+    @include transition-duration(1s);
+    @include transform(rotate(180deg));
+  }
+}
+
+#work {
+  padding-top: 5em;
+}
+
 main {
   z-index: 2;
   height: 100%;
@@ -90,8 +118,4 @@ main {
 }
 .anims.visible {
   opacity: 1;
-}
-
-#gallery--video {
-  margin: 2em 0;
 }

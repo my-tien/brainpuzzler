@@ -1,8 +1,6 @@
-/*
-	Big Picture by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+---
+
+---
 
 (function($) {
 	$(function() {
@@ -36,6 +34,14 @@
             });
 
 
+        if($("#menu_toggle").length > 0) {
+            $('#menu_toggle').click(function() {
+                "use strict";
+                $(this).toggleClass('active');
+
+                return false;
+            });
+        }
 
 
 
@@ -92,11 +98,17 @@
             });
         }
 
-        if( $('#background-slideshow').length > 0 ) {
-            $('#background-slideshow').kenburnsy({
-                fullscreen: true
-            });
-        }
+
+        $('#gallery--video').poptrox();
+
+
+        {% if site.deploy == "true" %}
+            if( $('#background-slideshow').length > 0 ) {
+                $('#background-slideshow').kenburnsy({
+                    fullscreen: true
+                });
+            }
+        {% endif %}
     });
 })(jQuery);
 

@@ -3,11 +3,13 @@ title: Brainpuzzler
 email: my-tien.nguyen@mpimf-heidelberg.mpg.de
 description: > # this means to ignore newlines until "baseurl:"
   Brainpuzzler is a project to reconstruct brain cells with the help of micro jobbers.
-baseurl: "/brainpuzzler" # the subpath of your site, e.g. /blog/
+baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://brainpuzzler.org" # the base hostname & protocol for your site
 github_username:  my-tien
 
 # Build settings
+deploy: false
+
 markdown: kramdown
 
 kramdown:
