@@ -24,6 +24,10 @@ main {
   }
 }
 
+.forever {
+  @include animation-iteration-count(3);
+}
+
 #work {
   padding-top: 5em;
 }
@@ -57,7 +61,6 @@ main {
 }
 
 #cover__outside {
-  @include transition(all ease-in-out .8s);
   position: absolute;
   right: 0;
   top: 0;
@@ -67,33 +70,27 @@ main {
   max-width: 50%;
   background: #2d2e30;
   z-index: 1;
-  font-size: 80%;
   color: #fff;
   line-height: 1.5em;
   padding: 2em 2.5em 2em 2em;
-
-  &.visible {
-    @include transition-delay(1s);
-    left: 50%;
-  }
+  display: none;
 }
 
 #nav--sub {
   ul {
     list-style: none;
+    text-align: center;
 
     li {
       display: inline-block;
     }
   }
+
+  .button {
+    color: #fff;
+  }
 }
 
-.part-content {
-  position: absolute;
-  top: 4em;
-  left: 1em;
-  right: 4em;
-}
 
 #contributors, #contact {
   display: none;

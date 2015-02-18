@@ -6,17 +6,15 @@
     <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
     <meta name="description" content="{{ site.description }}">
 
-    <link rel="stylesheet" href="{{ "/css/style.css" | prepend: site.baseurl }}">
-    <link rel="stylesheet" href="{{ "/css/animate.css" | prepend: site.baseurl }}">
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-
     <script src="{{ "/js/jquery.min.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/js/skel.min.js" | prepend: site.baseurl }}"></script>
-
-        <script src="{{ "/js/lua.min.js" | prepend: site.baseurl }}" type="text/javascript" charset="utf-8"></script>
-
+    <script src="{{ "/js/lua.min.js" | prepend: site.baseurl }}" type="text/javascript" charset="utf-8"></script>
     <script src="{{ "/js/jquery.poptrox.min.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/js/jquery.kenburnsy.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/js/velocity.min.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/js/init.js" | prepend: site.baseurl }}"></script>
+
+    <link rel="stylesheet" href="{{ "/css/style.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ "/css/animate.css" | prepend: site.baseurl }}">
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
 </head>

@@ -44,13 +44,13 @@
     var $preloadImage = function (url) {
       var loader = function (deferred) {
         var image = new Image();
-     
+
         image.onload = loaded;
         image.onerror = errored;
         image.onabort = errored;
-     
+
         image.src = url;
-     
+
         function loaded() {
           unbindEvents();
           // HACK for Webkit: 'load' event fires before props are set
@@ -169,7 +169,7 @@
 
       /**
        *
-       * next() switches to the next slide. 
+       * next() switches to the next slide.
        * Index cycles from top to bottom, because visible slide is the last node.
        *
       */

@@ -7,14 +7,14 @@ local setTimeout = __js"setTimeout"
 local window = __js"window"
 
 
--- jq("body").addClass("is-loading")
+jq("body").addClass("is-loading")
 
 
--- jq(window).on("load", function()
---     window.setTimeout(function()
---         jq("body").removeClass("is-loading")
---     end, 0)
--- end)
+jq(window).on("load", function()
+    window.setTimeout(function()
+        jq("body").removeClass("is-loading")
+    end, 0)
+end)
 
 
 if jq("#menu_show").length > 0 then
@@ -23,6 +23,7 @@ if jq("#menu_show").length > 0 then
         outside = jq("#cover__outside")
 
         jq("#menu_show").toggleClass("active")
+        jq("#menu_show").toggleClass("forever")
         jq("#cover__right").addClass("bounceOutRight")
 
         if not right.hasClass("hidden") then
@@ -32,10 +33,13 @@ if jq("#menu_show").length > 0 then
                 right.css("display", "none")
             end, 1400)
 
-            outside.addClass("visible")
+            outside.css("display", "block")
 
         else
-            outside.removeClass("visible")
+            -- outside.removeClass("visible")
+            setTimeout(function()
+                outside.css("display", "none")
+            end, 1000)
             right.removeClass("hidden")
             right.removeClass("bounceOutRight")
             right.addClass("bounceInRight")
@@ -44,76 +48,24 @@ if jq("#menu_show").length > 0 then
     end)
 end
 
--- if jq("#menu_show").length >= 1 then
---     jq("#menu_show").click(function()
---         jq("#menu_show").toggleClass("active")
 
---         right = jq("#cover__right")
---         outside = jq("#cover__outside")
+if jq("#nav--sub").length > 0 then
+    jq("#nav--sub li a").click(function()
+        th = jq(__js"this")
+        current_part = th.attr("href")
 
---         if not right.hasClass("hidden") then
---             right.addClass("hidden")
+        jq("#about").css("display", "none")
+        jq("#contributors").css("display", "none")
+        jq("#contact").css("display", "none")
 
+        jq(current_part).css("display", "block")
 
---             setTimeout(function()
---                 right.css("display", "none")
---             end, 1400)
+        return false
+    end)
+end
 
---             outside.addClass("visible")
+jq("#gallery--video").poptrox();
 
---         else
---             outside.removeClass("visible")
---         right.css("display", "block")
---         setTimeout(function()
---             right.removeClass("hidden")
-
---             end, 100)
---         end
-
---         return false
-
---     end)
--- end
-
--- function steps_show(act)
---     if act then
---         active_part = act
---     end
-
---     jq(active_part .. " .anims").each(function(i, el)
---         setTimeout(function()
---             jq(el).addClass("visible")
---         end, 100 + (i* 100))
---     end)
--- end
-
-
-
--- if jq("#nav--sub").length > 0 then
---     jq("#nav--sub li a").click(function()
---         th = jq(__js"this")
---         current_part = th.attr("href")
-
---         if not th.hasClass("special") then
---             th.parents("ul").find("li a").removeClass("special")
---             th.addClass("special")
---             jq(".part-content").stop(true, true).fadeOut()
---             jq(current_part).stop(true, true).fadeIn()
---         end
-
---             steps_show(current_part)
-
---         return false
---     end)
--- end
-
-
-
--- jq("#gallery--video").poptrox();
-
-
--- {% if site.deploy == "true" %}
---     if jq("#background-slideshow").length > 0 then
---         jq("#background-slideshow").kenburnsy{ fullscreen=true }
---     end
--- {% endif %}
+if jq("#background-slideshow").length > 0 and jq(window).height() > 800 then
+    jq("#background-slideshow").kenburnsy{ fullscreen=true }
+end

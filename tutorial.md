@@ -101,9 +101,12 @@ Brain Reconstruction with **Knossos**
 
 Let's see how we can earn money with this knowledge and KNOSSOS, a free brain reconstruction tool:
 
-1\.  Download **Knossos** (you will need it for all brainpuzzler jobs):
-2\.  Download the tutorial job:
-3\.  Start **Knossos** and drag the job into the KNOSSOS window. You should see something like this now:
+<ol start="1">
+<li>Download <strong>Knossos</strong> (you will need it for all brainpuzzler jobs): <a href="../../downloads/win32-Setup-Knossos 4.1.exe" class="button">Windows 32bit</a>, <a href="../../downloads/win64-Setup-Knossos 4.1.exe" class="button">Windows 64bit</a></li>
+<li>Download the tutorial job. The link can be found in our campaign description.</li>
+<li>Start <strong>Knossos</strong> and drag the job into the <strong>Knossos</strong> window. You should see something like this now:</li>
+</ol>
+
 </div>
 </div>
 
@@ -118,7 +121,7 @@ Let's see how we can earn money with this knowledge and KNOSSOS, a free brain re
 
 **Your job is to analyze the reconstruction and correct mistakes in it.**
 
-The red label in the toolbar reading "`x more left`" shows you how many cases you have to look at.
+The red label in the toolbar reading `x more left` shows you how many cases you have to look at.
 </div>
 </div>
 
@@ -128,14 +131,21 @@ The red label in the toolbar reading "`x more left`" shows you how many cases yo
 </div>
 
 <div class="8u">
-4\.  In the toolbar you see your current position in x, y and z coordinates. Scroll your mouse forward until you are at `z = 2640` (image left).
+
+<ol start="4">
+<li>In the toolbar you see your current position in x, y and z coordinates. Scroll your mouse forward until you are at <code>z = 2640</code> (image left).</li>
+</ol>
+
 </div>
 </div>
 
 <div class="row">
 <div class="8u">
-5\.  Then press and hold the `[space]` key. This will hide the color overlay to reveal the structure beneath (image right). Remember the note about recognizing moving objects is easy for humans? This is **very** important here. Scroll forwards and
-backwards fast while still holding the space key. You will make out the shape and see, that it is very round. It also contains a mitochondrion. It must be a neuron!
+
+<ol start="5">
+<li>Then press and hold the <code>Space</code> key. This will hide the color overlay to reveal the structure beneath (image right). Remember the note about recognizing moving objects is easy for humans? This is <em>very</em> important here. Scroll forwards and backwards fast while still holding the <code>Space</code> key. You will make out the shape and see, that it is very round. It also contains a mitochondrion. It must be a neuron!</li>
+</ol>
+
 </div>
 <div class="4u">
 <img src="{{ "/images/tutorial/tutorial_pos_z2640_hidden.PNG" | prepend: site.baseurl }}" alt="" class="image fit">
@@ -144,7 +154,11 @@ backwards fast while still holding the space key. You will make out the shape an
 
 <div class="row">
 <div class="4u">
-6\.  Now again scroll around while pressing and releasing the [space] key repeatedly. This lets you compare the color overlay with the neuron. You will notice, that the shape was not successfully reconstructed:
+
+<ol start="6">
+<li>Now again scroll around while pressing and releasing the <code>Space</code> key repeatedly. This lets you compare the color overlay with the neuron. You will notice, that the shape was not successfully reconstructed:</li>
+</ol>
+
 </div>
 
 <div class="4u">
@@ -163,20 +177,25 @@ backwards fast while still holding the space key. You will make out the shape an
 
 <div class="8u">
 
-7\.  Right click on the two missing puzzle pieces to add them to the reconstruction (image left). You can remove accidentally added pieces with \[Shift\] + Right Click.
-
-8\.  Scroll to both ends of your work area to find all mistakes.
-
-    Tip: There is still one more missing piece around z = 2650.
-
-9\.  When satisfied with this reconstruction, press the [N] key for "next". This will transport you to the next to-do item.
+<ol start="7">
+<li>Right click on the two missing puzzle pieces to add them to the reconstruction (image left). You can remove accidentally added pieces with <code>Shift + Right Click</code>.</li>
+<li>
+<p>Scroll to both ends of your work area to find all mistakes.</p>
+<p>Hint: There is still one more missing piece around <code>z = 2650</code>.</p>
+</li>
+<li>When satisfied with this reconstruction, press the <code>N</code> key for "next". This will transport you to the next to-do item.</li>
+</ol>
 
 </div>
 </div>
 
 <div class="row">
 <div class="8u">
-10\. Again, the first step is to determine if this is a neuron. Scroll around while pressing/releasing [space]. You will notice the concave shape and thin arms. This most likely is extracellular space. Since we are only interested in neurons, always skip these cases by pressing [N].
+
+<ol start="10">
+<li>Again, the first step is to determine if this is a neuron. Scroll around while pressing/releasing <code>Space</code>. You will notice the concave shape and thin arms. This most likely is extracellular space. Since we are only interested in neurons, always skip these cases by pressing <code>N</code>.</li>
+</ol>
+
 </div>
 
 <div class="4u">
@@ -187,7 +206,11 @@ backwards fast while still holding the space key. You will make out the shape an
 
 <div class="row">
 <div class="12u">
-11\. Examine the next case like the others before with scrolling and the [space] key. You will soon come to the conclusion, that this is no extracellular space. But still something is odd. It looks like the reconstruction has accidentally merged two neurons together!
+
+<ol start="11">
+<li>Examine the next case like the others before with scrolling and the <code>Space</code> key. You will soon come to the conclusion, that this is no extracellular space. But still something is odd. It looks like the reconstruction has accidentally merged two neurons together!</li>
+</ol>
+
 </div>
 </div>
 
@@ -202,13 +225,13 @@ backwards fast while still holding the space key. You will make out the shape an
 </div>
 
 <div class="6u">
-We call this a "wrong merger", it can occur between neurons as well as neurons and extracellular space. If you encounter this, click on the button "? >" in the toolbar. KNOSSOS remembers your note and provides you with the next case.
+We call this a "wrong merger", it can occur between neurons as well as neurons and extracellular space. If you encounter this, click on the button `? >` in the toolbar. **Knossos** remembers your note and provides you with the next case.
 </div>
 </div>
 
 <div class="row tutorial__box--important">
 <div class="6u">
-When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron's shape. You don't need to click "? >" if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
+When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron's shape. You don't need to click `? >` if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
 </div>
 
 <div class="3u">
@@ -222,7 +245,10 @@ When reconstructing neurons, you will notice that puzzle pieces rarely fit perfe
 
 <div class="row">
 <div class="12u">
-12\. This time, there is nothing left to do, so KNOSSOS asks you to submit your work. Press "Yes" and wait a bit until a message box appears with your personal verification code (image below). Copy it and enter it on microworkers.com.
+
+<ol start="12">
+<li>This time, there is nothing left to do, so <strong>Knossos</strong> asks you to submit your work. Press "Yes" and wait a bit until a message box appears with your personal verification code (image below). Copy it and enter it on <a href="http://www.microworkers.com">microworkers.com</a>.</li>
+</ol>
 
 </div>
 
@@ -248,8 +274,8 @@ KNOSSOS Commands Table
 | `Right click` | Add puzzle piece
 | `Shift + Right click` | Remove puzzle piece
 | `N` | Object finished, go to next one
-| \[<Previous\] button | Go back to previous object
-| \[?>\] button | Wrong piece, go to next
+| `< Previous` button | Go back to previous object
+| `? >` button | Wrong piece, go to next
 
 
 </div>
