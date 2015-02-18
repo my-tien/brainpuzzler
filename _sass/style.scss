@@ -391,3 +391,9 @@
     margin-top: 2em;
   }
 }
+
+
+
+.forever {
+  @include animation-iteration-count(3);
+}

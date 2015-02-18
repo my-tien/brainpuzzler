@@ -7,31 +7,6 @@ main {
   height: 100%;
 }
 
-#menu_toggle {
-  @include transition(all .6s ease);
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  left: calc(50% - 40px);
-  top: 50%;
-  z-index: 30;
-  color: #fff;
-
-  &.active {
-    @include transition-delay(.3s);
-    @include transition-duration(1s);
-    @include transform(rotate(180deg));
-  }
-}
-
-.forever {
-  @include animation-iteration-count(3);
-}
-
-#work {
-  padding-top: 5em;
-}
-
 #cover__left {
   display: table;
   width: 50%;
@@ -76,30 +51,15 @@ main {
   display: none;
 }
 
-#nav--sub {
-  ul {
-    list-style: none;
-    text-align: center;
-
-    li {
-      display: inline-block;
-    }
-  }
-
-  .button {
-    color: #fff;
-  }
-}
-
-
 #contributors, #contact {
   display: none;
 }
 
-.anims {
-  @include transition(all ease .8s);
-  opacity: 0;
-}
-.anims.visible {
-  opacity: 1;
-}
+
+// .anims {
+//   @include transition(all ease .8s);
+//   opacity: 0;
+// }
+// .anims.visible {
+//   opacity: 1;
+// }
