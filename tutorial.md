@@ -13,9 +13,9 @@ Hello,
 
 And thanks for your interest! In this tutorial you will learn how to help researchers uncover the mysteries of the brain with just a few mouse clicks.
 
-If you haven’t already done so, please follow the 1-minute introductory video to understand, what this is all about:
+If you haven't already done so, please follow the 1-minute introductory video to understand, what this is all about: [Brainpuzzler Introduction](http://youtu.be/letdtsUgIe4?rel=0)
 
-**Important:** the brainpuzzler jobs on microworkers.com require this tutorial as a prerequisite!
+**Important:** the brainpuzzler jobs on [microworkers.com](http://www.microworkers.com) require this tutorial as a prerequisite!
 
 Recognizing brain cells
 -----------------------
@@ -94,12 +94,12 @@ Being able to recognize extracellular space helps you to recognize neurons!
 
 <div class="row">
 <div class="12u">
-While comparing the images you might feel unconfident about recognizing the shapes so easily. Don’t worry! When provided with moving images, your brain will automatically recognize connected objects.
+While comparing the images you might feel unconfident about recognizing the shapes so easily. Don't worry! When provided with moving images, your brain will automatically recognize connected objects.
 
 Brain Reconstruction with **Knossos**
 -------------------------------------
 
-Let’s see how we can earn money with this knowledge and KNOSSOS, a free brain reconstruction tool:
+Let's see how we can earn money with this knowledge and KNOSSOS, a free brain reconstruction tool:
 
 1\.  Download **Knossos** (you will need it for all brainpuzzler jobs):
 2\.  Download the tutorial job:
@@ -169,7 +169,7 @@ backwards fast while still holding the space key. You will make out the shape an
 
     Tip: There is still one more missing piece around z = 2650.
 
-9\.  When satisfied with this reconstruction, press the [N] key for “next”. This will transport you to the next to-do item.
+9\.  When satisfied with this reconstruction, press the [N] key for "next". This will transport you to the next to-do item.
 
 </div>
 </div>
@@ -202,13 +202,13 @@ backwards fast while still holding the space key. You will make out the shape an
 </div>
 
 <div class="6u">
-We call this a “wrong merger”, it can occur between neurons as well as neurons and extracellular space. If you encounter this, click on the button “? >” in the toolbar. KNOSSOS remembers your note and provides you with the next case.
+We call this a "wrong merger", it can occur between neurons as well as neurons and extracellular space. If you encounter this, click on the button "? >" in the toolbar. KNOSSOS remembers your note and provides you with the next case.
 </div>
 </div>
 
 <div class="row tutorial__box--important">
 <div class="6u">
-When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron’s shape. You don’t need to click “? >” if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
+When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron's shape. You don't need to click "? >" if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
 </div>
 
 <div class="3u">
@@ -222,7 +222,7 @@ When reconstructing neurons, you will notice that puzzle pieces rarely fit perfe
 
 <div class="row">
 <div class="12u">
-12\. This time, there is nothing left to do, so KNOSSOS asks you to submit your work. Press “Yes” and wait a bit until a message box appears with your personal verification code (image below). Copy it and enter it on microworkers.com.
+12\. This time, there is nothing left to do, so KNOSSOS asks you to submit your work. Press "Yes" and wait a bit until a message box appears with your personal verification code (image below). Copy it and enter it on microworkers.com.
 
 </div>
 

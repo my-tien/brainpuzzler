@@ -2,14 +2,16 @@ html, body, main {
   overflow-x: hidden;
 }
 
+main {
+  z-index: 2;
+  height: 100%;
+}
 
 #menu_toggle {
   @include transition(all .6s ease);
-  // margin-top: -10px;
   position: absolute;
   width: 20px;
   height: 20px;
-  // left: -60px;
   left: calc(50% - 40px);
   top: 50%;
   z-index: 30;
@@ -26,16 +28,11 @@ html, body, main {
   padding-top: 5em;
 }
 
-main {
-  z-index: 2;
-  height: 100%;
-}
-
 #cover__left {
   display: table;
   width: 50%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   text-align: center;
   color: #fff;
 
@@ -45,9 +42,7 @@ main {
   }
 }
 
-
 #cover__right {
-  @include transition(all .6s ease);
   position: relative;
   right: 0;
   top: 0;
@@ -58,15 +53,8 @@ main {
   background: #fff;
   padding: 2em;
   z-index: 10;
-
-  &.hidden {
-    @include transition-delay(.3s);
-    @include transition-duration(1s);
-    left: 100%;
-  }
+  min-height: 100%;
 }
-
-
 
 #cover__outside {
   @include transition(all ease-in-out .8s);
@@ -89,7 +77,6 @@ main {
     left: 50%;
   }
 }
-
 
 #nav--sub {
   ul {

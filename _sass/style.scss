@@ -65,15 +65,15 @@
 		font-style: italic;
 	}
 
-	a {
-		color: #98c593;
+	// a {
+	// 	color: #98c593;
 
-		-moz-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
-		-webkit-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
-		-o-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
-		-ms-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
-		transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
-	}
+	// 	-moz-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
+	// 	-webkit-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
+	// 	-o-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
+	// 	-ms-transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
+	// 	transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
+	// }
 
 	sub {
 		position: relative;
@@ -321,134 +321,6 @@
 			form ::-moz-focus-inner {
 				border: 0;
 			}
-
-	/* Table */
-
-		table {
-			width: 100%;
-		}
-
-			table.default {
-				width: 100%;
-			}
-
-				table.default tbody tr:nth-child(2n+2) {
-					background: #f4f4f4;
-				}
-
-				table.default td {
-					padding: 0.5em 1em 0.5em 1em;
-				}
-
-				table.default th {
-					text-align: left;
-					font-weight: 900;
-					padding: 0.5em 1em 0.5em 1em;
-				}
-
-				table.default thead {
-					background: #444;
-					color: #fff;
-				}
-
-				table.default tfoot {
-					background: #eee;
-				}
-
-				table.default tbody {
-				}
-
-	/* Button */
-
-		input[type="button"],
-		input[type="submit"],
-		input[type="reset"],
-		.button {
-			background-color: #98c593;
-			border: 0;
-			border-radius: 3.5em;
-			color: #fff;
-			cursor: pointer;
-			display: inline-block;
-			height: 3.5em;
-			line-height: 3.5em;
-			outline: 0;
-			padding: 0 2em 0 2em;
-			position: relative;
-			text-align: center;
-			text-decoration: none;
-
-			-moz-appearance: none;
-			-webkit-appearance: none;
-			-o-appearance: none;
-			-ms-appearance: none;
-			appearance: none;
-
-			-moz-transition: all 0.2s ease-in-out;
-			-webkit-transition: all 0.2s ease-in-out;
-			-o-transition: all 0.2s ease-in-out;
-			-ms-transition: all 0.2s ease-in-out;
-			transition: all 0.2s ease-in-out;
-		}
-
-			.button.down {
-				width: 5em;
-				height: 5em;
-				line-height: 4.5em;
-				padding: 0;
-				background-image: url('images/dark-arrow.svg');
-				background-position: center center;
-				background-repeat: no-repeat;
-				text-indent: -10em;
-				overflow: hidden;
-			}
-
-				.button.down.anchored {
-					bottom: 0;
-					border-bottom: 0;
-					border-radius: 3em 3em 0 0;
-					height: 4.5em;
-					margin-left: -2.5em;
-				}
-
-			.button.anchored {
-				position: absolute;
-				left: 50%;
-			}
-
-			input[type="button"]:hover,
-			input[type="submit"]:hover,
-			input[type="reset"]:hover,
-			.button:hover {
-				background-color: #a8d5a3;
-			}
-
-			input[type="button"]:active,
-			input[type="submit"]:active,
-			input[type="reset"]:active,
-			.button:active {
-				background-color: #88b583;
-			}
-
-			input[type="button"].style2,
-			input[type="submit"].style2,
-			input[type="reset"].style2,
-			.button.style2 {
-				background-color: transparent;
-				border: solid 2px #e5e6e7;
-				color: inherit;
-			}
-
-				input[type="button"].style2:hover,
-				input[type="submit"].style2:hover,
-				input[type="reset"].style2:hover,
-				.button.style2:hover {
-					background-color: rgba(145,146,147,0.035);
-				}
-
-				.button.style2.down {
-					background-image: url('images/arrow.svg');
-				}
 
 
 /*********************************************************************************/
