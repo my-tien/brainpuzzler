@@ -202,13 +202,13 @@ backwards fast while still holding the space key. You will make out the shape an
 </div>
 
 <div class="6u">
-We call this a “wrong merger”, it can occur between neurons as well as neurons and extracellular space. If you encounter this, click on the button “split required >” in the toolbar. KNOSSOS remembers your note and provides you with the next case.
+We call this a “wrong merger”, it can occur between neurons as well as neurons and extracellular space. If you encounter this, click on the button “? >” in the toolbar. KNOSSOS remembers your note and provides you with the next case.
 </div>
 </div>
 
 <div class="row tutorial__box--important">
 <div class="6u">
-When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron’s shape. You don’t need to click “split required >” if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
+When reconstructing neurons, you will notice that puzzle pieces rarely fit perfectly into a neuron’s shape. You don’t need to click “? >” if a piece still mainly belongs to one neuron or extracellular space. Only use this functionality if you cannot tell to which shape the piece belongs. In this example no split is required:
 </div>
 
 <div class="3u">
