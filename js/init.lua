@@ -4,35 +4,18 @@
 
 local jq = __js"$"
 local setTimeout = __js"setTimeout"
-
-
-
--- function init_skel()
---     skel = __js"skel"
-
---     skel.init()
-
---     -- skel.init()({
---     --     reset = "full",
---     --     containers = "95%",
---     --     breakpoints = {
---     --         medium = { media = "(min-width: 769px) and (max-width: 1024px)" },
---     --         small = { media = "(max-width: 768px)" }
---     --     }
---     -- })
--- end
-
--- jq(init_skel())
-
 local window = __js"window"
+
 
 jq("body").addClass("is-loading")
 
+
 jq(window).on("load", function()
-        window.setTimeout(function()
-            jq("body").removeClass("is-loading")
-        end, 0)
-    end)
+    window.setTimeout(function()
+        jq("body").removeClass("is-loading")
+    end, 0)
+end)
+
 
 if jq("#menu_show").length >= 1 then
     print "hello"
