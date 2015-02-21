@@ -21,6 +21,10 @@ class Chunk:
 
     def validate(self, mergelist):
         merges = get_merged_groups(mergelist)
+        for correct_merge in self.correct_merges:
+            for merge in merges:
+                if len(set(merge).intersection(correct_merge)) > 1:
+                    return true
 
 
 def get_merged_groups(mergelist_path):
