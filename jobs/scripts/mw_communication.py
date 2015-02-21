@@ -31,23 +31,23 @@ class Campaign:
 
 def get_task_vcode(task_id):
     task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
-    if task_info is not None and len(task_info["proof"]) > 0:
-        return task_info["proof"][0]
+    if task_info is not None and len(task_info["task_details"]["proof"]) > 0:
+        return task_info["task_details"]["proof"][0]
+
+
+def get_task_worker(task_id):
+    task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
+    if task_info is not None:
+        return task_info["task_details"]["worker_id"]
 
 
 def mw_get(url):
-    try:
-        response = json.loads(mw_api.do_request('GET', url))
-        if response["status"] is "SUCCESS":
-            return response
-    except ValueError:
-        return None
+    response = mw_api.do_request('GET', url)
+    if response["value"]["status"] == "SUCCESS":
+        return response["value"]
 
 
 def mw_put(url, content):
-    try:
-        response = json.loads(mw_api.do_request('PUT', url, content))
-        if response["status"] is "SUCCESS":
-            return response
-    except ValueError:
-        return None
+    response = mw_api.do_request('PUT', url, content)
+    if response["value"]["status"] == "SUCCESS":
+        return response["value"]

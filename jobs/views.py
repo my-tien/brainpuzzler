@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -22,7 +23,8 @@ def index(request):
 def get_job(request, camp_id, mw_id, rand_key):
     if request.method == 'GET':
         try:
-            rand_job = random.choice(Job.objects.filter(submission=None).exclude(chunk_number=-1))
+            rand_job = random.choice(Job.objects.filter(Q(submission=None) | Q(submission__state=Submission.REJECTED))
+                                     .exclude(chunk_number=-1))
             return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}"
                             .format(rand_job.chunk_number, camp_id, mw_id, rand_key))
         except IndexError:
