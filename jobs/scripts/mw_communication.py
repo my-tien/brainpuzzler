@@ -12,7 +12,7 @@ class Campaign:
         self.campaign_id = campaign_id
 
     def get_tasks(self):
-        return mw_get('GET', '/campaign_hg/list_tasks/' + self.campaign_id)
+        return mw_get('/campaign_hg/list_tasks/' + self.campaign_id)
 
     def get_unrated_tasks(self):
         tasks = self.get_tasks()
@@ -30,7 +30,7 @@ class Campaign:
 
 
 def get_task_vcode(task_id):
-    task_info = mw_get('GET', '/campaign_hg/get_task_info/{0}'.format(task_id))
+    task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
     if task_info is not None and len(task_info["proof"]) > 0:
         return task_info["proof"][0]
 
