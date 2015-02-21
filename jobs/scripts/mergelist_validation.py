@@ -3,6 +3,7 @@ __author__ = 'tieni'
 import h5py
 from zipfile import ZipFile
 
+
 class Chunk:
     info_path = "/home/knossos/chunk_infos/"
     correct_merges = []
