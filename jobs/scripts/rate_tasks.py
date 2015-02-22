@@ -2,15 +2,14 @@ import os
 
 from jobs.models import Submission
 from jobs.scripts.submission_validation import is_valid
-from jobs.scripts.mw_communication import Campaign, get_task_vcode, get_task_worker
+from jobs.scripts.mw_communication import get_task_vcode, get_unrated_tasks, rate_task
 
 
 campaign_id = '2ebd1883a3f7'
 
 
 def run(*args):
-    campaign = Campaign(campaign_id)
-    unrated = campaign.get_unrated_tasks()
+    unrated = get_unrated_tasks()
     if unrated is None:
         print("No unrated tasks at the moment!")
         return
@@ -27,12 +26,12 @@ def run(*args):
                 valids.append("I rate task {0} with {1} valid!".format(task[0], kzip_name))
                 if "apply" in args:
                     submission.state = Submission.ACCEPTED
-                    campaign.rate_task(task[0], True, "")
+                    rate_task(task[0], True, "")
             else:
                 invalids.append(("I rate task {0} with {1} invalid!".format(task[0], kzip_name)))
                 if "apply" in args:
                     submission.state = Submission.REJECTED
-                    campaign.rate_task(task[0], False, "Your annotation seems to be incomplete.\n"
+                    rate_task(task[0], False, "Your annotation seems to be incomplete.\n"
                                                        "If you had problems with KNOSSOS, please message "
                                                        "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
             submission.save()
