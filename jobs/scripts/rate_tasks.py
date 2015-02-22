@@ -1,8 +1,7 @@
 import os
 
 from jobs.models import Submission
-from brainpuzzler.settings import MEDIA_ROOT
-from jobs.scripts.mergelist_validation import Chunk
+from jobs.scripts.submission_validation import is_valid
 from jobs.scripts.mw_communication import Campaign, get_task_vcode, get_task_worker
 
 
@@ -23,8 +22,7 @@ def run(*args):
         try:
             submission = Submission.objects.filter(token=vcode)[0]
             kzip_name = os.path.basename(submission.submit_file.name)
-            chunk = Chunk(submission.job.chunk_number)
-            valid = chunk.is_valid(MEDIA_ROOT + kzip_name)
+            valid = is_valid(submission)
             if valid:
                 valids.append("I rate task {0} with {1} valid!".format(task[0], kzip_name))
                 if "apply" in args:
