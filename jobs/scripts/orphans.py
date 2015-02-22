@@ -10,7 +10,7 @@ from jobs.scripts.mw_communication import get_tasks, get_task_vcode
 def run(*args):
     if "submits" in args:
         counter = 0
-        tasks = get_tasks()['tasks']
+        tasks = get_tasks()
         vcodes = [get_task_vcode(task[0]) for task in tasks]
 
         for submit in Submission.objects.all():

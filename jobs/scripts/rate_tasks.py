@@ -32,8 +32,8 @@ def run(*args):
                 if "apply" in args:
                     submission.state = Submission.REJECTED
                     rate_task(task[0], False, "Your annotation seems to be incomplete.\n"
-                                                       "If you had problems with KNOSSOS, please message "
-                                                       "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
+                                              "If you had problems with KNOSSOS, please message "
+                                              "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
             submission.save()
 
         except IndexError:
@@ -41,5 +41,5 @@ def run(*args):
     print('\n'.join(valids))
     print('\n'.join(invalids))
     counter = float(len(valids) + len(invalids))
-    print("I rated {0} tasks: {1} valid ({2:.2f}%) and {3} invalid ({4:.2f}%)!"
+    print("I rated {0} tasks: {1} valid ({2}%) and {3} invalid ({4}%)!"
           .format(counter, len(valids), 100*len(valids)/counter, len(invalids), 100*len(invalids)/counter))

@@ -8,13 +8,13 @@ campaign_id = '2ebd1883a3f7'
 
 
 def get_tasks():
-    return mw_get('/campaign_hg/list_tasks/' + campaign_id)
+    return mw_get('/campaign_hg/list_tasks/' + campaign_id)["tasks"]
 
 
 def get_unrated_tasks():
     tasks = get_tasks()
     if tasks is not None:
-        return [task for task in tasks["tasks"] if "NOTRATED" in task]
+        return [task for task in tasks if "NOTRATED" in task]
 
 
 def rate_task(task_id, accepted, comment):
