@@ -9,7 +9,7 @@ from jobs.scripts.mw_communication import Campaign, get_task_vcode, get_task_wor
 campaign_id = '2ebd1883a3f7'
 
 
-def run():
+def run(*args):
     campaign = Campaign(campaign_id)
     unrated = campaign.get_unrated_tasks()
     if unrated is None:
@@ -27,14 +27,16 @@ def run():
             valid = chunk.is_valid(MEDIA_ROOT + kzip_name)
             if valid:
                 valids.append("I rate task {0} with {1} valid!".format(task[0], kzip_name))
-                submission.state = Submission.ACCEPTED
-                campaign.rate_task(task[0], True, "")
+                if "apply" in args:
+                    submission.state = Submission.ACCEPTED
+                    campaign.rate_task(task[0], True, "")
             else:
                 invalids.append(("I rate task {0} with {1} invalid!".format(task[0], kzip_name)))
-                submission.state = Submission.REJECTED
-                campaign.rate_task(task[0], valid, "" if valid else "Your annotation seems to be incomplete.\n"
-                                                                    "If you had problems with KNOSSOS, please message "
-                                                                    "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
+                if "apply" in args:
+                    submission.state = Submission.REJECTED
+                    campaign.rate_task(task[0], False, "Your annotation seems to be incomplete.\n"
+                                                       "If you had problems with KNOSSOS, please message "
+                                                       "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
             submission.save()
 
         except IndexError:
