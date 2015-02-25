@@ -1,48 +1,85 @@
 __author__ = 'tieni'
 
-import os
+import h5py
 from xml.dom import minidom
-from zipfile import ZipFile
 
-from brainpuzzler.settings import MEDIA_ROOT
+from jobs.models import Submission
 
-
+info_path = "/home/knossos/chunk_infos/"
+box_size = (1120, 1120, 419)
 min_secs_per_task = 4
 max_split_requests = 10
 
 
 def num_split_requests(mergelist):
     count = 0
-    for line in mergelist:
-        if "Split request" in str(line, 'utf-8'):
+    for line in mergelist.split('\n'):
+        if "Split request" in line:
             count += 1
     return count
 
 
 def seconds_per_todo(annotation, num_todos):
-    dom = minidom.parseString(str(annotation.read(), 'utf-8'))
+    dom = minidom.parseString(annotation)
     time = float(dom.getElementsByTagName("time")[0].attributes["ms"].value)
     return time / 1000 / num_todos
 
 
 def number_todos(mergelist):
-    return len([str(line, 'utf-8') for line in mergelist]) / 4
+    return len([line for line in mergelist.split('\n')]) / 4
 
 
-def is_valid(submission):
-    submission_path = MEDIA_ROOT + os.path.basename(submission.submit_file.name)
-    job_path = MEDIA_ROOT + os.path.basename(submission.job.job_file.name)
-    try:
-        with ZipFile(job_path, 'r') as job, job.open("mergelist.txt", 'r') as job_mergelist, \
-                ZipFile(submission_path, 'r') as submit, \
-                submit.open("annotation.xml", 'r') as annotation, submit.open("mergelist.txt", 'r') as submit_mergelist:
-            secs_per_todo = seconds_per_todo(annotation, number_todos(job_mergelist))
-            print("time per todo: {0}, split requests: {1}".format(secs_per_todo, num_split_requests(submit_mergelist)))
-            if secs_per_todo < min_secs_per_task or num_split_requests(submit_mergelist) > max_split_requests:
-                return False
+def are_merged(mergelist, id1, id2):
+    for line in mergelist:
+        if id1 in line and id2 in line:
             return True
-    except IOError:
-        print("Failed to find all relevant files for submission " + str(submission))
+    return False
+
+
+def is_acceptable(submission):
+    job_mergelist = submission.job.mergelist()
+    annotation = submission.annotation()
+    submit_mergelist = submission.mergelist()
+    secs_per_todo = seconds_per_todo(annotation, number_todos(job_mergelist))
+    print("time per todo: {0:.2f}, split requests: {1}".format(secs_per_todo, num_split_requests(submit_mergelist)))
+    if secs_per_todo < min_secs_per_task or num_split_requests(submit_mergelist) > max_split_requests:
+        return False
+    return True
+
+
+def get_overlap_submissions(chunk_number):
+    """
+    Get all submissions that overlap with this chunk
+    :param chunk_number:
+    :return: list of .k.zips
+    """
+    # 27 chunks (including itself) overlap this chunk
+    # self, below and above
+    overlaps = [chunk_number, chunk_number - 1, chunk_number + 1]
+    # back, back below, back above
+    overlaps += [chunk_number - 11, chunk_number - 11 - 1, chunk_number - 11 + 1]
+    # front, front below, front above
+    overlaps += [chunk_number + 11, chunk_number + 11 - 1, chunk_number + 11 + 1]
+    # left, left below, left above
+    overlaps += [chunk_number - 164, chunk_number - 164 - 1, chunk_number - 164 + 1]
+    # right, right below, right above
+    overlaps += [chunk_number + 164, chunk_number + 164 - 1, chunk_number + 164 + 1]
+    # left back, left back below, left back above
+    overlaps += [chunk_number - 164 - 11, chunk_number - 164 - 11 - 1, chunk_number - 164 - 11 + 1]
+    # left front, left front below, left front above
+    overlaps += [chunk_number - 164 + 11, chunk_number - 164 + 11 - 1, chunk_number - 164 + 11 + 1]
+    # right back, right back below, right back above
+    overlaps += [chunk_number + 164 - 11, chunk_number + 164 - 11 - 1, chunk_number + 164 - 11 + 1]
+    # right front, right front below, right front above
+    overlaps += [chunk_number + 164 + 11, chunk_number + 164 + 11 - 1, chunk_number + 164 + 11 + 1]
+
+    with h5py.File(info_path + "chunk{0}_info.h5".format(chunk_number), 'r') as chunk_file:
+        seg = chunk_file['seg'].value
+        neighbors = set()
+
+    for submission in Submission.objects.filter(job__chunk_number__in=overlaps):
+        mergelist = submission.mergelist()
+
 
 # class Chunk:
 #     info_path = "/home/knossos/chunk_infos/"
