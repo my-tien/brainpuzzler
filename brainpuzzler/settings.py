@@ -17,9 +17,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vszag&eo-7om6&zz&3pg-72l%#s_s@7bu!qv(pp$%5jge2j*g$'
+def gen_secret_key():
+    from django.utils.crypto import get_random_string
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    return get_random_string(50, chars)
 
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = gen_secret_key()
+
 DEBUG = True
 
 TEMPLATE_DEBUG = True
@@ -62,8 +66,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
         'NAME': 'annotationjobs_db',
-        'USER': 'tieni',
-        'PASSWORD': 'kteamrocks',
+        'USER': 'username',
+        'PASSWORD': 'password',
         'HOST': '127.0.0.1'
     }
 }
