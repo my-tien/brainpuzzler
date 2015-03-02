@@ -1,18 +1,14 @@
-from django.db.models import Q
+import hashlib
+import shutil
+import tempfile
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-import hashlib
-import os
-import random
-import shutil
-import tempfile
-
 from jobs.models import *
+from employer_key import *
 import brainpuzzler.settings as settings
-
-employer_key = '278b1668328e26d793352b3bd40ff35ae9996289d39c444dccdb45b7527f7698'
 
 
 def index(request):
@@ -22,13 +18,18 @@ def index(request):
 
 def get_job(request, camp_id, mw_id, rand_key):
     if request.method == 'GET':
-        try:
-            rand_job = random.choice(Job.objects.filter(Q(submission=None) | Q(submission__state=Submission.REJECTED))
-                                     .exclude(chunk_number=-1))
+        try:  # try to return neighbor jobs of existing submissions first
+            submit = random.choice(Submission.objects.filter(~Q(state=Submission.REJECTED)))
+            neighbor_job = get_open_neighbor_job(submit.job.chunk_number)
             return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}"
-                            .format(rand_job.chunk_number, camp_id, mw_id, rand_key))
+                            .format(neighbor_job.chunk_number, camp_id, mw_id, rand_key))
         except IndexError:
-            return HttpResponse("There are no open jobs left!")
+            try:  # if none exists, return random open job
+                rand_job = get_random_open_job()
+                return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}"
+                                .format(rand_job.chunk_number, camp_id, mw_id, rand_key))
+            except IndexError:
+                return HttpResponse("There are no open jobs left!")
 
 
 @csrf_exempt

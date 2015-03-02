@@ -16,6 +16,7 @@ def run(*args):
 
     acceptables = []
     rejects = []
+    rejects_kzips = []
     for task in unrated:
         vcode = get_task_vcode(task[0])
         try:
@@ -24,22 +25,26 @@ def run(*args):
             acceptable = is_acceptable(submission)
             if acceptable:
                 acceptables.append("I rate task {0} with {1} valid!".format(task[0], kzip_name))
-                if "apply" in args:
+                if "apply-accepted" in args or "apply-all" in args:
                     submission.state = Submission.ACCEPTED
                     rate_task(task[0], True, "")
             else:
                 rejects.append(("I rate task {0} with {1} invalid!".format(task[0], kzip_name)))
-                if "apply" in args:
+                if "apply-all" in args:
                     submission.state = Submission.REJECTED
                     rate_task(task[0], False, "Your annotation seems to be incomplete.\n"
                                               "If you had problems with KNOSSOS, please message "
                                               "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
+                if "print-kzips":
+                    rejects_kzips.append(kzip_name)
             submission.save()
 
         except IndexError:
             print("Could not find vcode {0} for task {1}".format(vcode, task[0]))
     print('\n'.join(acceptables))
     print('\n'.join(rejects))
+    if len(rejects_kzips) > 0:
+        print(','.join(rejects_kzips))
     counter = float(len(acceptables) + len(rejects))
     print("I rated {0} tasks: {1} valid ({2:.1f}%) and {3} invalid ({4:.1f}%)!"
           .format(int(counter), len(acceptables), 100*len(acceptables)/counter, len(rejects), 100*len(rejects)/counter))

@@ -3,7 +3,7 @@ __author__ = 'tieni'
 import h5py
 from xml.dom import minidom
 
-from jobs.models import Submission
+from jobs.models import Submission, get_overlapping_jobs
 
 info_path = "/home/knossos/chunk_infos/"
 box_size = (1120, 1120, 419)
@@ -30,7 +30,9 @@ def number_todos(mergelist):
 
 
 def are_merged(mergelist, id1, id2):
-    for line in mergelist:
+    id1 = str(id1)
+    id2 = str(id2)
+    for line in mergelist.split('\n'):
         if id1 in line and id2 in line:
             return True
     return False
@@ -47,38 +49,56 @@ def is_acceptable(submission):
     return True
 
 
-def get_overlap_submissions(chunk_number):
+def get_neighbors(chunk_number):
     """
-    Get all submissions that overlap with this chunk
     :param chunk_number:
-    :return: list of .k.zips
+    :return:
     """
-    # 27 chunks (including itself) overlap this chunk
-    # self, below and above
-    overlaps = [chunk_number, chunk_number - 1, chunk_number + 1]
-    # back, back below, back above
-    overlaps += [chunk_number - 11, chunk_number - 11 - 1, chunk_number - 11 + 1]
-    # front, front below, front above
-    overlaps += [chunk_number + 11, chunk_number + 11 - 1, chunk_number + 11 + 1]
-    # left, left below, left above
-    overlaps += [chunk_number - 164, chunk_number - 164 - 1, chunk_number - 164 + 1]
-    # right, right below, right above
-    overlaps += [chunk_number + 164, chunk_number + 164 - 1, chunk_number + 164 + 1]
-    # left back, left back below, left back above
-    overlaps += [chunk_number - 164 - 11, chunk_number - 164 - 11 - 1, chunk_number - 164 - 11 + 1]
-    # left front, left front below, left front above
-    overlaps += [chunk_number - 164 + 11, chunk_number - 164 + 11 - 1, chunk_number - 164 + 11 + 1]
-    # right back, right back below, right back above
-    overlaps += [chunk_number + 164 - 11, chunk_number + 164 - 11 - 1, chunk_number + 164 - 11 + 1]
-    # right front, right front below, right front above
-    overlaps += [chunk_number + 164 + 11, chunk_number + 164 + 11 - 1, chunk_number + 164 + 11 + 1]
-
-    with h5py.File(info_path + "chunk{0}_info.h5".format(chunk_number), 'r') as chunk_file:
+    with h5py.File(info_path + "chunk{0}_values.h5".format(chunk_number), 'r') as chunk_file:
         seg = chunk_file['seg'].value
         neighbors = set()
+        for z in range(138):
+            for y in range(140):
+                for x in range(140):
+                    curr_id = seg[x][y][z]
+                    left = seg[x-1][y][z] if x > 0 else curr_id
+                    right = seg[x+1][y][z] if x < 139 else curr_id
+                    top = seg[x][y-1][z] if y > 0 else curr_id
+                    bottom = seg[x][y+1][z] if y < 139 else curr_id
+                    back = seg[x][y][z-1] if z > 0 else curr_id
+                    front = seg[x][y][z+1] if z < 137 else curr_id
+                    if curr_id != left:
+                        neighbors.add(frozenset([curr_id, left]))
+                    if curr_id != right:
+                        neighbors.add(frozenset([curr_id, right]))
+                    if curr_id != top:
+                        neighbors.add(frozenset([curr_id, top]))
+                    if curr_id != bottom:
+                        neighbors.add(frozenset([curr_id, bottom]))
+                    if curr_id != back:
+                        neighbors.add(frozenset([curr_id, back]))
+                    if curr_id != front:
+                        neighbors.add(frozenset([curr_id, front]))
+        return neighbors
 
+
+def get_overlap_submissions(chunk_number):
+    overlaps = get_overlapping_jobs(chunk_number)
+    mergelists = []
     for submission in Submission.objects.filter(job__chunk_number__in=overlaps):
-        mergelist = submission.mergelist()
+        mergelists.append(submission.mergelist())
+
+    neighbor_set = get_neighbors(chunk_number)
+    merges = []
+    for neighbor_pair in neighbor_set:
+        neighbors = [neighbor for neighbor in neighbor_pair]
+        vote = 0
+        for mergelist in mergelists:
+            vote += 1 if are_merged(mergelist, neighbors[0], neighbors[1]) else 0
+        print("vote: {0}".format(vote))
+        if vote > 2:
+            merges.append(neighbors)
+    print(merges)
 
 
 # class Chunk:
