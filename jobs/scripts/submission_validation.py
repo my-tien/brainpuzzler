@@ -22,7 +22,8 @@ def num_split_requests(mergelist):
 def seconds_per_todo(annotation, num_todos):
     dom = minidom.parseString(annotation)
     time = float(dom.getElementsByTagName("time")[0].attributes["ms"].value)
-    return time / 1000 / num_todos
+    if num_todos > 0:
+        return time / 1000 / num_todos
 
 
 def number_todos(mergelist):
@@ -43,10 +44,24 @@ def is_acceptable(submission):
     annotation = submission.annotation()
     submit_mergelist = submission.mergelist()
     secs_per_todo = seconds_per_todo(annotation, number_todos(job_mergelist))
-    print("time per todo: {0:.2f}, split requests: {1}".format(secs_per_todo, num_split_requests(submit_mergelist)))
-    if secs_per_todo < min_secs_per_task or num_split_requests(submit_mergelist) > max_split_requests:
-        return False
+    if secs_per_todo is None:
+        print("No todos in {0}".format(submission))
+        return True
+    else:
+        print("time per todo: {0:.2f}, split requests: {1}, {2}"
+              .format(secs_per_todo, num_split_requests(submit_mergelist), submission))
+        if secs_per_todo < min_secs_per_task or num_split_requests(submit_mergelist) > max_split_requests:
+            return False
     return True
+
+
+def has_0_time(submission):
+    job_mergelist = submission.job.mergelist()
+    annotation = submission.annotation()
+    secs_per_todo = seconds_per_todo(annotation, number_todos(job_mergelist))
+    if secs_per_todo == 0:
+        return True
+    return False
 
 
 def get_neighbors(chunk_number):
