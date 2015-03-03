@@ -21,7 +21,7 @@ def get_unrated_tasks():
 def get_accepted_tasks():
     tasks = get_tasks()
     if tasks is not None:
-        return [task for task in tasks if "SATISFIED" in task]
+        return [task for task in tasks if "OK" in task]
 
 
 def rate_task(task_id, accepted, comment):
@@ -49,8 +49,7 @@ def get_task_worker(task_id):
 def get_submission_date(task_id):
     task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
     if task_info is not None:
-        date = datetime.strptime(task_info["task_details"]["finished_datetime"])
-        print(date)
+        return datetime.strptime(task_info["task_details"]["finished_datetime"], "%Y-%m-%d %X")
 
 
 def mw_get(url):
