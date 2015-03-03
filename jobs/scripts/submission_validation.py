@@ -123,24 +123,21 @@ def write_majority_vote_mergelist(chunk_number, mergelists):
         if vote > 2:
             merges.append(neighbors)
 
-    indices = []
+    indices_to_del = []
     for index, neighbor_pair in enumerate(merges):
-        if index in indices:
+        if index in indices_to_del:
             continue
-        neighbor_1 = neighbor_pair[0]
-        neighbor_2 = neighbor_pair[1]
-        connected = []
+        connected = [neighbor_pair[0], neighbor_pair[1]]
         for index2, neighbor_pair2 in enumerate(merges):
-            if neighbor_pair == neighbor_pair2 or index2 in indices:
+            if neighbor_pair == neighbor_pair2 or index2 in indices_to_del:
                 continue
-            if neighbor_1 in neighbor_pair2 or neighbor_2 in neighbor_pair2\
-                    or len([val for val in neighbor_pair2 if val in connected]) != 0:
+            if len([val for val in neighbor_pair2 if val in connected]) != 0:
                 connected += neighbor_pair2
-                indices.append(index2)
+                indices_to_del.append(index2)
         neighbor_pair += connected
-    indices.sort()
 
-    for index in indices[::-1]:
+    indices_to_del.sort()
+    for index in indices_to_del[::-1]:
         merges.pop(index)
     merges = [set(merged_neighbor) for merged_neighbor in merges]
 
