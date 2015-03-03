@@ -6,7 +6,7 @@ from zipfile import ZipFile
 
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
-from jobs.scripts.submission_validation import num_split_requests
+from jobs.scripts.submission_validation import num_split_requests, get_accepted_tasks, get_submission_date
 
 
 def run(*args):
@@ -43,6 +43,14 @@ def run(*args):
         print(splits)
         print("average of {0} submits: {1} splits/submit. range [{2}, {3}]".format(len(splits), avg_splits, splits[0], splits[-1]))
 
+    if "submits-per-day" in args:
+        accepted = get_accepted_tasks()
+        dates = []
+        for elem in accepted:
+            date = get_submission_date(elem[0])
+            for date_elem in dates:
+                if date_elem.key() == date.date():
+                    date_elem
 
 
 

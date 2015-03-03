@@ -1,6 +1,7 @@
 __author__ = 'tieni'
 
 import h5py
+import numpy
 from xml.dom import minidom
 
 from jobs.models import Submission, get_overlapping_jobs
@@ -64,6 +65,20 @@ def has_0_time(submission):
     return False
 
 
+def write_mergelist(chunk_number, merges, path):
+    with h5py.File(info_path + "chunk{0}_info.h5".format(chunk_number), 'r') as info:
+        com = info['com'].value
+        ids = info['ids'].value
+        with open(path + "mergelist_{0}.txt".format(chunk_number), 'w') as mergelist:
+            counter = 1
+            for group in merges:
+                group = [str(obj_id) for obj_id in group]
+                first_id = numpy.where(ids == int(group[0]))
+                coord = com[first_id][0]
+                mergelist.write("{0} 0 1 {1}\n{2} {3} {4}\n\n\n".format(counter, ' '.join(group), coord[0], coord[1], coord[2]))
+                counter += 1
+
+
 def get_neighbors(chunk_number):
     """
     :param chunk_number:
@@ -97,12 +112,7 @@ def get_neighbors(chunk_number):
         return neighbors
 
 
-def get_overlap_submissions(chunk_number):
-    overlaps = get_overlapping_jobs(chunk_number)
-    mergelists = []
-    for submission in Submission.objects.filter(job__chunk_number__in=overlaps):
-        mergelists.append(submission.mergelist())
-
+def write_majority_vote_mergelist(chunk_number, mergelists):
     neighbor_set = get_neighbors(chunk_number)
     merges = []
     for neighbor_pair in neighbor_set:
@@ -110,10 +120,42 @@ def get_overlap_submissions(chunk_number):
         vote = 0
         for mergelist in mergelists:
             vote += 1 if are_merged(mergelist, neighbors[0], neighbors[1]) else 0
-        print("vote: {0}".format(vote))
         if vote > 2:
             merges.append(neighbors)
-    print(merges)
+
+    indices = []
+    for index, neighbor_pair in enumerate(merges):
+        if index in indices:
+            continue
+        neighbor_1 = neighbor_pair[0]
+        neighbor_2 = neighbor_pair[1]
+        connected = []
+        for index2, neighbor_pair2 in enumerate(merges):
+            if neighbor_pair == neighbor_pair2 or index2 in indices:
+                continue
+            if neighbor_1 in neighbor_pair2 or neighbor_2 in neighbor_pair2\
+                    or len([val for val in neighbor_pair2 if val in connected]) != 0:
+                connected += neighbor_pair2
+                indices.append(index2)
+        neighbor_pair += connected
+    indices.sort()
+
+    for index in indices[::-1]:
+        merges.pop(index)
+    merges = [set(merged_neighbor) for merged_neighbor in merges]
+
+    with h5py.File(info_path + "chunk{0}_info.h5".format(chunk_number), 'r') as info:
+        ids = info['ids'].value
+        for obj_id in ids:
+            existent = False
+            for group in merges:
+                if obj_id in group:
+                    existent = True
+                    break
+            if not existent:
+                merges.append({obj_id})
+
+    write_mergelist(chunk_number, merges, "/home/knossos/")
 
 
 # class Chunk:
