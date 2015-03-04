@@ -6,6 +6,8 @@ from zipfile import ZipFile
 
 from brainpuzzler.settings import MEDIA_ROOT
 
+box_size = (1120, 1120, 419)
+
 
 def read_kzip_file(kzip, name):
     kzip_path = MEDIA_ROOT + os.path.basename(kzip)
@@ -14,29 +16,6 @@ def read_kzip_file(kzip, name):
             return str(content.read(), 'utf-8')
     except IOError:
         print("Could not open " + kzip)
-
-
-def get_overlapping_jobs(chunk_number):
-    # 27 chunks (including itself) overlap this chunk
-    # self, below and above
-    overlaps = [chunk_number, chunk_number - 1, chunk_number + 1]
-    # back, back below, back above
-    overlaps += [chunk_number - 11, chunk_number - 11 - 1, chunk_number - 11 + 1]
-    # front, front below, front above
-    overlaps += [chunk_number + 11, chunk_number + 11 - 1, chunk_number + 11 + 1]
-    # left, left below, left above
-    overlaps += [chunk_number - 164, chunk_number - 164 - 1, chunk_number - 164 + 1]
-    # right, right below, right above
-    overlaps += [chunk_number + 164, chunk_number + 164 - 1, chunk_number + 164 + 1]
-    # left back, left back below, left back above
-    overlaps += [chunk_number - 164 - 11, chunk_number - 164 - 11 - 1, chunk_number - 164 - 11 + 1]
-    # left front, left front below, left front above
-    overlaps += [chunk_number - 164 + 11, chunk_number - 164 + 11 - 1, chunk_number - 164 + 11 + 1]
-    # right back, right back below, right back above
-    overlaps += [chunk_number + 164 - 11, chunk_number + 164 - 11 - 1, chunk_number + 164 - 11 + 1]
-    # right front, right front below, right front above
-    overlaps += [chunk_number + 164 + 11, chunk_number + 164 + 11 - 1, chunk_number + 164 + 11 + 1]
-    return overlaps
 
 
 class Job(models.Model):

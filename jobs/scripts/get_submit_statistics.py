@@ -59,12 +59,11 @@ def run(*args):
                         dates[date_elem] = 1
             if not found:
                 dates[date.date()] = 1
-        print(dates)
+        print(sorted(dates.items(), key=lambda x: x[0]))
         avg_submits = 0
         for num in dates.values():
             avg_submits += num
         avg_submits /= float(len(dates))
         print("Average submits per day: {0:.2f}".format(avg_submits))
-
 
 

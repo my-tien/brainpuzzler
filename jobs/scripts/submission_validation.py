@@ -1,13 +1,10 @@
 __author__ = 'tieni'
 
-import h5py
 import numpy
 from xml.dom import minidom
 
-from jobs.models import Submission, get_overlapping_jobs
+from jobs.chunk import Chunk
 
-info_path = "/home/knossos/chunk_infos/"
-box_size = (1120, 1120, 419)
 min_secs_per_task = 4
 max_split_requests = 10
 
@@ -65,55 +62,20 @@ def has_0_time(submission):
     return False
 
 
-def write_mergelist(chunk_number, merges, path):
-    with h5py.File(info_path + "chunk{0}_info.h5".format(chunk_number), 'r') as info:
-        com = info['com'].value
-        ids = info['ids'].value
-        with open(path + "mergelist_{0}.txt".format(chunk_number), 'w') as mergelist:
-            counter = 1
-            for group in merges:
-                group = [str(obj_id) for obj_id in group]
-                first_id = numpy.where(ids == int(group[0]))
-                coord = com[first_id][0]
-                mergelist.write("{0} 0 1 {1}\n{2} {3} {4}\n\n\n".format(counter, ' '.join(group), coord[0], coord[1], coord[2]))
-                counter += 1
-
-
-def get_neighbors(chunk_number):
-    """
-    :param chunk_number:
-    :return:
-    """
-    with h5py.File(info_path + "chunk{0}_values.h5".format(chunk_number), 'r') as chunk_file:
-        seg = chunk_file['seg'].value
-        neighbors = set()
-        for z in range(138):
-            for y in range(140):
-                for x in range(140):
-                    curr_id = seg[x][y][z]
-                    left = seg[x-1][y][z] if x > 0 else curr_id
-                    right = seg[x+1][y][z] if x < 139 else curr_id
-                    top = seg[x][y-1][z] if y > 0 else curr_id
-                    bottom = seg[x][y+1][z] if y < 139 else curr_id
-                    back = seg[x][y][z-1] if z > 0 else curr_id
-                    front = seg[x][y][z+1] if z < 137 else curr_id
-                    if curr_id != left:
-                        neighbors.add(frozenset([curr_id, left]))
-                    if curr_id != right:
-                        neighbors.add(frozenset([curr_id, right]))
-                    if curr_id != top:
-                        neighbors.add(frozenset([curr_id, top]))
-                    if curr_id != bottom:
-                        neighbors.add(frozenset([curr_id, bottom]))
-                    if curr_id != back:
-                        neighbors.add(frozenset([curr_id, back]))
-                    if curr_id != front:
-                        neighbors.add(frozenset([curr_id, front]))
-        return neighbors
+def write_mergelist(chunk, merges, path):
+    with open(path + "mergelist_{0}.txt".format(chunk.number), 'w') as mergelist:
+        counter = 1
+        for group in merges:
+            group = [str(obj_id) for obj_id in group]
+            first_id = numpy.where(chunk.ids == int(group[0]))
+            coord = chunk.mass_center[first_id][0]
+            mergelist.write("{0} 0 1 {1}\n{2} {3} {4}\n\n\n".format(counter, ' '.join(group), coord[0], coord[1], coord[2]))
+            counter += 1
 
 
 def write_majority_vote_mergelist(chunk_number, mergelists):
-    neighbor_set = get_neighbors(chunk_number)
+    chunk = Chunk(chunk_number)
+    neighbor_set = chunk.get_neighbors()
     merges = []
     for neighbor_pair in neighbor_set:
         neighbors = [neighbor for neighbor in neighbor_pair]
@@ -141,72 +103,13 @@ def write_majority_vote_mergelist(chunk_number, mergelists):
         merges.pop(index)
     merges = [set(merged_neighbor) for merged_neighbor in merges]
 
-    with h5py.File(info_path + "chunk{0}_info.h5".format(chunk_number), 'r') as info:
-        ids = info['ids'].value
-        for obj_id in ids:
-            existent = False
-            for group in merges:
-                if obj_id in group:
-                    existent = True
-                    break
-            if not existent:
-                merges.append({obj_id})
+    for obj_id in chunk.ids():
+        existent = False
+        for group in merges:
+            if obj_id in group:
+                existent = True
+                break
+        if not existent:
+            merges.append({obj_id})
 
-    write_mergelist(chunk_number, merges, "/home/knossos/")
-
-
-# class Chunk:
-#     info_path = "/home/knossos/chunk_infos/"
-#     correct_merges = []
-#     with open(info_path + "correct_merges.txt", 'r') as merges_file:
-#         for line in merges_file:
-#             correct_merges.append(line.split())
-#         correct_merges = [list(map(int, group)) for group in correct_merges]
-#
-#     def __init__(self, chunk_id):
-#         self.chunk_id = chunk_id
-#
-#         with h5py.File(Chunk.info_path + "chunk{0}_info.h5".format(chunk_id), 'r') as chunk_file:
-#             self.ids = chunk_file['ids'].value
-#         self.correct_merges = \
-#             [[subobj_id for subobj_id in group if subobj_id in self.ids] for group in Chunk.correct_merges]
-#         self.correct_merges = [group for group in self.correct_merges if len(group) > 1]
-#
-#     def is_valid(self, kzip_path):
-#         try:
-#             with ZipFile(kzip_path, 'r') as kzip, kzip.open("mergelist.txt", 'r') as mergelist:
-#                 if num_split_requests(mergelist) >= 10:
-#                     return False
-#                 if len(self.correct_merges) == 0:
-#                     return True
-#                 merges = get_merged_groups(mergelist)
-#                 for correct_merge in self.correct_merges:
-#                     for merge in merges:
-#                         if len(set(merge).intersection(correct_merge)) >= 1:
-#                             return True
-#             return False
-#         except IOError:
-#             print("IOError opening kzip: " + kzip_path)
-#             return False
-#
-#
-#
-#
-#
-# def get_merged_groups(mergelist):
-#     merges = []
-#     for line in mergelist:
-#         line = str(line)[:-3]  # bytes to string and trim trailing newline
-#         subobjects = line.split()[3:]
-#         if len(subobjects) > 1:
-#             merges.append(subobjects)
-#
-#     for group_index in range(len(merges)):
-#         for object_id in merges[group_index]:
-#             for group_index2 in range(len(merges)):
-#                 if group_index != group_index2 and object_id in merges[group_index2]:
-#                     merges[group_index] = list(set(merges[group_index]).union(merges[group_index2]))
-#                     merges[group_index2] = []
-#     merges = [group for group in merges if len(group) != 0]
-#     merges = [list(map(int, group)) for group in merges]
-#     return merges
+    write_mergelist(chunk, merges, "/home/knossos/")
