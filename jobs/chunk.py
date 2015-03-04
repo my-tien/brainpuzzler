@@ -57,10 +57,12 @@ class Chunk:
         index = self.index_of(voxel_id)
         return self.mass_center()[index]
 
-    def get_neighbors(self):
+    def get_supervoxel_neighbors(self):
         """
-        :param chunk_number:
-        :return:
+        Retrieves a list of all neighbor pairs in this chunk.
+        E.g., if supervoxel 1 has neighbors 2, 3 and 4, the list would contain these sets:
+        (1, 2), (1, 3), (1, 4)
+        :return: a list of neighbor pairs as frozensets
         """
         neighbors = set()
         for z in range(138):

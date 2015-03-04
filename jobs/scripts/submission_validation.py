@@ -75,7 +75,7 @@ def write_mergelist(chunk, merges, path):
 
 def write_majority_vote_mergelist(chunk_number, mergelists):
     chunk = Chunk(chunk_number)
-    neighbor_set = chunk.get_neighbors()
+    neighbor_set = chunk.get_supervoxel_neighbors()
     merges = []
     for neighbor_pair in neighbor_set:
         neighbors = [neighbor for neighbor in neighbor_pair]

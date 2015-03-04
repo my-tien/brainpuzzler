@@ -4,6 +4,7 @@ import os
 import random
 from zipfile import ZipFile
 
+from jobs.chunk import Chunk
 from brainpuzzler.settings import MEDIA_ROOT
 
 box_size = (1120, 1120, 419)
@@ -68,6 +69,6 @@ def get_random_open_job():
 
 
 def get_open_neighbor_job(chunk_number):
-    overlaps = get_overlapping_jobs(chunk_number)
+    overlaps = Chunk(chunk_number).get_overlapping_chunks()
     return random.choice(Job.objects.filter(Q(chunk_number__in=overlaps)
                                             & (Q(submission=None) | Q(submission__state=Submission.REJECTED))))
