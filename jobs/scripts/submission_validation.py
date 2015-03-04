@@ -67,8 +67,8 @@ def write_mergelist(chunk, merges, path):
         counter = 1
         for group in merges:
             group = [str(obj_id) for obj_id in group]
-            first_id = numpy.where(chunk.ids == int(group[0]))
-            coord = chunk.mass_center[first_id][0]
+            first_id = numpy.where(chunk.ids() == int(group[0]))
+            coord = chunk.mass_center()[first_id][0]
             mergelist.write("{0} 0 1 {1}\n{2} {3} {4}\n\n\n".format(counter, ' '.join(group), coord[0], coord[1], coord[2]))
             counter += 1
 
