@@ -4,21 +4,23 @@ import os
 
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
-from jobs.scripts.mw_communication import get_tasks, get_task_vcode
+from jobs.scripts.mw_communication import get_tasks, Task
 
 
 def run(*args):
     if "submits" in args:
         counter = 0
         tasks = get_tasks()
-        vcodes = [get_task_vcode(task[0]) for task in tasks]
+        vcodes = [Task(task[0]).vcode() for task in tasks]
 
         for submit in Submission.objects.all():
             if submit.token not in vcodes:
                 counter += 1
                 print("Submission " + str(submit) + " is orphaned.")
                 if "delete" in args:
+                    os.remove(MEDIA_ROOT + os.path.basename(submit.submit_file.name))
                     submit.delete()
+
         print("{0} orphaned submissions.".format(counter))
 
     if "kzips" in args:
