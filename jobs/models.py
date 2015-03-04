@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 import os
 import random
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipfile
 
 from jobs.chunk import Chunk
 from brainpuzzler.settings import MEDIA_ROOT
@@ -13,10 +13,14 @@ box_size = (1120, 1120, 419)
 def read_kzip_file(kzip, name):
     kzip_path = MEDIA_ROOT + os.path.basename(kzip)
     try:
-        with ZipFile(kzip_path, 'r') as kzip, kzip.open(name, 'r') as content:
+        with ZipFile(kzip_path, 'r') as kzip_file, kzip_file.open(name, 'r') as content:
             return str(content.read(), 'utf-8')
     except IOError:
         print("Could not open " + kzip)
+        return False
+    except BadZipfile:
+        print(kzip + " seems to be corrupted!")
+        return False
 
 
 class Job(models.Model):

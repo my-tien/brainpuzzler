@@ -6,7 +6,6 @@ from jobs.scripts.mw_communication import get_unrated_tasks, Task
 
 
 campaign_id = '2ebd1883a3f7'
-mw_ids = ['d9e96698', 'd5cee551', '11efb79e', '089df202', 'abb744ad']
 
 
 def run(*args):
@@ -25,11 +24,7 @@ def run(*args):
         try:
             submission = Submission.objects.filter(token=vcode)[0]
             worker_id = task.worker()
-            if "accept-known-mws" in args:
-                if worker_id in mw_ids:
-                    submission.state = Submission.ACCEPTED
-                    task.rate(True, "")
-            elif "zero-time" in args:
+            if "zero-time" in args:
                 if has_0_time(submission):
                     print("Zero time in {0} from worker {1}".format(submission, worker_id))
                     if "apply-all" in args:

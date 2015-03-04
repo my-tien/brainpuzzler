@@ -41,6 +41,9 @@ def is_acceptable(submission):
     job_mergelist = submission.job.mergelist()
     annotation = submission.annotation()
     submit_mergelist = submission.mergelist()
+    if not annotation or not submit_mergelist:
+        return False
+
     secs_per_todo = seconds_per_todo(annotation, number_todos(job_mergelist))
     if secs_per_todo is None:
         print("No todos in {0}".format(submission))
