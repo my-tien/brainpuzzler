@@ -2,7 +2,7 @@ import os
 
 from jobs.models import Submission
 from jobs.scripts.submission_validation import is_acceptable, has_0_time
-from jobs.scripts.mw_communication import get_task_vcode, get_task_worker, get_unrated_tasks, rate_task
+from jobs.scripts.mw_communication import get_unrated_tasks, Task
 
 
 campaign_id = '2ebd1883a3f7'
@@ -18,46 +18,48 @@ def run(*args):
     acceptables = []
     rejects = []
     rejects_kzips = []
-    for task in unrated:
-        vcode = get_task_vcode(task[0])
+    for entry in unrated:
+        task_id = entry[0]
+        task = Task(task_id)
+        vcode = task.vcode()
         try:
             submission = Submission.objects.filter(token=vcode)[0]
-            worker_id = get_task_worker(task[0])
+            worker_id = task.worker()
             if "accept-known-mws" in args:
                 if worker_id in mw_ids:
                     submission.state = Submission.ACCEPTED
-                    rate_task(task[0], True, "")
+                    task.rate(True, "")
             elif "zero-time" in args:
                 if has_0_time(submission):
                     print("Zero time in {0} from worker {1}".format(submission, worker_id))
                     if "apply-all" in args:
                         submission.state = Submission.REJECTED
                         submission.save()
-                        rate_task(task[0], False, "Your submission does not contain any work.\n"
-                                                  "If you had problems with KNOSSOS, please message "
-                                                  "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
+                        task.rate(False, "Your submission does not contain any work.\n"
+                                         "If you had problems with KNOSSOS, please message "
+                                         "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
 
             else:
                 kzip_name = os.path.basename(submission.submit_file.name)
                 acceptable = is_acceptable(submission)
                 if acceptable:
-                    acceptables.append("I rate task {0} with {1} valid, from {2}!".format(task[0], kzip_name, worker_id))
+                    acceptables.append("I rate task {0} with {1} valid, from {2}!".format(task.id, kzip_name, worker_id))
                     if "apply-accepted" in args or "apply-all" in args:
                         submission.state = Submission.ACCEPTED
-                        rate_task(task[0], True, "")
+                        task.rate(True, "")
                 else:
-                    rejects.append(("I rate task {0} with {1} invalid, from {2}!".format(task[0], kzip_name, worker_id)))
+                    rejects.append(("I rate task {0} with {1} invalid, from {2}!".format(task.id, kzip_name, worker_id)))
                     if "apply-all" in args:
                         submission.state = Submission.REJECTED
-                        rate_task(task[0], False, "Your annotation seems to be incomplete.\n"
-                                                  "If you had problems with KNOSSOS, please message "
-                                                  "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
+                        task.rate(False, "Your annotation seems to be incomplete.\n"
+                                         "If you had problems with KNOSSOS, please message "
+                                         "me at my-tien.nguyen@mpimf-heidelberg.mpg.de")
                     if "print-kzips":
                         rejects_kzips.append(kzip_name)
                 submission.save()
 
         except IndexError:
-            print("Could not find vcode {0} for task {1}".format(vcode, task[0]))
+            print("Could not find vcode {0} for task {1}".format(vcode, task.id))
 
     if len(acceptables) > 0 or len(rejects) > 0:
         print('\n'.join(acceptables))

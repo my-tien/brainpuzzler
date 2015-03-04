@@ -24,32 +24,29 @@ def get_accepted_tasks():
         return [task for task in tasks if "OK" in task]
 
 
-def rate_task(task_id, accepted, comment):
-    response = mw_put('/campaign_hg/rate_task/' + campaign_id,
-                      {
-                          'id_task': str(task_id),
-                          'rating': 'OK' if accepted else 'NOK',
-                          'comment': comment
-                      })
-    pprint(response)
+class Task:
+    def __init__(self, task_id):
+        self.id = task_id
+        self.info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
 
+    def vcode(self):
+        if len(self.info["task_details"]["proof"]) > 0:
+            return self.info["task_details"]["proof"][0]
 
-def get_task_vcode(task_id):
-    task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
-    if task_info is not None and len(task_info["task_details"]["proof"]) > 0:
-        return task_info["task_details"]["proof"][0]
+    def worker(self):
+        return self.info["task_details"]["worker_id"]
 
+    def submit_date(self):
+        return datetime.strptime(self.info["task_details"]["finished_datetime"], "%Y-%m-%d %X")
 
-def get_task_worker(task_id):
-    task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
-    if task_info is not None:
-        return task_info["task_details"]["worker_id"]
-
-
-def get_submission_date(task_id):
-    task_info = mw_get('/campaign_hg/get_task_info/{0}'.format(task_id))
-    if task_info is not None:
-        return datetime.strptime(task_info["task_details"]["finished_datetime"], "%Y-%m-%d %X")
+    def rate(self, accepted, comment):
+        response = mw_put('/campaign_hg/rate_task/' + campaign_id,
+                          {
+                              'id_task': str(self.id),
+                              'rating': 'OK' if accepted else 'NOK',
+                              'comment': comment
+                          })
+        pprint(response)
 
 
 def mw_get(url):

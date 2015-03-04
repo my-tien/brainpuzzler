@@ -7,7 +7,7 @@ from zipfile import ZipFile
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
 from jobs.scripts.submission_validation import num_split_requests
-from jobs.scripts.mw_communication import get_accepted_tasks, get_submission_date
+from jobs.scripts.mw_communication import get_accepted_tasks, Task
 
 
 def run(*args):
@@ -48,7 +48,8 @@ def run(*args):
         accepted = get_accepted_tasks()
         dates = {}
         for elem in accepted:
-            date = get_submission_date(elem[0])
+            task = Task(elem[0])
+            date = task.submit_date()
             found = False
             for date_elem in dates:
                 if date_elem == date.date():
