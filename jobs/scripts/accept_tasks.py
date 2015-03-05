@@ -19,18 +19,20 @@ def run(*args):
     if len(args) == 0:
         for task in good_tasks:
             if task.worker() in mw_ids:
+                task.rate(True, "")
                 try:
                     submission = Submission.objects.filter(token=task.vcode())[0]
                     submission.state = Submission.ACCEPTED
-                    task.rate(True, "")
                 except IndexError:
                     print("Could not find submit for task {0}".format(task.id))
                     continue
 
         return
     # specific tasks passed
-    numbers = [int(value) for value in args[:-1]]
+    number_range = args[:-1] if len(args) > 1 else args
+    numbers = [int(value) for value in number_range]
     submits = Submission.objects.filter(job__chunk_number__in=numbers)
+    print("{0} {1}".format(numbers, len(submits)))
     tokens = [submit.token for submit in submits]
     good_tasks = [task for task in good_tasks if task.vcode() in tokens]
     for submit in submits:
