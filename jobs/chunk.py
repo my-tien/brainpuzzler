@@ -36,7 +36,7 @@ class Chunk:
             self.read_info()
         return self._ids
 
-    def mass_center(self):
+    def mass_centers(self):
         if self._mass_center is None:
             self.read_info()
         return self._mass_center
@@ -55,7 +55,7 @@ class Chunk:
 
     def mass_center_of(self, voxel_id):
         index = self.index_of(voxel_id)
-        return self.mass_center()[index]
+        return self.mass_centers()[index]
 
     def get_supervoxel_neighbors(self):
         """

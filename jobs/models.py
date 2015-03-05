@@ -5,6 +5,7 @@ import random
 from zipfile import ZipFile, BadZipfile
 
 from jobs.chunk import Chunk
+from jobs.mergelist import Mergelist
 from brainpuzzler.settings import MEDIA_ROOT
 
 box_size = (1120, 1120, 419)
@@ -30,7 +31,9 @@ class Job(models.Model):
     job_file = models.FileField()
 
     def mergelist(self):
-        return read_kzip_file(self.job_file.name, "mergelist.txt")
+        mergelist = Mergelist()
+        mergelist.read(read_kzip_file(self.job_file.name, "mergelist.txt"))
+        return mergelist
 
     def annotation(self):
         return read_kzip_file(self.job_file.name, "annotation.xml")

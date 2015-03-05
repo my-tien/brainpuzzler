@@ -2,9 +2,10 @@ __author__ = 'tieni'
 
 
 class SegObject:
-    def __init__(self, obj_id=None, todo=None, position=None, supervoxels=None, category="", comment=""):
+    def __init__(self, obj_id=None, todo=None, immutable=None, position=None, supervoxels=None, category="", comment=""):
         self.id = obj_id
         self.todo = todo
+        self.immutable = immutable
         self.pos = position
         self.category = category
         self.comment = comment
@@ -15,32 +16,15 @@ class SegObject:
 
 
 class Mergelist:
-    def __init__(self, chunk_number, mergelist_path):
-        self.chunk_number = chunk_number
+    def __init__(self, mergelist_path=None):
         self.seg_objects = []
+        if mergelist_path is None:
+            return
         try:
             with open(mergelist_path, 'r') as txt:
-                index = 0
-                obj_id = None; todo = None; supervoxels = []; coord = []; category = None; comment = None
-                for line in txt:
-                    if index == 0:
-                        content = line.split()
-                        obj_id = int(content[0])
-                        todo = True if content[1] == "1" else False
-                        supervoxels = [int(sub_id) for sub_id in content[3:]]
-                    if index == 1:
-                        coord = [int(coordinate) for coordinate in line.split()]
-                    if index == 2:
-                        category = line
-                    if index == 3:
-                        comment = line
-                        self.seg_objects.append(SegObject(obj_id, todo, coord, supervoxels, category, comment))
-                        index = 0
-                        continue
-                    index += 1
-            print('\n'.join([str(seg_object) for seg_object in self.seg_objects]))
+                self.read(str(txt, 'utf-8'))
         except IOError:
-            print("No mergelist " + mergelist_path)
+            print("Could not open " + mergelist_path)
 
     def count_comment(self, comment):
         count = 0
@@ -60,6 +44,30 @@ class Mergelist:
             if id1 in seg_obj.supervoxels and id2 in seg_obj.supervoxels:
                 return True
         return False
+
+    def read(self, stream):
+        if stream is None:
+            print("stream is None")
+            return
+        index = 0
+        obj_id = None; todo = None; supervoxels = []; coord = []; category = None
+        for line in stream:
+            if index == 0:
+                content = line.split()
+                obj_id = int(content[0])
+                todo = True if content[1] == "1" else False
+                supervoxels = [int(sub_id) for sub_id in content[3:]]
+            if index == 1:
+                coord = [int(coordinate) for coordinate in line.split()]
+            if index == 2:
+                category = line
+            if index == 3:
+                comment = line
+                self.seg_objects.append(SegObject(obj_id, todo, coord, supervoxels, category, comment))
+                index = 0
+                continue
+            index += 1
+        print('\n'.join([str(seg_object) for seg_object in self.seg_objects]))
 
     def write(self, absolute_path):
         with open(absolute_path, 'w') as mergelist:
