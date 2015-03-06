@@ -64,7 +64,9 @@ class Submission(models.Model):
                + str(self.state) + ", rated " + str(self.rating)
 
     def mergelist(self):
-        return read_kzip_file(self.submit_file.name, "mergelist.txt")
+        mergelist = Mergelist()
+        mergelist.read(read_kzip_file(self.submit_file.name, "mergelist.txt"))
+        return mergelist
 
     def annotation(self):
         return read_kzip_file(self.submit_file.name, "annotation.xml")

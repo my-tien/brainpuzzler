@@ -5,9 +5,6 @@ from jobs.scripts.submission_validation import is_acceptable, has_0_time
 from jobs.scripts.mw_communication import get_unrated_tasks, Task
 
 
-campaign_id = '2ebd1883a3f7'
-
-
 def run(*args):
     unrated = get_unrated_tasks()
     if unrated is None:

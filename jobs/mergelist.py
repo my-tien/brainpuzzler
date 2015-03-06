@@ -50,12 +50,15 @@ class Mergelist:
             print("stream is None")
             return
         index = 0
-        obj_id = None; todo = None; supervoxels = []; coord = []; category = None
-        for line in stream:
+        obj_id = None; todo = None; immutable = None; supervoxels = []; coord = []; category = None
+        for line in stream.split('\n'):
             if index == 0:
+                if len(line) == 0:
+                    break
                 content = line.split()
                 obj_id = int(content[0])
                 todo = True if content[1] == "1" else False
+                immutable = True if content[2] == "1" else False
                 supervoxels = [int(sub_id) for sub_id in content[3:]]
             if index == 1:
                 coord = [int(coordinate) for coordinate in line.split()]
@@ -63,11 +66,10 @@ class Mergelist:
                 category = line
             if index == 3:
                 comment = line
-                self.seg_objects.append(SegObject(obj_id, todo, coord, supervoxels, category, comment))
+                self.seg_objects.append(SegObject(obj_id, todo, immutable, coord, supervoxels, category, comment))
                 index = 0
                 continue
             index += 1
-        print('\n'.join([str(seg_object) for seg_object in self.seg_objects]))
 
     def write(self, absolute_path):
         with open(absolute_path, 'w') as mergelist:

@@ -29,9 +29,10 @@ def is_acceptable(submission):
         print("No todos in {0}".format(submission))
         return True
     else:
+        split_requests = submit_mergelist.count_comment("Split request")
         print("time per todo: {0:.2f}, split requests: {1}, {2}"
-              .format(secs_per_todo, submit_mergelist.num_split_requests(), submission))
-        if secs_per_todo < min_secs_per_task or submit_mergelist.num_split_requests() > max_split_requests:
+              .format(secs_per_todo, split_requests, submission))
+        if secs_per_todo < min_secs_per_task or split_requests > max_split_requests:
             return False
     return True
 

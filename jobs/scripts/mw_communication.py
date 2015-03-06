@@ -5,7 +5,7 @@ from jobs.scripts.MW_API import MW_API
 
 
 mw_api = MW_API('af801b23166b3a7a80df6eaf7efa3031095d16e69572f910a5c88bf2f6cf7fd9')
-campaign_id = '2ebd1883a3f7'
+campaign_id = '821113b0c802'
 
 
 def get_tasks():
