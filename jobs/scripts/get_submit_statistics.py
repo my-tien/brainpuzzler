@@ -6,8 +6,8 @@ from zipfile import ZipFile
 
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
-from jobs.scripts.submission_validation import num_split_requests
-from jobs.scripts.mw_communication import get_accepted_tasks, Task
+from jobs.mergelist import Mergelist
+from jobs.scripts.mw_communication import get_tasks, get_accepted_tasks, Task
 
 
 def run(*args):
@@ -36,16 +36,15 @@ def run(*args):
     if "split-requests" in args:
         splits = []
         for submission in submissions:
-            submit_path = MEDIA_ROOT + os.path.basename(submission.submit_file.name)
-            with ZipFile(submit_path, 'r') as submit, submit.open("mergelist.txt", 'r') as mergelist:
-                splits.append(num_split_requests(mergelist))
+            mergelist = submission.mergelist()
+            splits.append(mergelist.count_comment("Split required"))
         splits.sort()
         avg_splits = sum(splits)/len(splits)
         print(splits)
         print("average of {0} submits: {1} splits/submit. range [{2}, {3}]".format(len(splits), avg_splits, splits[0], splits[-1]))
 
     if "submits-per-day" in args:
-        accepted = get_accepted_tasks()
+        accepted = get_tasks()
         dates = {}
         for elem in accepted:
             task = Task(elem[0])
@@ -65,6 +64,21 @@ def run(*args):
         for num in dates.values():
             avg_submits += num
         avg_submits /= float(len(dates))
-        print("Average submits per day: {0:.2f}".format(avg_submits))
+        print("Average submits per day ({0} days): {1:.2f}".format(len(dates), avg_submits))
+
+    if "accepted-ratio":
+        tasks = get_tasks()
+        if tasks is not None:
+            accepted = []; rejected = []
+            for task in tasks:
+                if "OK" in task:
+                    accepted.append(task)
+                else:
+                    rejected.append(task)
+            total = len(accepted + rejected)
+            num_accepted = len(accepted)
+            num_rejected = len(rejected)
+            print("{0} tasks: {1} accepted ({2:.2f}%) and {3} rejected tasks ({4:.2f}%)"
+                  .format(total, num_accepted, num_accepted/float(total), num_rejected, num_rejected/float(total)))
 
 
