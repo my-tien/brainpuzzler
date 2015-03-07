@@ -24,7 +24,7 @@ def get_accepted_tasks():
 
 
 def get_tasks_from(mw_id):
-    return mw_get('/campaign_hg/get_worker_tasks/' + campaign_id + "_" + mw_id)
+    return mw_get('/campaign_hg/get_worker_tasks/' + campaign_id + "_" + mw_id)["tasks"]
 
 
 class Task:

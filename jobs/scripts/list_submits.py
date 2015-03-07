@@ -13,7 +13,7 @@ def run(*args):
     for mw_id in args:
         submit_files = []
         result = get_tasks_from(mw_id)
-        for task in [task for task in result["tasks"] if task["task_rating"] == "NOTRATED"]:
+        for task in [task for task in result if task["task_rating"] == "NOTRATED"]:
             vcode = task["proof"][0]
             try:
                 submit = Submission.objects.filter(token=vcode)[0]
