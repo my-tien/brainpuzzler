@@ -8,8 +8,13 @@ mw_api = MW_API('af801b23166b3a7a80df6eaf7efa3031095d16e69572f910a5c88bf2f6cf7fd
 campaign_id = '821113b0c802'
 
 
+def campaign_info():
+    return mw_get("/campaign_hg/get_info/" + campaign_id)
+
+
 def get_tasks():
     return mw_get('/campaign_hg/list_tasks/' + campaign_id)["tasks"]
+
 
 def get_unrated_tasks():
     tasks = get_tasks()
