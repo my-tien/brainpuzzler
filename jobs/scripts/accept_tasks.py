@@ -13,7 +13,7 @@ def run(*args):
         for mw_id in mw_ids:
             good_tasks = [task for task in get_tasks_from(mw_id) if task["task_rating"] == "NOTRATED"]
             for task in good_tasks:
-                task.rate(True, "")
+                Task(task["task_id"]).rate(True, "")
             for submit in Submission.objects.filter(token__in=[task["proof"][0] for task in good_tasks]):
                 submit.state = Submission.ACCEPTED
                 submit.save()

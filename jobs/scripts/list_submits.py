@@ -12,8 +12,8 @@ def run(*args):
         return
     for mw_id in args:
         submit_files = []
-        result = get_tasks_from(mw_id)
-        for task in [task for task in result if task["task_rating"] == "NOTRATED"]:
+        result = [task for task in get_tasks_from(mw_id) if task["task_rating"] == "NOTRATED"]
+        for task in result:
             vcode = task["proof"][0]
             try:
                 submit = Submission.objects.filter(token=vcode)[0]
@@ -23,3 +23,5 @@ def run(*args):
                 continue
         print("submissions from worker " + mw_id + ":")
         print(','.join(submit_files))
+        print("task ids:")
+        print(' '.join([task["task_id"] for task in result]))
