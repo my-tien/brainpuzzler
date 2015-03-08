@@ -5,7 +5,7 @@ from jobs.models import *
 from jobs.scripts.mw_communication import get_tasks_from, Task
 
 
-mw_ids = ['d9e96698', 'd5cee551', '11efb79e', '089df202', 'abb744ad']
+mw_ids = ['d9e96698', 'd5cee551', '11efb79e', '089df202', 'abb744ad', '286671cc', '0fff9226', 'c3a943f1']
 
 
 def run(*args):
