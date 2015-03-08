@@ -66,6 +66,6 @@ end
 
 jq("#gallery--video").poptrox();
 
--- if jq("#background-slideshow").length > 0 and jq(window).height() > 800 then
---     jq("#background-slideshow").kenburnsy{ fullscreen=true }
--- end
+if jq("#background-slideshow").length > 0 and jq(window).height() > 800 then
+    jq("#background-slideshow").kenburnsy{ fullscreen=true }
+end
