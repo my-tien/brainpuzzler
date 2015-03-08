@@ -103,7 +103,7 @@ Let's see how we can earn money with this knowledge and KNOSSOS, a free brain re
 
 <ol start="1">
 <li>Download <strong>Knossos</strong> (you will need it for all brainpuzzler jobs): <a href="../../downloads/win32-Setup-Knossos 4.1.exe" class="button">Windows 32bit</a>, <a href="../../downloads/win64-Setup-Knossos 4.1.exe" class="button">Windows 64bit</a></li>
-<li>Download the tutorial job. The link can be found in our campaign description.</li>
+<li>Download the <a href="http://brainpuzzler.org/jobs/job_-1/camp_1/mw_1/rand_1/">tutorial job</a>.</li>
 <li>Start <strong>Knossos</strong> and drag the job into the <strong>Knossos</strong> window. You should see something like this now:</li>
 </ol>
 
