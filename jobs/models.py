@@ -11,6 +11,10 @@ from brainpuzzler.settings import MEDIA_ROOT
 box_size = (1120, 1120, 419)
 
 
+def job_exists(number):
+    return len(list(Job.objects.filter(chunk_number=number))) != 0
+
+
 def read_kzip_file(kzip, name):
     kzip_path = MEDIA_ROOT + os.path.basename(kzip)
     try:
@@ -29,6 +33,9 @@ class Job(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300, blank=True)
     job_file = models.FileField()
+
+    def is_open(self):
+        return len(self.submission.filter(state__in=[Submission.CREATED, Submission.ACCEPTED])) == 0
 
     def mergelist(self):
         mergelist = Mergelist()
@@ -73,11 +80,17 @@ class Submission(models.Model):
 
 
 def get_random_open_job():
-    random.choice(Job.objects.filter(Q(submission=None) | Q(submission__state=Submission.REJECTED))
-                  .exclude(chunk_number=-1))
+    try:
+        return Job.objects.filter(submission=None)[0]
+    except IndexError:
+        for job in Job.objects.all().exclude(chunk_number=-1):
+            if job.is_open():
+                return job
 
 
 def get_open_neighbor_job(chunk_number):
     overlaps = Chunk(chunk_number).get_overlapping_chunks()
-    return random.choice(Job.objects.filter(Q(chunk_number__in=overlaps)
-                                            & (Q(submission=None) | Q(submission__state=Submission.REJECTED))))
+    neighbors = Job.objects.filter(Q(chunk_number__in=overlaps))
+    for neighbor in neighbors:
+        if neighbor.is_open():
+            return neighbor

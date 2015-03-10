@@ -18,17 +18,22 @@ def index(request):
 
 def get_job(request, camp_id, mw_id, rand_key):
     if request.method == 'GET':
-        try:  # try to return neighbor jobs of existing submissions first
-            submit = random.choice(Submission.objects.filter(~Q(state=Submission.REJECTED)))
+        # try to return an unfinished neighbor of an existing submission first
+        valid_submits = list(Submission.objects.filter(~Q(state=Submission.REJECTED)))
+        neighbor_job = None
+        while neighbor_job is None and len(valid_submits) > 0:
+            submit = random.choice(valid_submits)
             neighbor_job = get_open_neighbor_job(submit.job.chunk_number)
+            valid_submits.remove(submit)
+        if neighbor_job is not None:
             return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}"
                             .format(neighbor_job.chunk_number, camp_id, mw_id, rand_key))
-        except IndexError:
-            try:  # if none exists, return random open job
-                rand_job = get_random_open_job()
+        else:  # if none exists, return random open job
+            rand_job = get_random_open_job()
+            if rand_job:
                 return redirect("http://brainpuzzler.org/jobs/job_{0}/camp_{1}/mw_{2}/rand_{3}"
                                 .format(rand_job.chunk_number, camp_id, mw_id, rand_key))
-            except IndexError:
+            else:
                 return HttpResponse("There are no open jobs left!")
 
 
