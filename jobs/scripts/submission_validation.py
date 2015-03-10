@@ -89,7 +89,7 @@ def write_majority_vote_mergelist(chunk_number, mergelists):
     majority_mergelist = Mergelist()
     index = 1
     for merge in merges:
-        coord = chunk.mass_centers()[merge[0]]
+        coord = chunk.mass_centers()[chunk.index_of(merge[0])]
         majority_mergelist.seg_objects.append(SegObject(index, 0, 1, coord, merge))
         index += 1
     majority_mergelist.write("/home/knossos/mergelist_{0}.txt".format(chunk_number))
