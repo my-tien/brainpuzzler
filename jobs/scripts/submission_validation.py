@@ -62,30 +62,33 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
     neighbor_set = chunk.get_supervoxel_neighbors()
     merges = []
     for neighbor_pair in neighbor_set:  # majority vote for merging the neighbor pair
-        neighbor1 = neighbor_pair.pop()
-        neighbor2 = neighbor_pair.pop()
+        neighbors = [neighbor for neighbor in neighbor_pair]
         vote = 0
         overlaps = 0
         for mergelist in mergelists:
-            ids1 = mergelist.contained_in(neighbor1)
-            ids2 = mergelist.contained_in(neighbor2)
+            ids1 = mergelist.contained_in(neighbors[0])
+            ids2 = mergelist.contained_in(neighbors[1])
             if len(ids1) > 0 and len(ids2) > 0:  # only mergelists containing both objects can participate
                 overlaps += 1
                 vote += 1 if len(ids1 & ids2) > 0 else 0
         if vote > overlaps/2:
-            merges.append({neighbor1, neighbor2})
+            merges.append(neighbors)
+
     # move merge pairs into their respective connected components
     indices_to_skip = []  # remembers all visited pairs
     for index, pair1 in enumerate(merges):
         if index in indices_to_skip:
             continue
+        connected = [pair1[0], pair1[1]]
         for index2, pair2 in enumerate(merges):
-            if index2 in indices_to_skip or index2 == index:
+            if pair2 == pair1 or index2 in indices_to_skip:
                 continue
-            if len(pair2 & merges[index]) != 0:  # if one neighbor in component, add the other too
-                merges[index] = merges[index] | pair2
+            if len([val for val in pair2 if val in connected]) != 0:  # if one neighbor in component, add the other too
+                connected += pair2
                 indices_to_skip.append(index2)
+        pair1 += connected
 
+    merges = [set(group) for group in merges]
     if include_solos:  # add all unmerged subobjects too
         for obj_id in chunk.ids():
             existent = False
