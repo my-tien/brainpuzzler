@@ -6,7 +6,7 @@ class SegObject:
         self.id = obj_id
         self.todo = todo
         self.immutable = immutable
-        self.pos = position
+        self.pos = [] if position is None else position
         self.category = category
         self.comment = comment
         self.supervoxels = [] if supervoxels is None else supervoxels
