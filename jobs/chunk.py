@@ -7,7 +7,8 @@ info_path = "/home/knossos/chunk_infos/"
 
 
 class Chunk:
-    size = [140, 140, 138]
+    width = 140
+    depth = 138
 
     def __init__(self, chunk_number):
         self.number = chunk_number
@@ -65,16 +66,19 @@ class Chunk:
         :return: a list of neighbor pairs as frozensets
         """
         neighbors = set()
-        for z in range(138):
-            for y in range(140):
-                for x in range(140):
-                    curr_id = self.seg()[x][y][z]
-                    left = self.seg()[x-1][y][z] if x > 0 else curr_id
-                    right = self.seg()[x+1][y][z] if x < self.size[0] - 1 else curr_id
-                    top = self.seg()[x][y-1][z] if y > 0 else curr_id
-                    bottom = self.seg()[x][y+1][z] if y < self.size[1] - 1 else curr_id
-                    back = self.seg()[x][y][z-1] if z > 0 else curr_id
-                    front = self.seg()[x][y][z+1] if z < self.size[2] - 1 else curr_id
+        seg = self.seg()
+        for x in range(self.width):
+            x_pos = seg[x]
+            for y in range(self.width):
+                xy_pos = x_pos[y]
+                for z in range(self.depth):
+                    curr_id = xy_pos[z]
+                    left = seg[x-1][y][z] if x > 0 else curr_id
+                    right = seg[x+1][y][z] if x < self.width - 1 else curr_id
+                    top = x_pos[y-1][z] if y > 0 else curr_id
+                    bottom = x_pos[y+1][z] if y < self.width - 1 else curr_id
+                    back = xy_pos[z-1] if z > 0 else curr_id
+                    front = xy_pos[z+1] if z < self.depth - 1 else curr_id
                     if curr_id != left:
                         neighbors.add(frozenset([curr_id, left]))
                     if curr_id != right:

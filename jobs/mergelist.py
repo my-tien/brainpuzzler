@@ -15,9 +15,17 @@ class SegObject:
         return "object {0} at {1}: {2}".format(self.id, self.pos, self.supervoxels)
 
 
+class SegSubObject:
+    def __init__(self, sub_id, obj_ids=None):
+        self.id = sub_id
+        self.objects = [] if obj_ids is None else obj_ids
+
+
 class Mergelist:
     def __init__(self, mergelist_path=None):
         self.seg_objects = []
+        self.seg_subobjects = {}
+
         if mergelist_path is None:
             return
         try:
@@ -38,6 +46,12 @@ class Mergelist:
         for seg_obj in self.seg_objects:
             count += 1 if seg_obj.todo else 0
         return count
+
+    def contained_in(self, sub_id):
+        try:
+            return self.seg_subobjects[sub_id]
+        except KeyError:
+            return []
 
     def are_merged(self, id1, id2):
         for seg_obj in self.seg_objects:
@@ -60,6 +74,11 @@ class Mergelist:
                 todo = True if content[1] == "1" else False
                 immutable = True if content[2] == "1" else False
                 supervoxels = [int(sub_id) for sub_id in content[3:]]
+                for supervoxel in supervoxels:
+                    try:
+                        self.seg_subobjects[supervoxel].append(obj_id)
+                    except KeyError:
+                        self.seg_subobjects[supervoxel] = [obj_id]
             if index == 1:
                 coord = [int(coordinate) for coordinate in line.split()]
             if index == 2:

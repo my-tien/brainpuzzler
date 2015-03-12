@@ -10,11 +10,9 @@ min_secs_per_task = 4
 max_split_requests = 10
 
 
-def seconds_per_todo(annotation, num_todos):
+def time(annotation):
     dom = minidom.parseString(annotation)
-    time = float(dom.getElementsByTagName("time")[0].attributes["ms"].value)
-    if num_todos > 0:
-        return time / 1000 / num_todos
+    return float(dom.getElementsByTagName("time")[0].attributes["ms"].value)
 
 
 def is_acceptable(submission):
@@ -24,7 +22,7 @@ def is_acceptable(submission):
     if not annotation or not submit_mergelist:
         return False
 
-    secs_per_todo = seconds_per_todo(annotation, job_mergelist.number_todos())
+    secs_per_todo = time(annotation) / 1000 / job_mergelist.number_todos()
     if secs_per_todo is None:
         print("No todos in {0}".format(submission))
         return True
@@ -40,22 +38,28 @@ def is_acceptable(submission):
 def has_0_time(submission):
     job_mergelist = submission.job.mergelist()
     annotation = submission.annotation()
-    secs_per_todo = seconds_per_todo(annotation, job_mergelist.number_todos())
+    xml_time = time(annotation)
+    secs_per_todo = xml_time / 1000 / job_mergelist.number_todos()
     if secs_per_todo == 0:
         return True
     return False
 
 
-def write_majority_vote_mergelist(chunk_number, mergelists):
+def write_majority_vote_mergelist(chunk_number, mergelists, path):
     chunk = Chunk(chunk_number)
     neighbor_set = chunk.get_supervoxel_neighbors()
     merges = []
     for neighbor_pair in neighbor_set:
         neighbors = [neighbor for neighbor in neighbor_pair]
         vote = 0
+        overlaps = 0
         for mergelist in mergelists:
-            vote += 1 if mergelist.are_merged(neighbors[0], neighbors[1]) else 0
-        if vote > 2:
+            ids1 = mergelist.contained_in(neighbors[0])
+            ids2 = mergelist.contained_in(neighbors[1])
+            if len(ids1) > 0 and len(ids2) > 0:
+                overlaps += 1
+                vote += 1 if len(set(ids1).intersection(ids2)) > 0 else 0
+        if vote > overlaps/2:
             merges.append(neighbors)
 
     indices_to_del = []
@@ -92,4 +96,4 @@ def write_majority_vote_mergelist(chunk_number, mergelists):
         coord = chunk.mass_centers()[chunk.index_of(merge[0])]
         majority_mergelist.seg_objects.append(SegObject(index, 0, 1, coord, merge))
         index += 1
-    majority_mergelist.write("/home/knossos/mergelist_{0}.txt".format(chunk_number))
+    majority_mergelist.write(path)
