@@ -87,7 +87,9 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
                 connected += pair2
                 indices_to_skip.append(index2)
         pair1 += connected
-
+    indices_to_skip.sort()
+    for index in indices_to_skip[::-1]:
+        merges.pop(index)
     merges = [set(group) for group in merges]
     if include_solos:  # add all unmerged subobjects too
         for obj_id in chunk.ids():
@@ -101,9 +103,9 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
 
     merges = [list(merger) for merger in merges]
     majority_mergelist = Mergelist()
-    for index, merge in enumerate(merges):
-        if index in indices_to_skip:
-            continue
+    obj_id = 1
+    for merge in merges:
         coord = chunk.mass_centers()[chunk.index_of(merge[0])][0]
-        majority_mergelist.seg_objects.append(SegObject(index, 0, 1, coord, merge))
+        majority_mergelist.seg_objects.append(SegObject(obj_id, 0, 1, coord, merge))
+        obj_id += 1
     majority_mergelist.write(path)
