@@ -9,7 +9,7 @@ class SegObject:
         self.pos = [] if position is None else position
         self.category = category
         self.comment = comment
-        self.supervoxels = [] if supervoxels is None else supervoxels
+        self.supervoxels = set() if supervoxels is None else supervoxels
 
     def __str__(self):
         return "object {0} at {1}: {2}".format(self.id, self.pos, self.supervoxels)
@@ -24,7 +24,7 @@ class SegSubObject:
 class Mergelist:
     def __init__(self, mergelist_path=None):
         self.seg_objects = []
-        self.seg_subobjects = {}
+        self.seg_subobjects = {}  # dict subobjectID : set of objectIDs
 
         if mergelist_path is None:
             return
@@ -51,7 +51,7 @@ class Mergelist:
         try:
             return self.seg_subobjects[sub_id]
         except KeyError:
-            return []
+            return {}
 
     def are_merged(self, id1, id2):
         for seg_obj in self.seg_objects:
@@ -64,7 +64,7 @@ class Mergelist:
             print("stream invalid")
             return
         index = 0
-        obj_id = None; todo = None; immutable = None; supervoxels = []; coord = []; category = None
+        obj_id = None; todo = None; immutable = None; supervoxels = set(); coord = []; category = None
         for line in stream.split('\n'):
             if index == 0:
                 if len(line) == 0:
@@ -73,12 +73,12 @@ class Mergelist:
                 obj_id = int(content[0])
                 todo = True if content[1] == "1" else False
                 immutable = True if content[2] == "1" else False
-                supervoxels = [int(sub_id) for sub_id in content[3:]]
+                supervoxels = {int(sub_id) for sub_id in content[3:]}
                 for supervoxel in supervoxels:
                     try:
-                        self.seg_subobjects[supervoxel].append(obj_id)
+                        self.seg_subobjects[supervoxel].add(obj_id)
                     except KeyError:
-                        self.seg_subobjects[supervoxel] = [obj_id]
+                        self.seg_subobjects[supervoxel] = {obj_id}
             if index == 1:
                 coord = [int(coordinate) for coordinate in line.split()]
             if index == 2:
