@@ -45,49 +45,61 @@ def has_0_time(submission):
     return False
 
 
-def write_majority_vote_mergelist(chunk_number, mergelists, path):
+def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path):
+    """
+    Write a unified mergelist from all available mergelists to this chunk.
+
+    Unification is done through three steps:
+     1. Gather all existing supervoxel neighbor pairs in the chunk.
+     2. Test for each neighbor pair if it should be merged through majority vote with all available mergelists.
+     3. Move resulting merge pairs into their respective connected components.
+
+    :param chunk_number: The chunk receiving a mergelist
+    :param mergelists: the input mergelists
+    :param path: absolute output path for majority vote mergelist
+    """
     chunk = Chunk(chunk_number)
     neighbor_set = chunk.get_supervoxel_neighbors()
     merges = []
-    for neighbor_pair in neighbor_set:
-        neighbors = [neighbor for neighbor in neighbor_pair]
+    for neighbor_pair in neighbor_set:  # majority vote for merging the neighbor pair
+        neighbor1 = neighbor_pair.pop()
+        neighbor2 = neighbor_pair.pop()
         vote = 0
         overlaps = 0
         for mergelist in mergelists:
-            ids1 = mergelist.contained_in(neighbors[0])
-            ids2 = mergelist.contained_in(neighbors[1])
-            if len(ids1) > 0 and len(ids2) > 0:
+            ids1 = mergelist.contained_in(neighbor1)
+            ids2 = mergelist.contained_in(neighbor2)
+            if len(ids1) > 0 and len(ids2) > 0:  # only mergelists containing both objects can participate
                 overlaps += 1
                 vote += 1 if len(set(ids1).intersection(ids2)) > 0 else 0
         if vote > overlaps/2:
-            merges.append(neighbors)
-
-    indices_to_del = []
-    for index, neighbor_pair in enumerate(merges):
+            merges.append({neighbor1, neighbor2})
+    # move merge pairs into their respective connected components
+    indices_to_del = []  # remembers all visited pairs
+    for index, pair1 in enumerate(merges):
         if index in indices_to_del:
             continue
-        connected = [neighbor_pair[0], neighbor_pair[1]]
-        for index2, neighbor_pair2 in enumerate(merges):
-            if neighbor_pair == neighbor_pair2 or index2 in indices_to_del:
+        for index2, pair2 in enumerate(merges):
+            if index2 in indices_to_del or index2 == index:
                 continue
-            if len([val for val in neighbor_pair2 if val in connected]) != 0:
-                connected += neighbor_pair2
+            if len(pair2.intersection(merges[index])) != 0:  # if one neighbor in component, add the other too
+                merges[index] = merges[index].union(pair2)
                 indices_to_del.append(index2)
-        neighbor_pair += connected
 
+    # now remove all pairs that have been moved to a component
     indices_to_del.sort()
     for index in indices_to_del[::-1]:
         merges.pop(index)
-    merges = [set(merged_neighbor) for merged_neighbor in merges]
 
-    for obj_id in chunk.ids():
-        existent = False
-        for group in merges:
-            if obj_id in group:
-                existent = True
-                break
-        if not existent:
-            merges.append({obj_id})
+    if include_solos:  # add all unmerged subobjects too
+        for obj_id in chunk.ids():
+            existent = False
+            for group in merges:
+                if obj_id in group:
+                    existent = True
+                    break
+            if not existent:
+                merges.append({obj_id})
 
     merges = [list(merger) for merger in merges]
     majority_mergelist = Mergelist()
