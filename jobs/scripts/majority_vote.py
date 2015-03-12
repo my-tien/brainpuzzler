@@ -1,5 +1,9 @@
 __author__ = 'tieni'
 
+import cProfile
+import os
+from timeit import Timer
+
 from django.db.models import Q
 
 from jobs.chunk import Chunk
@@ -9,10 +13,9 @@ from jobs.scripts.submission_validation import write_majority_vote_mergelist
 info_path = "/home/knossos/chunk_infos/"
 
 
-def run(*args):
-    if len(args) == 0:
-        return
-    chunk_range = [num for num in range(0, 2475) if job_exists(num)] if "all" in args else [int(value) for value in args[:-1]]
+def content():
+    chunk_range = [num for num in range(1476, 1477) if job_exists(num)]
+    print(chunk_range)
     overlap_list = []
     for chunk_number in chunk_range:
         chunk = Chunk(chunk_number)
@@ -20,16 +23,21 @@ def run(*args):
         overlaps = chunk.get_overlapping_chunks()
         chunks = []
         available_submits = Submission.objects.filter(Q(job__chunk_number__in=overlaps), ~Q(state=Submission.REJECTED))
-        if len(available_submits) != 27:
-            continue
         for submission in available_submits:
             if submission.job.chunk_number not in chunks:
-                if submission.mergelist() is not None:
-                    mergelists.append(submission.mergelist())
+                mergelist = submission.mergelist()
+                if mergelist is not None:
+                    mergelists.append(mergelist)
                     chunks.append(submission.job.chunk_number)
         overlap_list.append("chunk {0}: {1} overlaps\n".format(chunk_number, len(mergelists)))
         print("Creating majority vote mergelist for {0}".format(chunk_number))
-        write_majority_vote_mergelist(chunk_number, mergelists)
+        write_majority_vote_mergelist(chunk_number, mergelists, "/home/knossos/mergelists/mergelist_{0}.txt".format(chunk_number))
 
-    with open(args[-1], 'w') as overlaps_f:
+    with open("/home/knossos/overlaps.txt", 'w') as overlaps_f:
         overlaps_f.writelines(overlap_list)
+
+
+def run(*args):
+    # t = Timer(lambda: content())
+    # print(t.timeit())
+    cProfile.runctx("content()", globals(), locals())
