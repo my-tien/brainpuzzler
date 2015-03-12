@@ -7,7 +7,7 @@ from zipfile import ZipFile
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
 from jobs.mergelist import Mergelist
-from jobs.scripts.mw_communication import get_tasks, get_accepted_tasks, Task
+from jobs.scripts.mw_communication import campaign_info, get_tasks, get_accepted_tasks, get_tasks_from, Task
 
 
 def run(*args):
@@ -66,19 +66,19 @@ def run(*args):
         avg_submits /= float(len(dates))
         print("Average submits per day ({0} days): {1:.2f}".format(len(dates), avg_submits))
 
-    if "accepted-ratio":
-        tasks = get_tasks()
-        if tasks is not None:
-            accepted = []; rejected = []
-            for task in tasks:
-                if "OK" in task:
-                    accepted.append(task)
-                else:
-                    rejected.append(task)
-            total = len(accepted + rejected)
-            num_accepted = len(accepted)
-            num_rejected = len(rejected)
-            print("{0} tasks: {1} accepted ({2:.2f}%) and {3} rejected tasks ({4:.2f}%)"
-                  .format(total, num_accepted, num_accepted/float(total), num_rejected, num_rejected/float(total)))
+    if "accepted-ratio" in args:
+        info = campaign_info()
+        ok = int(info["tasks_ok"])
+        nok = int(info["tasks_nok"])
+        print("{0} tasks: {1} accepted ({2:.2f}%) and {3} rejected tasks ({4:.2f}%)"
+              .format(ok + nok, ok, ok/float(ok+nok), nok, nok/float(ok+nok)))
 
+    if "workers" in args:
+        tasks = get_tasks()
+        workers = set()
+        tasks = [Task(elem[0]) for elem in tasks]
+        for task in tasks:
+            workers.add(task.worker())
+        print(workers)
+        print("{0} workers participated.".format(len(workers)))
 
