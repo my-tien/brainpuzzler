@@ -1,8 +1,6 @@
 __author__ = 'tieni'
 
 import cProfile
-import os
-from timeit import Timer
 
 from django.db.models import Q
 
@@ -14,7 +12,7 @@ info_path = "/home/knossos/chunk_infos/"
 
 
 def content():
-    chunk_range = [num for num in range(1476, 1477) if job_exists(num)]
+    chunk_range = [num for num in range(1475, 1476) if job_exists(num)]
     print(chunk_range)
     overlap_list = []
     for chunk_number in chunk_range:
@@ -38,6 +36,4 @@ def content():
 
 
 def run(*args):
-    # t = Timer(lambda: content())
-    # print(t.timeit())
     cProfile.runctx("content()", globals(), locals())

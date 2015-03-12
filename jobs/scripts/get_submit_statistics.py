@@ -1,17 +1,35 @@
 __author__ = 'tieni'
 
 import os
+import numpy
 from xml.dom import minidom
 from zipfile import ZipFile
 
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
 from jobs.mergelist import Mergelist
+from jobs.scripts.submission_validation import time
 from jobs.scripts.mw_communication import campaign_info, get_tasks, get_accepted_tasks, get_tasks_from, Task
 
 
 def run(*args):
     submissions = Submission.objects.all()
+    times = []
+    if "hongkong-time" in args:
+        base = "/home/knossos/hongkong_submits/"
+        folders = [name for name in os.listdir(base)]
+        for dir in folders:
+            for file in os.listdir(base + dir):
+                with ZipFile(base + dir + "/" + file, 'r') as kzip, kzip.open("annotation.xml", 'r') as xml:
+                    annotation = str(xml.read(), 'utf-8')
+                    times.append(time(annotation)/1000/60)
+                    if time(annotation)/1000/60 == 0:
+                        print(base + dir + "/" + file + " with time {0}".format(time(annotation)))
+        print(numpy.histogram(times, [5, 10, 15, 20, 25, 30, 35, 40, 45]))
+        print("{0:.2f} min avg time, {1:.2f} min total time ({2} files, {3} min, {4} max)"
+              .format(sum(times)/len(times), sum(times)/60, len(times), min(times), max(times)))
+
+
     if "time" in args:
         times = []
         for submission in submissions:
