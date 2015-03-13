@@ -12,8 +12,7 @@ info_path = "/home/knossos/chunk_infos/"
 
 
 def content():
-    chunk_range = [num for num in range(1475, 1476) if job_exists(num)]
-    print(chunk_range)
+    chunk_range = [num for num in range(0, 2475) if job_exists(num)]
     overlap_list = []
     for chunk_number in chunk_range:
         chunk = Chunk(chunk_number)
@@ -27,6 +26,7 @@ def content():
                 if mergelist is not None:
                     mergelists.append(mergelist)
                     chunks.append(submission.job.chunk_number)
+        print("chunk {0}: {1} overlaps\n".format(chunk_number, len(mergelists)))
         overlap_list.append("chunk {0}: {1} overlaps\n".format(chunk_number, len(mergelists)))
         print("Creating majority vote mergelist for {0}".format(chunk_number))
         write_majority_vote_mergelist(chunk_number, mergelists, True, "/home/knossos/mergelists/mergelist_{0}.txt".format(chunk_number))
@@ -36,4 +36,5 @@ def content():
 
 
 def run(*args):
-    cProfile.runctx("content()", globals(), locals())
+    # cProfile.runctx("content()", globals(), locals())
+    content()

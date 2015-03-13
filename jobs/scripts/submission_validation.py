@@ -87,6 +87,7 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
                 connected += pair2
                 indices_to_skip.append(index2)
         pair1 += connected
+
     indices_to_skip.sort()
     for index in indices_to_skip[::-1]:
         merges.pop(index)

@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from io import TextIOWrapper
 import os
 import random
 from zipfile import ZipFile, BadZipfile
@@ -19,7 +20,7 @@ def read_kzip_file(kzip, name):
     kzip_path = MEDIA_ROOT + os.path.basename(kzip)
     try:
         with ZipFile(kzip_path, 'r') as kzip_file, kzip_file.open(name, 'r') as content:
-            return str(content.read(), 'utf-8')
+            return TextIOWrapper(content, newline=None)
     except IOError:
         print("Could not open " + kzip)
         return False

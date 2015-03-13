@@ -30,7 +30,7 @@ class Mergelist:
             return
         try:
             with open(mergelist_path, 'r') as txt:
-                self.read(str(txt, 'utf-8'))
+                self.read(txt)
         except IOError:
             print("Could not open " + mergelist_path)
 
@@ -65,11 +65,11 @@ class Mergelist:
             return
         index = 0
         obj_id = None; todo = None; immutable = None; supervoxels = set(); coord = []; category = None
-        for line in stream.split('\n'):
+        for line in stream:
             if index == 0:
-                if len(line) == 0:
-                    break
                 content = line.split()
+                if len(content) < 4:
+                    break
                 obj_id = int(content[0])
                 todo = True if content[1] == "1" else False
                 immutable = True if content[2] == "1" else False
