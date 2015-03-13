@@ -48,11 +48,13 @@ class Chunk:
         return self._sizes
 
     def index_of(self, voxel_id):
-        return numpy.where(self.ids() == voxel_id)
+        index = numpy.where(self.ids() == voxel_id)
+        return index if len(index[0]) > 0 else -1
 
     def size_of(self, voxel_id):
         index = self.index_of(voxel_id)
-        return self.sizes()[index][0]
+
+        return self.sizes()[index][0] if index != -1 else -1
 
     def mass_center_of(self, voxel_id):
         index = self.index_of(voxel_id)
