@@ -26,12 +26,24 @@ def run(*args):
                     if time(annotation)/1000/60 == 0:
                         print(base + dir + "/" + file + " with time {0}".format(time(annotation)))
         print(numpy.histogram(times, [5, 10, 15, 20, 25, 30, 35, 40, 45]))
-        print("{0:.2f} min avg time, {1:.2f} min total time ({2} files, {3} min, {4} max)"
+        print("{0:.2f} min avg time, {1:.2f} h total time ({2} files, {3} min, {4} max)"
               .format(sum(times)/len(times), sum(times)/60, len(times), min(times), max(times)))
 
-
-    if "time" in args:
+    if "mw-time" in args:
         times = []
+        valid_submits = Submission.objects.filter(state__in=[Submission.CREATED, Submission.ACCEPTED])
+        valids = len(valid_submits)
+        for index, submission in enumerate(valid_submits):
+            print("we are at {0} from {1}".format(index, valids))
+            annotation = submission.annotation()
+            if annotation:
+                times.append(time(submission.annotation())/1000/60)
+
+        print(numpy.histogram(times, [5, 10, 15, 20, 25, 30, 35, 40, 45]))
+        print("{0:.2f} min avg time, {1:.2f} h total time ({2} files, {3} min, {4} max)"
+              .format(sum(times)/len(times), sum(times)/60, len(times), min(times), max(times)))
+
+    if "time-per-todo" in args:
         for submission in submissions:
             submission_path = MEDIA_ROOT + os.path.basename(submission.submit_file.name)
             job_path = MEDIA_ROOT + os.path.basename(submission.job.job_file.name)
