@@ -52,7 +52,7 @@ class Chunk:
 
     def size_of(self, voxel_id):
         index = self.index_of(voxel_id)
-        return self.sizes()[index]
+        return self.sizes()[index][0]
 
     def mass_center_of(self, voxel_id):
         index = self.index_of(voxel_id)
