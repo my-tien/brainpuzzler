@@ -5,14 +5,16 @@ import cProfile
 from django.db.models import Q
 
 from jobs.chunk import Chunk
-from jobs.models import job_exists, Submission
+from jobs.mergelist import Mergelist, SegObject
+from jobs.models import job_exists, Job, Submission
 from jobs.scripts.submission_validation import write_majority_vote_mergelist
 
 info_path = "/home/knossos/chunk_infos/"
 
 
 def content():
-    chunk_range = [num for num in range(0, 2475) if job_exists(num)]
+    ids = [1002, 1203, 1400, 1025, 1233, 1418, 1050, 1280, 1130, 1330, 1177, 1380]
+    chunk_range = [num for num in ids if job_exists(num)]
     overlap_list = []
     for chunk_number in chunk_range:
         chunk = Chunk(chunk_number)
@@ -24,15 +26,23 @@ def content():
             if submission.job.chunk_number not in chunks:
                 mergelist = submission.mergelist()
                 if mergelist is not None:
-                    mergelists.append(mergelist)
+                    mergelists.append((mergelist, submission.job.chunk_number))
                     chunks.append(submission.job.chunk_number)
         print("chunk {0}: {1} overlaps\n".format(chunk_number, len(mergelists)))
-        overlap_list.append("chunk {0}: {1} overlaps\n".format(chunk_number, len(mergelists)))
-        print("Creating majority vote mergelist for {0}".format(chunk_number))
-        write_majority_vote_mergelist(chunk_number, mergelists, True, "/home/knossos/mergelists/mergelist_{0}.txt".format(chunk_number))
+        if len(mergelists) == 27:
+            overlap_list.append("chunk {0}: {1} overlaps\n".format(chunk_number, len(mergelists)))
 
-    with open("/home/knossos/overlaps.txt", 'w') as overlaps_f:
-        overlaps_f.writelines(overlap_list)
+        for mergelist in mergelists:
+            chunk = Chunk(mergelist[1])
+            for sub_id in chunk.ids():
+                if sub_id not in mergelist[0].seg_subobjects.keys():
+                    mergelist[0].add_object(0, 1, chunk.mass_center_of(sub_id), [sub_id])
+            mergelist[0].write("/home/knossos/complete_mergelists/mergelist_{0}.txt".format(mergelist[1]))
+    #     print("Creating majority vote mergelist for {0}".format(chunk_number))
+    #     write_majority_vote_mergelist(chunk_number, mergelists, True, "/home/knossos/mergelists/mergelist_{0}.txt".format(chunk_number))
+    #
+    # with open("/home/knossos/overlaps.txt", 'w') as overlaps_f:
+    #     overlaps_f.writelines(overlap_list)
 
 
 def run(*args):

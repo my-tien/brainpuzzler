@@ -2,7 +2,7 @@ import os
 
 from jobs.models import Submission
 from jobs.scripts.submission_validation import is_acceptable, has_0_time
-from jobs.scripts.mw_communication import get_unrated_tasks, Task
+from jobs.mw_communication import get_unrated_tasks, Task
 
 
 def run(*args):

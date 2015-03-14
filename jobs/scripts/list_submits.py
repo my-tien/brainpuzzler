@@ -3,7 +3,7 @@ __author__ = 'Tieni'
 import os
 
 from jobs.models import Submission
-from jobs.scripts.mw_communication import get_tasks_from
+from jobs.mw_communication import get_tasks_from
 
 
 def run(*args):

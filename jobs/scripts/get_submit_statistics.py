@@ -1,9 +1,6 @@
 __author__ = 'tieni'
 
 import os
-import matplotlib as mpl
-mpl.use("Agg")
-import matplotlib.pyplot as pyplot
 import numpy
 from xml.dom import minidom
 from zipfile import ZipFile
@@ -11,25 +8,9 @@ from zipfile import ZipFile
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
 from jobs.mergelist import Mergelist
+from jobs.plotter import save_histogram
 from jobs.scripts.submission_validation import time
-from jobs.scripts.mw_communication import campaign_info, get_tasks, get_accepted_tasks, get_tasks_from, Task
-
-
-figure_path = "/home/knossos/figures/"
-
-def save_histogram(data, bin_range, name):
-    figure = pyplot.figure()
-    histo = figure.add_subplot(111)
-    histo.hist(data, bins=bin_range)
-    rects = [rect for rect in histo.get_children() if isinstance(rect, mpl.patches.Rectangle)]
-    for rect in rects:
-        height = rect.get_height()
-        if height == 1:
-            continue
-        histo.text(rect.get_x()+rect.get_width()/2., height, str(height), ha='center', va='bottom')
-    histo.set_xlabel("time in minutes")
-    histo.set_ylabel("number of jobs")
-    figure.savefig(figure_path + name)
+from jobs.mw_communication import campaign_info, get_tasks, get_accepted_tasks, get_tasks_from, Task
 
 
 def run(*args):
@@ -45,7 +26,7 @@ def run(*args):
                     times.append(time(annotation)/1000/60)
                     if time(annotation)/1000/60 == 0:
                         print(base + dir + "/" + file + " with time {0}".format(time(annotation)))
-        save_histogram(times, [x*5 for x in range(0, 10)], "conventional_time.png")
+        save_histogram(times, [x*5 for x in range(0, 10)], "time in minutes", "number of jobs", "conventional_time.png")
         print("{0:.2f} min avg time, {1:.2f} h total time ({2} files, {3} min, {4} max)"
               .format(sum(times)/len(times), sum(times)/60, len(times), min(times), max(times)))
 
@@ -59,7 +40,7 @@ def run(*args):
             if annotation:
                 times.append(time(submission.annotation())/1000/60)
 
-        save_histogram(times, [x*5 for x in range(0, 10)], "mw_time.png")
+        save_histogram(times, [x*5 for x in range(0, 10)], "time in minutes", "number of jobs", "mw_time.png")
         print("{0:.2f} min avg time, {1:.2f} h total time ({2} files, {3} min, {4} max)"
               .format(sum(times)/len(times), sum(times)/60, len(times), min(times), max(times)))
 

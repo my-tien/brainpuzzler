@@ -62,7 +62,7 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
     neighbor_set = chunk.get_supervoxel_neighbors()
     merges = []
     for neighbor_pair in neighbor_set:  # majority vote for merging the neighbor pair
-        neighbors = [neighbor for neighbor in neighbor_pair]
+        neighbors = list(neighbor_pair)
         vote = 0
         overlaps = 0
         for mergelist in mergelists:
@@ -71,25 +71,43 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
             if len(ids1) > 0 and len(ids2) > 0:  # only mergelists containing both objects can participate
                 overlaps += 1
                 vote += 1 if len(ids1 & ids2) > 0 else 0
+        print("overlaps: {0}, vote {1}".format(overlaps, vote))
         if vote > overlaps/2:
+            print("MERGING")
             merges.append(neighbors)
-
+    # neuron = []
+    # for merge in merges:
+    #     if 148688 == merge[0]:
+    #         neuron.append(merge[1])
+    #     elif 148688 == merge[1]:
+    #         neuron.append(merge[0])
+    # skip = []
+    # for n in neuron:
+    #     for index, merge in enumerate(merges):
+    #         if index in skip: continue
+    #         if n == merge[0]:
+    #             neuron.append(merge[1])
+    #             skip.append(index)
+    #         if n == merge[1]:
+    #             neuron.append(merge[0])
+    #             skip.append(index)
+    # print(neuron)
     # move merge pairs into their respective connected components
-    indices_to_skip = []  # remembers all visited pairs
+    indices_to_del = []
     for index, pair1 in enumerate(merges):
-        if index in indices_to_skip:
+        if index in indices_to_del:
             continue
         connected = [pair1[0], pair1[1]]
         for index2, pair2 in enumerate(merges):
-            if pair2 == pair1 or index2 in indices_to_skip:
+            if pair2 == pair1 or index2 in indices_to_del:
                 continue
             if len([val for val in pair2 if val in connected]) != 0:  # if one neighbor in component, add the other too
                 connected += pair2
-                indices_to_skip.append(index2)
+                indices_to_del.append(index2)
         pair1 += connected
 
-    indices_to_skip.sort()
-    for index in indices_to_skip[::-1]:
+    indices_to_del.sort()
+    for index in indices_to_del[::-1]:
         merges.pop(index)
     merges = [set(group) for group in merges]
     if include_solos:  # add all unmerged subobjects too

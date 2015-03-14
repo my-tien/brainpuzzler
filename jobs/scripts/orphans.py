@@ -4,7 +4,7 @@ import os
 
 from brainpuzzler.settings import MEDIA_ROOT
 from jobs.models import Submission
-from jobs.scripts.mw_communication import get_tasks, Task
+from jobs.mw_communication import get_tasks, Task
 
 
 def run(*args):

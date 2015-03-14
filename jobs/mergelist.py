@@ -15,16 +15,11 @@ class SegObject:
         return "object {0} at {1}: {2}".format(self.id, self.pos, self.supervoxels)
 
 
-class SegSubObject:
-    def __init__(self, sub_id, obj_ids=None):
-        self.id = sub_id
-        self.objects = [] if obj_ids is None else obj_ids
-
-
 class Mergelist:
     def __init__(self, mergelist_path=None):
         self.seg_objects = []
         self.seg_subobjects = {}  # dict subobjectID : set of objectIDs
+        self.max_object_id = 0
 
         if mergelist_path is None:
             return
@@ -51,13 +46,19 @@ class Mergelist:
         try:
             return self.seg_subobjects[sub_id]
         except KeyError:
-            return {}
+            return set()
 
     def are_merged(self, id1, id2):
         for seg_obj in self.seg_objects:
             if id1 in seg_obj.supervoxels and id2 in seg_obj.supervoxels:
                 return True
         return False
+
+    def add_object(self, todo, immutable, position, initial_subobjects, category="", comment=""):
+        self.max_object_id += 1
+        self.seg_objects.append(SegObject(self.max_object_id, todo, immutable, position, initial_subobjects, category, comment))
+        for subobject in initial_subobjects:
+            self.seg_subobjects[subobject] = self.max_object_id
 
     def read(self, stream):
         if stream is None or stream is False:

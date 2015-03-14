@@ -1,53 +1,66 @@
 __author__ = 'tieni'
+
+from os import listdir
+
 from jobs.chunk import Chunk
 from jobs.mergelist import Mergelist
+from jobs.plotter import save_histogram
 
-control_path = "/home/knossos/conventional_submits/mergelists/mergelist_"
-test_path = "/home/knossos/mergelists/mergelist_"
+control_path = "/home/knossos/control_lists/"
+test_path = "/home/knossos/mergelists/"
 
 
 def run(*args):
     if len(args) != 1:
-        print("Usage: compare_submits --script-args=chunk_number")
+        print("Usage: compare_submits --script-args=chunk_number|all")
         return
+    files = [name for name in listdir(control_path)] if "all" in args else ["mergelist_{0}.txt".format(args[0])]
+    print(files)
+    relative_errors = []
+    for name in files:
+        number = int(name.split('_')[1][:-4])
+        control_list = Mergelist(control_path + name)
+        mergelist = Mergelist(test_path + name)
+        chunk = Chunk(number)
+        control_sizes = {}
+        abs_errors = {}
+        for seg_obj in [seg_object for seg_object in control_list.seg_objects if "neuron" in seg_object.comment]:
+            # retrieve correct size for each neuron
+            control_sizes[seg_obj.id] = 0
+            for supervoxel in seg_obj.supervoxels:
+                if chunk.index_of(supervoxel) == -1:
+                    continue
+                control_sizes[seg_obj.id] += chunk.size_of(supervoxel)
 
-    control_list = Mergelist(control_path + args[0] + ".txt")
-    mergelist = Mergelist(test_path + args[0] + ".txt")
-    chunk = Chunk(int(args[0]))
-    control_sizes = {}
-    for seg_obj in control_list.seg_objects:
-        control_sizes[seg_obj.id] = 0
-        for supervoxel in seg_obj.supervoxels:
-            if chunk.index_of(supervoxel) == -1:
-                continue
-            control_sizes[seg_obj.id] += chunk.size_of(supervoxel)
-    abs_errors = {}
-    for seg_obj in [seg_object for seg_object in mergelist.seg_objects if "ecs" not in seg_object.comment]:
-        test_voxels = seg_obj.supervoxels
-        max_intersects = 0
-        matching_object = None
-        for control_obj in control_list.seg_objects:
-            intersection = len(set(control_obj.supervoxels) & test_voxels)
-            if intersection > max_intersects:
-                max_intersects = intersection
-                matching_object = control_obj
-        if matching_object is None:
-            continue
-        control_voxels = matching_object.supervoxels
-        difference = (test_voxels ^ control_voxels) - (test_voxels & control_voxels)
-        error = 0
-        for supervoxel in difference:
-            error += chunk.size_of(supervoxel)
-        try:
-            abs_errors[matching_object.id] = min(error, abs_errors[matching_object.id])
-        except KeyError:
-            abs_errors[matching_object.id] = error
+            # compare with most similar object in test-mergelist
+            max_intersects = 0
+            similar_object = None
+            for test_obj in mergelist.seg_objects:
+                intersection = len(seg_obj.supervoxels & test_obj.supervoxels)
+                if intersection > max_intersects:
+                    max_intersects = intersection
+                    similar_object = test_obj
+            if similar_object is None:
+                abs_errors[seg_obj.id] = (control_sizes[seg_obj.id], -1)
+            else:
+                difference = (seg_obj.supervoxels ^ similar_object.supervoxels) - (seg_obj.supervoxels & similar_object.supervoxels)
+                error = 0
+                for supervoxel in difference:
+                    error += chunk.size_of(supervoxel)
+                try:
+                    if error < abs_errors[seg_obj.id][0]:
+                        abs_errors[seg_obj.id] = (error, similar_object.id)
+                except KeyError:
+                    abs_errors[seg_obj.id] = (error, similar_object.id) if error < control_sizes[seg_obj.id] else (control_sizes[seg_obj.id], similar_object.id)
 
-    rel_errors = {}
-    for obj_id, error in abs_errors.items():
-        rel_errors[obj_id] = error / control_sizes[obj_id]
-    for obj_id, rel_error in rel_errors.items():
-        print("{0}: {1:.2f}% error".format(obj_id, rel_error))
-    total_error = sum(abs_errors.values())
-    total_size = sum(control_sizes.values())
-    print("total error: {0:.2f}% ({1}/{2})".format(total_error/total_size, total_error, total_size))
+        rel_errors = {}
+        for obj_id, error in abs_errors.items():
+            rel_errors[obj_id] = error[0] / control_sizes[obj_id]
+        for obj_id, rel_error in rel_errors.items():
+            print("{0}: {1:.2f} error with obj {2}".format(obj_id, rel_error, abs_errors[obj_id][1]))
+        total_error = sum([error[0] for error in abs_errors.values()])
+        total_size = sum(control_sizes.values())
+        relative_errors.append(total_error/total_size)
+        print("chunk {0}: total error of {1:.2f} ({2}/{3})".format(number, total_error/total_size, total_error, total_size))
+
+    save_histogram(list(relative_errors), [0.1*x for x in range(1, 11)], "error in percent", "number of submits", "errors.png")
