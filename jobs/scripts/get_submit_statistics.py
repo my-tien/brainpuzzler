@@ -16,8 +16,8 @@ from jobs.mw_communication import campaign_info, get_tasks, get_accepted_tasks, 
 def run(*args):
     submissions = Submission.objects.all()
     times = []
-    if "hongkong-time" in args:
-        base = "/home/knossos/hongkong_submits/"
+    if "conventional-time" in args:
+        base = "/home/knossos/conventional_submits/"
         folders = [name for name in os.listdir(base)]
         for dir in folders:
             for file in os.listdir(base + dir):
