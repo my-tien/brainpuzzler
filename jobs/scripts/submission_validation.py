@@ -1,11 +1,13 @@
 __author__ = 'tieni'
 
+import networkx as nx
 import numpy
+import os
 from xml.dom import minidom
 
 from jobs.chunk import Chunk
 from jobs.mergelist import Mergelist, SegObject
-
+from jobs.plotter import plot_graph
 min_secs_per_task = 4
 max_split_requests = 10
 
@@ -45,6 +47,15 @@ def has_0_time(submission):
     return False
 
 
+def build_connected_components(objects):
+    G = nx.Graph()
+    for obj in objects:
+        first = obj.pop()
+        while obj:
+            G.add_edge(first, obj.pop())
+    return list(nx.connected_components(G))
+
+
 def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path):
     """
     Write a unified mergelist from all available mergelists to this chunk.
@@ -58,73 +69,47 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
     :param mergelists: the input mergelists
     :param path: absolute output path for majority vote mergelist
     """
-    chunk = Chunk(chunk_number)
-    neighbor_set = chunk.get_supervoxel_neighbors()
+    chunks = {chunk_number: Chunk(chunk_number)}
+    neighbor_sets = {}
+    for mergelist in mergelists:
+        with open("/home/knossos/chunk_neighbors/chunk_{0}.txt".format(mergelist[1]), 'r') as neighbor_file:
+            neighbor_set = set()
+            for line in neighbor_file:
+                neighbor_set.add(frozenset([int(value) for value in line.split()]))
+        neighbor_sets[mergelist[1]] = neighbor_set
+
     merges = []
-    for neighbor_pair in neighbor_set:  # majority vote for merging the neighbor pair
+    for neighbor_pair in neighbor_sets[chunk_number]:  # majority vote for merging the neighbor pair
         neighbors = list(neighbor_pair)
         vote = 0
         overlaps = 0
         for mergelist in mergelists:
-            ids1 = mergelist.contained_in(neighbors[0])
-            ids2 = mergelist.contained_in(neighbors[1])
-            if len(ids1) > 0 and len(ids2) > 0:  # only mergelists containing both objects can participate
+            if neighbor_pair in neighbor_sets[mergelist[1]]:
+                ids1 = mergelist[0].contained_in(neighbors[0])
+                ids2 = mergelist[0].contained_in(neighbors[1])
+            # if len(ids1) > 0 and len(ids2) > 0:  # only mergelists containing both objects can participate
                 overlaps += 1
                 vote += 1 if len(ids1 & ids2) > 0 else 0
-        print("overlaps: {0}, vote {1}".format(overlaps, vote))
-        if vote > overlaps/2:
-            print("MERGING")
+        if vote > max(7, overlaps/2):
+            print("overlaps: {0}, votes: {1}".format(overlaps, vote))
             merges.append(neighbors)
-    # neuron = []
-    # for merge in merges:
-    #     if 148688 == merge[0]:
-    #         neuron.append(merge[1])
-    #     elif 148688 == merge[1]:
-    #         neuron.append(merge[0])
-    # skip = []
-    # for n in neuron:
-    #     for index, merge in enumerate(merges):
-    #         if index in skip: continue
-    #         if n == merge[0]:
-    #             neuron.append(merge[1])
-    #             skip.append(index)
-    #         if n == merge[1]:
-    #             neuron.append(merge[0])
-    #             skip.append(index)
-    # print(neuron)
-    # move merge pairs into their respective connected components
-    indices_to_del = []
-    for index, pair1 in enumerate(merges):
-        if index in indices_to_del:
-            continue
-        connected = [pair1[0], pair1[1]]
-        for index2, pair2 in enumerate(merges):
-            if pair2 == pair1 or index2 in indices_to_del:
-                continue
-            if len([val for val in pair2 if val in connected]) != 0:  # if one neighbor in component, add the other too
-                connected += pair2
-                indices_to_del.append(index2)
-        pair1 += connected
 
-    indices_to_del.sort()
-    for index in indices_to_del[::-1]:
-        merges.pop(index)
-    merges = [set(group) for group in merges]
-    if include_solos:  # add all unmerged subobjects too
-        for obj_id in chunk.ids():
-            existent = False
-            for group in merges:
-                if obj_id in group:
-                    existent = True
-                    break
-            if not existent:
-                merges.append({obj_id})
+    merges = build_connected_components(merges)
 
-    merges = [list(merger) for merger in merges]
+    # if include_solos:  # add all unmerged subobjects too
+    #     for obj_id in chunks[chunk_number].ids():
+    #         existent = False
+    #         for group in merges:
+    #             if obj_id in group:
+    #                 existent = True
+    #                 break
+    #         if not existent:
+    #             merges.append([obj_id])
+
     majority_mergelist = Mergelist()
     obj_id = 1
     for merge in merges:
-        coord = chunk.mass_centers()[chunk.index_of(merge[0])][0]
+        coord = chunks[chunk_number].mass_center_of(merge[0])
         majority_mergelist.seg_objects.append(SegObject(obj_id, 0, 1, coord, merge))
         obj_id += 1
     majority_mergelist.write(path)
