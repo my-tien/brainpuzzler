@@ -95,7 +95,8 @@ class Mergelist:
         with open(absolute_path, 'w') as mergelist:
             for seg_obj in self.seg_objects:
                 mergelist.write("{0} {1} {2} {3}\n{4}\n{5}\n{6}\n"
-                                .format(seg_obj.id, seg_obj.todo, seg_obj.immutable, ' '.join([str(voxel) for voxel in seg_obj.supervoxels]),
+                                .format(seg_obj.id, 1 if seg_obj.todo else 0, 1 if seg_obj.immutable else 0,
+                                        ' '.join([str(voxel) for voxel in seg_obj.supervoxels]),
                                         ' '.join([str(coord) for coord in seg_obj.pos]),
                                         seg_obj.category,
                                         seg_obj.comment))
