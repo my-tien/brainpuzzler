@@ -1,14 +1,18 @@
 __author__ = 'tieni'
 
 import h5py
+import math
 import numpy
 
-info_path = "/home/knossos/chunk_infos/"
+base_coords = [4840, 4712, 2630]
+chunks_in_z = 11
+chunks_in_xy = 15
 
 
 class Chunk:
     width = 140
     depth = 138
+    info_path = "/home/knossos/chunk_infos/"
 
     def __init__(self, chunk_number):
         self.number = chunk_number
@@ -18,11 +22,11 @@ class Chunk:
         self._sizes = None
 
     def read_seg(self):
-        with h5py.File(info_path + "chunk{0}_values.h5".format(self.number), 'r') as values:
+        with h5py.File(Chunk.info_path + "chunk{0}_values.h5".format(self.number), 'r') as values:
             self._seg = values['seg'].value
 
     def read_info(self):
-        with h5py.File(info_path + "chunk{0}_info.h5".format(self.number), 'r') as info:
+        with h5py.File(Chunk.info_path + "chunk{0}_info.h5".format(self.number), 'r') as info:
             self._mass_center = info['com'].value
             self._ids = info['ids'].value
             self._sizes = info['size'].value
@@ -58,7 +62,24 @@ class Chunk:
 
     def mass_center_of(self, voxel_id):
         index = self.index_of(voxel_id)
-        return self.mass_centers()[index]
+        return self.mass_centers()[index][0]
+
+    def coordinates(self):
+        chunk_number = self.number + 1  # first chunk has number 0
+        number_bars = math.ceil(chunk_number/chunks_in_z)
+        x = math.ceil(number_bars/chunks_in_xy)
+        x = 0 if x < 1 else int(x/2)*140 if x % 2 == 1 else x/2 * 140 - 70
+        x += base_coords[0]
+
+        y = number_bars % chunks_in_xy
+        y = 0 if y < 1 else int(y/2) * 140 if y % 2 == 1 else y/2*140 - 70
+        y += base_coords[1]
+
+        z = chunk_number % 11
+        z = 0 if z < 1 else int(z/2)*70 if z % 2 == 1 else z/2*70 - 35
+        z += base_coords[2]
+
+        return [x, y, z]
 
     def get_supervoxel_neighbors(self):
         """
