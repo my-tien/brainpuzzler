@@ -14,12 +14,14 @@ from jobs.mw_communication import campaign_info, get_tasks, get_accepted_tasks, 
 
 
 def run(*args):
-    submissions = Submission.objects.all()
+    submissions = None
     times = []
     if "conventional-time" in args:
         base = "/home/knossos/conventional_submits/"
         folders = [name for name in os.listdir(base)]
         for dir in folders:
+            if dir == "mergelists":
+                continue
             for file in os.listdir(base + dir):
                 with ZipFile(base + dir + "/" + file, 'r') as kzip, kzip.open("annotation.xml", 'r') as xml:
                     annotation = str(xml.read(), 'utf-8')
@@ -45,6 +47,8 @@ def run(*args):
               .format(sum(times)/len(times), sum(times)/60, len(times), min(times), max(times)))
 
     if "time-per-todo" in args:
+        if submissions is None:
+            submissions = Submission.objects.all()
         for submission in submissions:
             submission_path = MEDIA_ROOT + os.path.basename(submission.submit_file.name)
             job_path = MEDIA_ROOT + os.path.basename(submission.job.job_file.name)
@@ -65,6 +69,8 @@ def run(*args):
         print(times)
 
     if "split-requests" in args:
+        if submissions is None:
+            submissions = Submission.objects.all()
         splits = []
         for submission in submissions:
             mergelist = submission.mergelist()

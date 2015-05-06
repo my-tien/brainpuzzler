@@ -15,7 +15,6 @@ def run(*args):
         print("Usage: compare_submits --script-args=chunk_number|all")
         return
     files = [name for name in listdir(control_path)] if "all" in args else ["mergelist_{0}.txt".format(args[0])]
-    print(files)
     relative_errors = []
     for name in files:
         number = int(name.split('_')[1][:-4])
@@ -33,28 +32,29 @@ def run(*args):
                 control_sizes[seg_obj.id] += chunk.size_of(supervoxel)
 
             # compare with most similar object in test-mergelist
-            max_intersects = 0
+            max_intersect_size = 0
             similar_object = None
             for test_obj in mergelist.seg_objects:
-                intersection = len(seg_obj.supervoxels & test_obj.supervoxels)
-                if intersection > max_intersects:
-                    max_intersects = intersection
+                intersection = seg_obj.supervoxels & test_obj.supervoxels
+                intersect_size = 0
+                for supervoxel in intersection:
+                    intersect_size += chunk.size_of(supervoxel)
+                if intersect_size > max_intersect_size:
+                    max_intersect_size = intersect_size
                     similar_object = test_obj
-            if similar_object is None:
-                abs_errors[seg_obj.id] = (control_sizes[seg_obj.id], -1)
-            else:
-                difference = (seg_obj.supervoxels ^ similar_object.supervoxels) - (seg_obj.supervoxels & similar_object.supervoxels)
-                error = 0
-                for supervoxel in difference:
-                    error += chunk.size_of(supervoxel)
-                try:
-                    if error < abs_errors[seg_obj.id][0]:
-                        abs_errors[seg_obj.id] = (error, similar_object.id)
-                except KeyError:
-                    abs_errors[seg_obj.id] = (error, similar_object.id) if error < control_sizes[seg_obj.id] else (control_sizes[seg_obj.id], similar_object.id)
+            difference = (seg_obj.supervoxels ^ similar_object.supervoxels) - (seg_obj.supervoxels & similar_object.supervoxels)
+            error = 0
+            for supervoxel in difference:
+                error += chunk.size_of(supervoxel)
+            try:
+                if error < abs_errors[seg_obj.id][0]:
+                    abs_errors[seg_obj.id] = (error, similar_object.id)
+            except KeyError:
+                abs_errors[seg_obj.id] = (error, similar_object.id) if error < control_sizes[seg_obj.id] else (control_sizes[seg_obj.id], similar_object.id)
 
         rel_errors = {}
         for obj_id, error in abs_errors.items():
+            # if error[1] == 10: print("ERROR: {0}, control {1}".format(error[0], control_sizes[obj_id]))
             rel_errors[obj_id] = error[0] / control_sizes[obj_id]
         for obj_id, rel_error in rel_errors.items():
             print("{0}: {1:.2f} error with obj {2}".format(obj_id, rel_error, abs_errors[obj_id][1]))
@@ -62,5 +62,5 @@ def run(*args):
         total_size = sum(control_sizes.values())
         relative_errors.append(total_error/total_size)
         print("chunk {0}: total error of {1:.2f} ({2}/{3})".format(number, total_error/total_size, total_error, total_size))
-
-    save_histogram(list(relative_errors), [0.1*x for x in range(1, 11)], "error in percent", "number of submits", "errors.png")
+        print("relative errors: {0}".format(relative_errors))
+    save_histogram(list(relative_errors), [0.01*x for x in range(0, 10)], "error in percent", "number of submits", "errors.png", False)
