@@ -68,15 +68,25 @@ class Chunk:
         chunk_number = self.number + 1  # first chunk has number 0
         number_bars = math.ceil(chunk_number/chunks_in_z)
         x = math.ceil(number_bars/chunks_in_xy)
-        x = 0 if x < 1 else int(x/2)*140 if x % 2 == 1 else x/2 * 140 - 70
+        x = 0 if x < 1 \
+            else int(x/2)*140 if x % 2 == 1 \
+            else x/2 * 140 - 70
         x += base_coords[0]
 
         y = number_bars % chunks_in_xy
-        y = 0 if y < 1 else int(y/2) * 140 if y % 2 == 1 else y/2*140 - 70
+        # 5692 == base_coords[1] + int(chunks_in_xy/2)*140
+        y = 5692 if y == 0 \
+            else 0 if y < 1 \
+            else int(y/2) * 140 if y % 2 == 1 \
+            else y/2*140 - 70
         y += base_coords[1]
 
         z = chunk_number % 11
-        z = 0 if z < 1 else int(z/2)*70 if z % 2 == 1 else z/2*70 - 35
+        # 2980 == base_coords[2] + int(chunks_in_z/2) * 70
+        z = 2980 if z == 0 \
+            else 0 if z < 1 \
+            else int(z/2)*70 if z % 2 == 1 \
+            else z/2*70 - 35
         z += base_coords[2]
 
         return [x, y, z]
