@@ -74,22 +74,22 @@ class Chunk:
         x += base_coords[0]
 
         y = number_bars % chunks_in_xy
-        # 5692 == base_coords[1] + int(chunks_in_xy/2)*140
-        y = 5692 if y == 0 \
+        # 980 == int(chunks_in_xy/2)*140
+        y = 980 if y == 0 \
             else 0 if y < 1 \
             else int(y/2) * 140 if y % 2 == 1 \
             else y/2*140 - 70
         y += base_coords[1]
 
         z = chunk_number % 11
-        # 2980 == base_coords[2] + int(chunks_in_z/2) * 70
-        z = 2980 if z == 0 \
+        # 350 == int(chunks_in_z/2) * 70
+        z = 350 if z == 0 \
             else 0 if z < 1 \
             else int(z/2)*70 if z % 2 == 1 \
             else z/2*70 - 35
         z += base_coords[2]
 
-        return [x, y, z]
+        return [int(x), int(y), int(z)]
 
     def get_supervoxel_neighbors(self):
         """
