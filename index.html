@@ -2,129 +2,128 @@
 layout: default
 ---
 
-<main>
-    <section id="cover__left">
-        <div id="cover__left--inside">
-            <header>
-                <h2>The Brainpuzzler <span>Project</span></h2>
-            </header>
-            <p>Connectomics meets micro-jobbing</p>
+<div id="wrapper">
+    <div id="header">
+        <header>
+            <h1>The Brainpuzzler Project<br>
+            has finished.</h1>
+            <p>We would like to thank all micro-workers for their contributions!</p>
+        </header>
 
-            <footer>
-                <p>A research project developed at the<br> <strong>Max Planck Institute for Medical Research</strong></p>
+        <footer>
+            <p>A research project developed at the<br> <strong>Max Planck Institute for Medical Research</strong></p>
 
-                <a href="https://www.mpimf-heidelberg.mpg.de/en" class="button--mpi">More</a>
-            </footer>
-        </div>
+            <a href="https://www.mpimf-heidelberg.mpg.de/en" class="button--mpi">More</a>
+        </footer>
+    </div>
+
+    <section id="ranking">
+        <table class="default">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Land</th>
+                    <th>Nickname</th>
+                    <th>Ranking</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Mirka Kalicanin</td>
+                    <td>Serbia</td>
+                    <td>MK89</td>
+                    <td>★★★★</td>
+                </tr>
+                <tr>
+                    <td>Mariusz Cholewa</td>
+                    <td>Poland</td>
+                    <td>Yapan</td>
+                    <td>★★★</td>
+                </tr>
+                <tr>
+                    <td>Magdalena Kot</td>
+                    <td>Poland</td>
+                    <td>Kotek</td>
+                    <td>★★★</td>
+                </tr>
+                <tr>
+                    <td>Milos Duric</td>
+                    <td>Serbia</td>
+                    <td>Member_571232</td>
+                    <td>★★★</td>
+                </tr>
+                <tr>
+                    <td>Ray Dyer</td>
+                    <td>Canada</td>
+                    <td>RDyerCA</td>
+                    <td>★★</td>
+                </tr>
+                <tr>
+                    <td>Darjan Svojic</td>
+                    <td>Serbia</td>
+                    <td>Member_894808</td>
+                    <td>★</td>
+                </tr>
+                <tr>
+                    <td>Filip Bogdanoski</td>
+                    <td>Macedonia</td>
+                    <td>gokio</td>
+                    <td>★</td>
+                </tr>
+                <tr>
+                    <td>Ivan Bogdanoski</td>
+                    <td>Macedonia</td>
+                    <td>gokio</td>
+                    <td>★</td>
+                </tr>
+                <tr>
+                    <td>Victor Mutethia</td>
+                    <td>Kenya</td>
+                    <td>Member_156205</td>
+                    <td>★</td>
+                </tr>
+                <tr>
+                    <td>Davor Trenkoski</td>
+                    <td>Macedonia</td>
+                    <td>Bubasvaba</td>
+                    <td>★</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
-
-
-    <a href="#" id="menu_show" class="animated rubberBand forever slow">
-        <span class="sq_1"></span>
-        <span class="sq_2"></span>
-        <span class="sq_3"></span>
-        <span class="sq_4"></span>
-    </a>
-
-    <section id="cover__right" class="animated">
-        <h2>Learn about the challenges of brain reconstruction:</h2>
-
-        <div id="gallery--video">
-            <a href="http://youtu.be/letdtsUgIe4?rel=0" data-poptrox="youtube,800x480" class="image thumb"><img src="{{ "/images/thumbnail.png" | prepend: site.baseurl }}" alt="Brainpuzzler Introduction Video" class="image fit"></a>
-        </div>
-
-        <p>The <em>Brainpuzzler</em> project is open for participation on <a href="">Microworkers.com</a>. If you live in one of the following countries, you can create a Microworkers account to contribute to our project:</p>
-
-        <p>United States of America, Canada, United Kingdom, Australia, European Countries</p>
-
-        <p>We employ the brain reconstruction tool <strong>Knossos</strong> for our work. If you are interested, you are welcome to have a look at our interactive tutorial:</p>
-
-        <p>
-            <a href="../downloads/win32-Setup-Knossos 4.1.exe" class="button button-primary">Knossos Windows 32bit</a>
-            <a href="../downloads/win64-Setup-Knossos 4.1.exe" class="button button-primary">Knossos Windows 64bit</a>
-        </p>
-        <p>
-            <a href="{{ "/tutorial/" | prepend: site.baseurl }}" class="button">Tutorial</a>
-        </p>
-
-        <p>(This is a special version of <strong>Knossos</strong> with built-in functionality for micro-jobbing.)</p>
-    </section>
-
-    <section id="cover__outside" class="animated">
-        <nav id="nav--sub">
-            <ul>
-                <li><a href="#about" class="button">About <strong>Brainpuzzler</strong></a></li>
-                <li><a href="#contributors" class="button">Contributors</a></li>
-                <li><a href="#contact" class="button">Contact</a></li>
-            </ul>
-        </nav>
-
-        <div id="about" class="part-content">
-            <h3>About the Project</h3>
-
-            <p>Connectomics is the science of reconstructing entire networks of brain cells, called &lsquo;neurons&rsquo;. One great difficulty lies in the sheer number of neurons within a single creature. For example, larval zebrafish already have a complex nervous system with around 100,000 neurons. Another challenge is the small scale we have to work with: Neurons are measured in micrometers.</p>
-
-            <p>Computers are able to process these vast amounts of information. They perform extremely fast neuron reconstructions after they learned how to recognize brain cells.</p>
-
-            <p>But teaching computers to recognize objects in brain images is complex, the results are error-prone.</p>
-
-            <p>Humans, on the other hand, work very slowly compared to computers, but are naturally superior when it comes to pattern recognition.</p>
-
-            <p>So we came up with a solution that combines the strengths of both computers and humans:</p>
-
-            <p>We take the micro-jobbing approach to let the internet community correct computer outputs of neuron reconstructions – and get paid for it. For this we put emphasize on enabling everybody to participate, without needing any background in neuroscience.</p>
-
-            <p>Join the connectomics field and be an active part of research!</p>
-        </div>
-
-        <div id="contributors" class="part-content">
-            <h3>The people behind Brainpuzzler</h3>
-
-            <p>Brainpuzzler is part of My-Tien Nguyen&rsquo;s bachelor&rsquo;s thesis in the department of Biomedical Optics (Prof. Winfried Denk) at the <em>Max Planck Institute for Medical Research</em> in <em>Heidelberg, Germany</em>. She studies Medical Informatics at the <em>Mannheim University of Applied Sciences</em>.</p>
-
-            <h4>Contributions:</h4>
-            <ul>
-                <li>Image data and supervision by <em>Jörgen Kornfeld</em> (Ph.D. student in neuroscience)
-                </li>
-                <li>Segmentation data by <em>Julia Buhmann</em> (graduate student in molecular biotechnology), and <em>Sven Dorkenwald</em> (graduate student in physics)
-                </li>
-                <li><strong>Knossos</strong> is being developed by the <strong>Knossos</strong> team, founded by <em>Jörgen Kornfeld</em> and <em>Fabian Svara</em>: <a href="http://www.knossostool.org">www.knossostool.org</a>
-                <li><strong>Knossos&rsquo;</strong> segmentation feature by <em>Norbert Pfeiler, Michael Pronkin, and My-Tien Nguyen</em>
-                </li>
-                <li>Brainpuzzler website by <em>Sebastian Spaar</em></li>
-            </ul>
-        </div>
-
-        <div id="contact" class="part-content">
-            <div class="row">
-                <div class="3u">
-                    <img src="{{ "/images/team/my-tien.png" | prepend: site.baseurl }}" alt="My-Tien Nguyen" class="image fit">
-                </div>
-
-                <div class="9u">
-                    <p>Feel free to contact My-Tien if you have any questions or comments about Brainpuzzler:</p>
-
-
-                    <form action="//formspree.io/my-tien.nguyen@mpimf-heidelberg.mpg.de" method="POST">
-                        <input type="text" name="name" id="name" placeholder="Name" />
-                        <br>
-                        <input type="email" name="email" id="email" placeholder="Email" />
-                        <br>
-                        <textarea name="message" id="message" placeholder="Message" rows="5"></textarea>
-                        <br>
-                        <input type="submit" class="button button-primary" value="Send Message" />
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-
-<div id="background-slideshow">
-    <img src="{{ "/images/cement-vines.jpg" | prepend: site.baseurl }}" alt="">
-    <img src="{{ "/images/wall-vines.jpg" | prepend: site.baseurl }}" alt="">
-    <img src="{{ "/images/photo-jay-mantri-n-182.jpeg" | prepend: site.baseurl }}" alt="">
 </div>
 
-<script type="application/x-lua" src="/js/init.lua"></script>
+<section id="footer">
+    <h2>About Brainpuzzler</h2>
+    <p>Connectomics is the science of reconstructing entire networks of brain cells, called &lsquo;neurons&rsquo;. One great difficulty lies in the sheer number of neurons within a single creature. For example, larval zebrafish already have a complex nervous system with around 100,000 neurons. Another challenge is the small scale we have to work with: Neurons are measured in micrometers.</p>
+
+    <p>Computers are able to process these vast amounts of information. They perform extremely fast neuron reconstructions after they learned how to recognize brain cells.</p>
+
+    <p>But teaching computers to recognize objects in brain images is complex, the results are error-prone.</p>
+
+    <p>Humans, on the other hand, work very slowly compared to computers, but are naturally superior when it comes to pattern recognition.</p>
+
+    <p>So we came up with a solution that combines the strengths of both computers and humans:</p>
+
+    <p>We take the micro-jobbing approach to let the internet community correct computer outputs of neuron reconstructions – and get paid for it. For this we put emphasize on enabling everybody to participate, without needing any background in neuroscience.</p>
+
+    <p>Join the connectomics field and be an active part of research!</p>
+
+    <h2>The people behind Brainpuzzler</h2>
+    <p>Brainpuzzler is part of My-Tien Nguyen&rsquo;s bachelor&rsquo;s thesis in the department of Biomedical Optics (Prof. Winfried Denk) at the <em>Max Planck Institute for Medical Research</em> in <em>Heidelberg, Germany</em>. She studies Medical Informatics at the <em>Mannheim University of Applied Sciences</em>.</p>
+
+    <h3>Contributions:</h3>
+    <ul class="default">
+        <li>Image data and supervision by <em>Jörgen Kornfeld</em> (Ph.D. student in neuroscience)
+        </li>
+        <li>Segmentation data by <em>Julia Buhmann</em> (graduate student in molecular biotechnology), and <em>Sven Dorkenwald</em> (graduate student in physics)
+        </li>
+        <li><strong>KNOSSOS</strong> is being developed by the <strong>KNOSSOS</strong> team, founded by <em>Jörgen Kornfeld</em> and <em>Fabian Svara</em>: <a href="http://www.knossostool.org">www.knossostool.org</a>
+        <li><strong>KNOSSOS&rsquo;</strong> segmentation feature by <em>Norbert Pfeiler, Michael Pronkin, and My-Tien Nguyen</em>
+        </li>
+        <li>Brainpuzzler website by <em>Sebastian Spaar</em></li>
+    </ul>
+</section>
+
+<script src="{{ "/js/main.js" | prepend: site.baseurl }}"></script>
