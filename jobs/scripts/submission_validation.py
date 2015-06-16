@@ -7,7 +7,6 @@ from xml.dom import minidom
 
 from jobs.chunk import Chunk
 from jobs.mergelist import Mergelist, SegObject
-from jobs.plotter import plot_graph
 min_secs_per_task = 4
 max_split_requests = 10
 
@@ -56,7 +55,7 @@ def build_connected_components(objects):
     return list(nx.connected_components(G))
 
 
-def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path):
+def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, outputpath, min_vote=0):
     """
     Write a unified mergelist from all available mergelists to this chunk.
 
@@ -87,24 +86,23 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
             if neighbor_pair in neighbor_sets[mergelist[1]]:
                 ids1 = mergelist[0].contained_in(neighbors[0])
                 ids2 = mergelist[0].contained_in(neighbors[1])
-            # if len(ids1) > 0 and len(ids2) > 0:  # only mergelists containing both objects can participate
                 overlaps += 1
-                vote += 1 if len(ids1 & ids2) > 0 else 0
-        if vote > max(7, overlaps/2):
+                vote += 1 if len(ids1 & ids2) > 0 else 0  # only mergelists containing both objects can participate
+        if vote > max(min_vote, overlaps/2):
             print("overlaps: {0}, votes: {1}".format(overlaps, vote))
             merges.append(neighbors)
 
     merges = build_connected_components(merges)
 
-    # if include_solos:  # add all unmerged subobjects too
-    #     for obj_id in chunks[chunk_number].ids():
-    #         existent = False
-    #         for group in merges:
-    #             if obj_id in group:
-    #                 existent = True
-    #                 break
-    #         if not existent:
-    #             merges.append([obj_id])
+    if include_solos:  # add all unmerged subobjects too
+        for obj_id in chunks[chunk_number].ids():
+            existent = False
+            for group in merges:
+                if obj_id in group:
+                    existent = True
+                    break
+            if not existent:
+                merges.append([obj_id])
 
     majority_mergelist = Mergelist()
     obj_id = 1
@@ -112,4 +110,4 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, path)
         coord = chunks[chunk_number].mass_center_of(merge[0])
         majority_mergelist.seg_objects.append(SegObject(obj_id, 0, 1, coord, merge))
         obj_id += 1
-    majority_mergelist.write(path)
+    majority_mergelist.write(outputpath)
