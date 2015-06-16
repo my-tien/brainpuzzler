@@ -3,17 +3,12 @@ import shutil
 import tempfile
 
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from jobs.models import *
 from employer_key import *
 import brainpuzzler.settings as settings
-
-
-def index(request):
-    context = {'greeting': 'Hello World!'}
-    return render(request, 'jobs/index.html', context)
 
 
 def get_job(request, camp_id, mw_id, rand_key):
