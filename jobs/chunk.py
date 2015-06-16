@@ -23,7 +23,7 @@ class Chunk:
 
     def read_seg(self):
         with h5py.File(Chunk.info_path + "chunk{0}_values.h5".format(self.number), 'r') as values:
-            self._seg = values['seg'].value
+            self._seg = values['seg'].value.astype(numpy.int64)
 
     def read_info(self):
         with h5py.File(Chunk.info_path + "chunk{0}_info.h5".format(self.number), 'r') as info:
