@@ -2,29 +2,28 @@
 layout: default
 ---
 
-<div id="wrapper">
-    <div id="header">
-        <header>
-            <h1>The Brainpuzzler Project<br>
-            has finished.</h1>
-            <p>We would like to thank all micro-workers for their contributions!</p>
-        </header>
 
-        <footer>
-            <p>A research project developed at the<br> <strong>Max Planck Institute for Medical Research</strong></p>
+<!-- Header -->
+<header id="header">
+    <h1>The Brainpuzzler Project</h1>
+    <p>The Brainpuzzler project has finished. We would like to thank all micro-workers for their contributions!</p>
 
-            <a href="https://www.mpimf-heidelberg.mpg.de/en" class="button--mpi">More</a>
-        </footer>
-    </div>
+    <footer>
+        <p>A research project developed at the<br> <strong>Max Planck Institute for Medical Research</strong></p>
 
-    <section id="ranking">
+        <a href="https://www.mpimf-heidelberg.mpg.de/en" class="button--mpi">More</a>
+    </footer>
+</header>
+
+<section id="ranking">
+    <div class="content container 75%">
         <table class="default">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Land</th>
                     <th>Nickname</th>
-                    <th>Ranking</th>
+                    <th>Submissions</th>
                 </tr>
             </thead>
 
@@ -33,68 +32,67 @@ layout: default
                     <td>Mirka Kalicanin</td>
                     <td>Serbia</td>
                     <td>MK89</td>
-                    <td>★★★★</td>
-                </tr>
-                <tr>
-                    <td>Mariusz Cholewa</td>
-                    <td>Poland</td>
-                    <td>Yapan</td>
-                    <td>★★★</td>
-                </tr>
-                <tr>
-                    <td>Magdalena Kot</td>
-                    <td>Poland</td>
-                    <td>Kotek</td>
-                    <td>★★★</td>
+                    <td>948</td>
                 </tr>
                 <tr>
                     <td>Milos Duric</td>
                     <td>Serbia</td>
                     <td>Member_571232</td>
-                    <td>★★★</td>
+                    <td>500</td>
+                </tr>
+                <tr>
+                    <td>Mariusz Cholewa</td>
+                    <td>Poland</td>
+                    <td>Yapan</td>
+                    <td>335</td>
+                </tr>
+                <tr>
+                    <td>Magdalena Kot</td>
+                    <td>Poland</td>
+                    <td>Kotek</td>
+                    <td>168</td>
                 </tr>
                 <tr>
                     <td>Ray Dyer</td>
                     <td>Canada</td>
                     <td>RDyerCA</td>
-                    <td>★★</td>
+                    <td>99</td>
+                </tr>
+                <tr>
+                    <td>Filip Bogdanoski &amp; Ivan Bogdanoski</td>
+                    <td>Macedonia</td>
+                    <td>gokio</td>
+                    <td>69</td>
                 </tr>
                 <tr>
                     <td>Darjan Svojic</td>
                     <td>Serbia</td>
                     <td>Member_894808</td>
-                    <td>★</td>
-                </tr>
-                <tr>
-                    <td>Filip Bogdanoski</td>
-                    <td>Macedonia</td>
-                    <td>gokio</td>
-                    <td>★</td>
-                </tr>
-                <tr>
-                    <td>Ivan Bogdanoski</td>
-                    <td>Macedonia</td>
-                    <td>gokio</td>
-                    <td>★</td>
-                </tr>
-                <tr>
-                    <td>Victor Mutethia</td>
-                    <td>Kenya</td>
-                    <td>Member_156205</td>
-                    <td>★</td>
+                    <td>63</td>
                 </tr>
                 <tr>
                     <td>Davor Trenkoski</td>
                     <td>Macedonia</td>
                     <td>Bubasvaba</td>
-                    <td>★</td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>Victor Mutethia</td>
+                    <td>Kenya</td>
+                    <td>Member_156205</td>
+                    <td>9</td>
                 </tr>
             </tbody>
         </table>
-    </section>
-</div>
 
-<section id="footer">
+        <footer>
+            <p>Our <strong>top 10 honors contributors</strong>, who have put great effort into producing high quality results. Each of their submissions is above average and shows the contributor&rsquo;s attention to detail.</p>
+            <p>Thank you very much for your participation!</p>
+        </footer>
+    </div>
+</section>
+
+<section id="about">
     <h2>About Brainpuzzler</h2>
     <p>Connectomics is the science of reconstructing entire networks of brain cells, called &lsquo;neurons&rsquo;. One great difficulty lies in the sheer number of neurons within a single creature. For example, larval zebrafish already have a complex nervous system with around 100,000 neurons. Another challenge is the small scale we have to work with: Neurons are measured in micrometers.</p>
 
@@ -126,4 +124,4 @@ layout: default
     </ul>
 </section>
 
-<script src="{{ "/js/main.js" | prepend: site.baseurl }}"></script>
+<script src="{{ "/js/main.js" prepend: site.baseurl }}"></script>

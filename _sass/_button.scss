@@ -10,4 +10,8 @@
   background-repeat: no-repeat;
   text-indent: -10em;
   overflow: hidden;
+
+  &:hover {
+    border: 2px solid #fff;
+  }
 }

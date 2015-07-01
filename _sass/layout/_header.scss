@@ -1,0 +1,98 @@
+@import '../libs/vars';
+@import '../libs/functions';
+@import '../libs/mixins';
+
+#header {
+  @include vendor('display', 'flex');
+  @include vendor('flex-direction', 'column');
+  @include vendor('justify-content', 'center');
+  width: 50%;
+  padding: 2em;
+
+	h1 {
+		font-size: 3.25em;
+    text-align: center;
+		margin: 0 0 (_size(element-margin) * 0.275) 0;
+	}
+
+	p {
+		font-size: 1.35em;
+		line-height: 1.65em;
+	}
+
+	a {
+		color: inherit;
+	}
+
+  footer {
+    text-align: center;
+  }
+
+  @include breakpoint(medium) {
+    width: 100%;
+  }
+
+	@include breakpoint(small) {
+		h1 {
+			font-size: 2em;
+		}
+
+		p {
+			font-size: 1em;
+		}
+	}
+
+	@include breakpoint(xsmall) {
+		margin: 0 0 (_size(element-margin) * 0.5) 0;
+	}
+}
+
+#ranking {
+  background: #fff;
+  width: 50%;
+
+  footer {
+    padding: 2em;
+  }
+
+  @include breakpoint(medium) {
+    width: 100%;
+  }
+}
+
+#about {
+  padding: 2em;
+  color: #fff;
+  background: #2d2e30;
+}
+
+  table {
+    width: 100%;
+
+    &.default {
+      width: 100%;
+
+      tbody tr:nth-child(2n+2) {
+        background: #f4f4f4;
+      }
+
+      td {
+        padding: 0.5em 1em 0.5em 1em;
+      }
+
+      th {
+        text-align: left;
+        font-weight: 900;
+        padding: 0.5em 1em 0.5em 1em;
+      }
+
+      thead {
+        background: #444;
+        color: #fff;
+      }
+
+      tfoot {
+        background: #eee;
+      }
+    }
+  }
