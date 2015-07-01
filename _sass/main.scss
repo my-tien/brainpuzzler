@@ -5,41 +5,36 @@
 @import 'font-awesome.min.css';
 @import url('http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900');
 
-/*
-	Eventually by Pixelarity
-	pixelarity.com @pixelarity
-	License: pixelarity.com/license
-*/
 
-	@include skel-breakpoints((
-		xlarge: '(max-width: 1680px)',
-		large: '(max-width: 1280px)',
-		medium: '(max-width: 980px)',
-		small: '(max-width: 736px)',
-		xsmall: '(max-width: 480px)',
-		xxsmall: '(max-width: 360px)',
-		short: '(max-height: 640px)'
-	));
+@include skel-breakpoints((
+	xlarge: '(max-width: 1680px)',
+	large: '(max-width: 1280px)',
+	medium: '(max-width: 980px)',
+	small: '(max-width: 736px)',
+	xsmall: '(max-width: 480px)',
+	xxsmall: '(max-width: 360px)',
+	short: '(max-height: 640px)'
+));
 
-	@include skel-layout((
-		reset: 'full',
-		boxModel: 'border'
-	));
+@include skel-layout((
+	reset: 'full',
+	boxModel: 'border'
+));
 
 // Base.
 
-	@import 'base/page';
-	@import 'base/bg';
-	@import 'base/typography';
+@import 'base/page';
+@import 'base/bg';
+@import 'base/typography';
 
 // Components.
 
-	@import 'components/section';
-	@import 'components/icon';
-	@import 'components/list';
-	@import 'components/form';
-	@import 'components/button';
+@import 'components/section';
+@import 'components/icon';
+@import 'components/list';
+@import 'components/form';
+@import 'components/button';
 
 // Layout.
 
-	@import 'layout/header';
+@import 'layout/header';

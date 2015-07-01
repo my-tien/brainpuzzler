@@ -2,20 +2,12 @@
 @import '../libs/functions';
 @import '../libs/mixins';
 
-///
-/// Eventually by Pixelarity
-/// pixelarity.com @pixelarity
-/// License: pixelarity.com/license
-///
+.icon {
+	@include icon;
+	border-bottom: none;
+	position: relative;
 
-/* Icon */
-
-	.icon {
-		@include icon;
-		border-bottom: none;
-		position: relative;
-
-		> .label {
-			display: none;
-		}
+	> .label {
+		display: none;
 	}
+}
