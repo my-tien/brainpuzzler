@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SegEM Challenge</title>
+  <meta name="description" content="The SegEM Challenge is an open competition to find the most suitable machine learning algorithms that segments 3D EM datasets.
+">
+
+  <link rel="canonical" href="http://brainpuzzler.org/knossos-challenge/">
+  <link rel="stylesheet" href="/static_root/css/main.css" />
+</head>
+
+
+  <body class="landing">
+        <header id="header" class="alt">
+    <h1 id="logo"><a href="index.html">SegEM Challenge</a></h1>
+</header>
+
+        <!-- Banner -->
+<section id="banner">
+    <div class="content">
+        <div class="inner">
+            <header>
+                <p>The <strong>SegEM Challenge</strong> is an open competition to find the <strong>most suitable machine learning algorithms that segments 3D EM datasets</strong>. The competition is held by the <em>Max Planck Institute for Medical Research</em> located in <em>Heidelberg, Germany</em>.</p>
+            </header>
+
+            <ul class="actions vertical">
+                <li><a href="#one" class="button">Learn more</a></li>
+                <li><a href="#upload" class="button special">Upload your Segmentation</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- One -->
+<section id="one" class="wrapper">
+    <div class="inner">
+        <header class="major">
+            <h2>How does it work</h2>
+        </header>
+
+        <ul class="features">
+            <li>
+                <h3>1. Download dataset.</h3>
+                <p>Download</p>
+            </li>
+            <li>
+                <h3>2. Run Segmentation.</h3>
+                <p>Download</p>
+            </li>
+            <li>
+                <h3>3. Upload Segmentation</h3>
+                <p>Upload</p>
+            </li>
+        </ul>
+
+        <div class="content">
+            <p>In our segmentation cube format, we use 64bit matrices with an edge length of 128 voxels. These cubes are compressed with Google snappy, and should have the file type <code>.seg.sz</code>.</p>
+
+            <p>The segmentation should be wrapped in a KNOSSOS annotation file (<code>.k.zip</code>) to submit it. In our <a href="https://github.com/knossos-project/knossos-python-tools">GitHub repository <span class="icon fa-external-link"></span></a>, you will find Python code for generating such files.</p>
+
+            <!-- <p>Here is an example of a file for a valid submission:</p> -->
+
+            <p>Due to the large size of the dataset, our evaluation is based on a sparse skeleton that was obtained by aggregating thousands of manual tracings made by students. We compare your submission against this skeleton and count the number of correctly as well as incorrectly associated locations to determine your score.</p>
+        </div>
+
+    	<header class="major">
+    		<h2 id="upload">Upload your Segmentation</h2>
+        </header>
+
+        <div class="content">
+    		<form action="" method="post" enctype="multipart/form-data">
+    			
+    				{% csrf_token %}
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+    				        <p>Your name: {{form.challenger_name}}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+    				        <p>Your email address: {{form.mail_address}}</p>
+                        </div>
+                        <div class="12u$">
+            				<p>{{ form.non_field_errors }}</p>
+            				<p>{{ form.challenge_file.label }} {{ form.challenge_file.help_text }}</p>
+    					   <p>{{ form.challenge_file.errors }}</p>
+    					   <p>{{ form.challenge_file }}</p>
+                        </div>
+                        <div class="12u$">
+    				        <p><input type="submit" value="Submit" /></p>
+                        </div>
+                    </div>
+    			
+            </form>
+        </div>
+    		<!--
+                <div class="row uniform 50%">
+                    <div class="6u 12u$(xsmall)">
+                        <input type="text" name="demo-name" id="demo-name" value="" placeholder="Name" />
+                    </div>
+                    <div class="6u$ 12u$(xsmall)">
+                        <input type="email" name="demo-email" id="demo-email" value="" placeholder="Email" />
+                    </div>
+                    <div class="12u$">
+                        <textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+                    </div>
+                    <div class="12u$">
+                        <ul class="actions">
+                            <li><input type="submit" value="Upload" class="special" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+             -->
+    </div>
+</section>
+
+<footer id="footer">
+    <section id="ranking">
+    <header>
+        <h2>Current Ranking</h2>
+    </header>
+
+    <div class="table-wrapper">
+        <table class="alt">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>test</td>
+                    <td>test</td>
+                    <td>test</td>
+                </tr>
+
+                <tr>
+                    <td>test</td>
+                    <td>test</td>
+                    <td>test</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+    <div class="content">
+        <div class="inner">
+            <section class="about">
+                <h3>SegEM Challenge</h3>
+                <p>Presented by the <em>Max Planck Institute for Medical Research</em>.<br>
+                Photo of zebrafinsh by <a href="https://www.flickr.com/people/cyron/"><em>Cyron</em></a>, licensed under <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>.</p>
+            </section>
+            <ul class="icons bulleted">
+                <li class="icon fa-map-marker">
+                    <h3>Address</h3>
+                    <p>Max Planck Institute for Medical Research<br />
+                    Jahnstr. 29<br />
+                    69120 Heidelberg<br />
+                    Germany</p>
+                </li>
+            </ul>
+            <ul class="icons bulleted">
+                <li class="icon fa-envelope-o">
+                    <h3>Email</h3>
+                    <p><a href="#">knossos-team@mpimf-heidelberg.mpg.de</a></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<!--
+    <div class="inner">
+        <header>
+            <p>Presented by the <em>Max Planck Institute for Medical Research</em>.</p>
+        </header>
+
+        <ul class="icons bulleted">
+            <li class="icon fa-map-marker">
+                <h3>Address</h3>
+                <p>Max Planck Institute for Medical Research<br />
+                Jahnstr. 29<br />
+                69120 Heidelberg<br />
+                Germany</p>
+            </li>
+        </ul>
+
+        <ul class="icons bulleted">
+            <li class="icon fa-envelope-o">
+                <h3>Email</h3>
+                <p><a href="#">knossos-team@mpimf-heidelberg.mpg.de</a></p>
+            </li>
+        </ul>
+    </div> -->
+
+
+<script src="/static_root/js/jquery.min.js"></script>
+<script src="/static_root/js/skel.min.js"></script>
+<script src="/static_root/js/main.js"></script>
+
+
+  </body>
+
+</html>
