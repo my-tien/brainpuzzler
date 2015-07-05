@@ -16,7 +16,7 @@ def index(request):
             return HttpResponseRedirect(reverse('challenge.views.index'))
     else:
         form = ChallengeSubmissionForm()
-    return render_to_response('challenge/k_challenge.html',
+    return render_to_response('challenge/index.html',
                               {'action': reverse('challenge.views.index'),
                                'challenge_submissions': None,
                                'form': form},
