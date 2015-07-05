@@ -30,6 +30,7 @@ def handle_submission(submission):
     with open(MEDIA_ROOT + 'knossos-challenge/submissions.txt', 'a') as submission_list:
         submission_list.write(submission.POST['challenger_name'] + '\t'
                               + submission.POST['mail_address'] + '\t'
+                              + submission.POST['challenger_time'] + '\t'
                               + filename + '\n')
 
     with open(MEDIA_ROOT + 'knossos-challenge/' + filename, 'wb+') as new_submit:
