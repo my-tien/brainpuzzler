@@ -77,17 +77,20 @@
     			
     				{% csrf_token %}
                     <div class="row uniform 50%">
-                        <div class="6u 12u$(xsmall)">
+                        <div class="4u 12u$(xsmall)">
     				        <p>Your name: {{form.challenger_name}}</p>
                         </div>
-                        <div class="6u$ 12u$(xsmall)">
-    				        <p>Your email address: {{form.mail_address}}</p>
+                        <div class="4u 12u$(xsmall)">
+    				        <p>Your e-mail address: {{form.mail_address}}</p>
+                        </div>
+                        <div class="4u 12u$(xsmall)">
+                            <p>Your computation time: {{form.challenger_time}}</p>
                         </div>
                         <div class="12u$">
-            				<p>{{ form.non_field_errors }}</p>
-            				<p>{{ form.challenge_file.label }} {{ form.challenge_file.help_text }}</p>
-    					   <p>{{ form.challenge_file.errors }}</p>
-    					   <p>{{ form.challenge_file }}</p>
+                            <p>{{ form.non_field_errors }}</p>
+                            <p>{{ form.challenge_file.label }} {{ form.challenge_file.help_text }}</p>
+                            <p>{{ form.challenge_file.errors }}</p>
+                            <p>{{ form.challenge_file }}</p>
                         </div>
                         <div class="12u$">
     				        <p><input type="submit" value="Submit" /></p>
