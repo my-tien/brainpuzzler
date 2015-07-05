@@ -90,6 +90,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
-
-MEDIA_ROOT = '/home/tieni/microworker_segmentation/media/'
+STATIC_URL = '/static_root/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/srv/http/media/'
+STATIC_ROOT = '/srv/http/static_root'
+STATICFILES_DIRS = ( '/home/knossos/brainpuzzler/challenge/static', )
