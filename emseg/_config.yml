@@ -1,0 +1,15 @@
+# Site settings
+title: EMSeg Challenge
+email: knossos-team@mpimf-heidelberg.mpg.de
+description: > # this means to ignore newlines until "baseurl:"
+  The EMSeg Challenge is an open competition to find the most suitable
+  machine learning algorithms that segments 3D EM datasets.
+baseurl: "/emseg-challenge" # the subpath of your site, e.g. /blog/
+url: "http://brainpuzzler.org" # the base hostname & protocol for your site
+static_url: "/static_root/challenge"
+
+# Build settings
+markdown: kramdown
+
+exclude:
+    - "feed.xml"

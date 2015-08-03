@@ -1,0 +1,127 @@
+---
+layout: default
+---
+
+<!-- Banner -->
+<section id="banner">
+    <div class="content">
+        <div class="inner">
+            <header>
+                <p>The <strong>EMSeg Challenge</strong> is an open competition to find the <strong>most suitable machine learning algorithms that segments 3D EM datasets</strong>. The competition is held by the <em>Max Planck Institute for Medical Research</em> located in <em>Heidelberg, Germany</em>.</p>
+            </header>
+
+            <ul class="actions vertical">
+                <li><a href="#one" class="button">Learn more</a></li>
+                <li><a href="#upload" class="button special">Upload your Segmentation</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- One -->
+<section id="one" class="wrapper">
+    <div class="inner">
+		<header class="major">
+			<h2>About the competition</h2>
+		</header>
+
+		<div class="content">
+			<p><strong>EMSeg</strong> is a 3D image segmentation challenge, focusing on the tough segmentation problem of automatic neurite reconstruction from volume electron microscopy data of brain tissue. Since state of the art segmentation approaches start to approach the statistical significance limits of test metrics for small, densely annotated ground truth volumes, the EMSeg test volume is a 10x10x10 µm cube with high skeleton reconstruction coverage. Submissions are tested against these skeleton reconstructions and reported as the sum of total false splits and merges.
+		</div>
+
+        <header class="major">
+            <h2>How does it work</h2>
+        </header>
+
+        <div class="content">
+            <ul class="features">
+                <li>
+                    <h3>1. Download dataset.</h3>
+                    <p>Download</p>
+                </li>
+                <li>
+                    <h3>2. Run Segmentation.</h3>
+                    <p>Download</p>
+                </li>
+                <li>
+                    <h3>3. Upload Segmentation</h3>
+                    <p>Upload</p>
+                </li>
+            </ul>
+        </div>
+
+		<header class="major">
+			<h2>Datasets</h2>
+		</header>
+
+		<div class="content">
+			<ul>
+				<li>Provided ground truth xxx , provided by K. L. Briggman </li>
+				<li>j0126 striatum songbird data set, J. Kornfeld</li>
+				<li>6 densely annotated cubes of size bla voxels with 32-bit integer labels, provided as raw matrices with little endian order in a .zip container.</li>
+				<li>dense myelin annotations (no membrane annotations) for approaches that can additionally use sparsely annotated ground truth</li>
+			</ul>
+
+			<h3>Submission format</h3>
+
+			<ul>
+				<li>32-bit integer raw file, in the same format as the ground truth cubes, compressed in a <code>.zip</code> file.</li>
+				<li>Each neurite/supervoxel with its own ID.</li>
+				<li>0 for background (extracellular space or membranes).</li>
+			</ul>
+		</div>
+
+		<header class="major">
+			<h2>Evaluation</h2>
+		</header>
+
+        <div class="content">
+			<p>A skeleton node on 0 is counted as a false split.</p>
+        </div>
+
+    	<header class="major">
+    		<h2 id="upload">Upload your Segmentation</h2>
+        </header>
+
+        <div class="content">
+    		<form action="{{ action }}" method="post" enctype="multipart/form-data">
+    			{% raw %}
+    				{% csrf_token %}
+                    <div class="row uniform 50%">
+                        <div class="6u$ 12u$(xsmall)">
+    				        <p>Your name: {{form.challenger_name}}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+    				        <p>Your e-mail address: {{form.mail_address}}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <p>Your computation time: {{form.challenger_time}}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <p>{{ form.challenge_file.label }}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <p>{{ form.challenge_file }}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <p>{{ form.challenge_file.help_text }}</p>
+                        </div>
+                        <div class="6u$ 12u$(xsmall">
+                            <p>{{ form.non_field_errors }}</p>
+                            <p>{{ form.challenge_file.errors }}</p>
+                        </div>
+                        <div class="12u$">
+                            <p><input type="submit" value="Submit" /></p>
+                        </div>
+                    </div>
+    			{% endraw %}
+            </form>
+        </div>
+    </div>
+</section>
+
+{% include footer.html %}
+
+<script src="{{ "/js/jquery.min.js" | prepend: site.static_url }}"></script>
+<script src="{{ "/js/skel.min.js" | prepend: site.static_url }}"></script>
+<script src="{{ "/js/main.js" | prepend: site.static_url }}"></script>
