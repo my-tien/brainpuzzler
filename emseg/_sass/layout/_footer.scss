@@ -3,7 +3,7 @@
 @import '../libs/mixins';
 
 #footer {
-  @include banner-bg('../../images/banner.jpg');
+  @include banner-bg('images/banner.jpg');
   @include color-typography(accent4);
   @include color-button(accent4);
   @include color-section(accent4);
