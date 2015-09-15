@@ -55,7 +55,78 @@ def build_connected_components(objects):
     return list(nx.connected_components(G))
 
 
-def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, outputpath, min_vote=0):
+def write_voted_mergelist_respect_voxelsize(chunk_number, mergelists, outputpath, size_vote_map):
+    """
+    Write a unified mergelist from all available mergelists to this chunk.
+
+    Unification is done through three steps:
+     1. Gather all existing supervoxel neighbor pairs in the chunk.
+     2. Test for each neighbor pair if it should be merged through majority vote with all available mergelists.
+        Required votes depend on the size of each supervoxel as specified in size_vote_map.
+     3. Move resulting merge pairs into their respective connected components.
+
+    :param chunk_number: The chunk for which to generate a majority voted mergelist
+    :param mergelists: The input mergelists
+    :param outputpath: Absolute output path for majority vote mergelist
+    :param size_vote_map: Map of supervoxel size to required number of votes for merging. Allowed values: "one", {n|nϵ[0,1]}
+    """
+    chunks = {chunk_number: Chunk(chunk_number)}
+    neighbor_sets = {}
+    for mergelist in mergelists:
+        with open("/home/tieni/brainpuzzler/data/neighbors/chunk_{0}.txt".format(mergelist[1]), 'r') as neighbor_file:
+            neighbor_set = set()
+            for line in neighbor_file:
+                neighbor_set.add(frozenset([int(value) for value in line.split()]))
+        neighbor_sets[mergelist[1]] = neighbor_set
+
+    sorted_keys = sorted(size_vote_map.keys())
+    merges = []
+    for neighbor_pair in neighbor_sets[chunk_number]:  # majority vote for merging the neighbor pair
+        neighbors = list(neighbor_pair)
+        vote = 0
+        overlaps = 0
+        for mergelist in mergelists:
+            if neighbor_pair in neighbor_sets[mergelist[1]]:
+                ids1 = mergelist[0].contained_in(neighbors[0])
+                ids2 = mergelist[0].contained_in(neighbors[1])
+                overlaps += 1
+                vote += 1 if len(ids1 & ids2) > 0 else 0  # only mergelists containing both objects can participate
+        # determine minimum votes required based on size of smaller supervoxel
+        vote_boundary = 1
+        for key in sorted_keys:
+            if key > neighbors[0] or key > neighbors[1]:
+                votes_required = size_vote_map[key]
+                vote_boundary = 1 if votes_required == "one" else votes_required * overlaps
+                break
+        try:
+            if vote >= vote_boundary:
+                print("overlaps: {0}, votes: {1}".format(overlaps, vote))
+                merges.append(neighbors)
+        except TypeError:
+            print('Invalid (size: vote) map. Allowed values are "one" or {n|nϵ[0,1]}')
+            return
+
+    merges = build_connected_components(merges)
+
+    for obj_id in chunks[chunk_number].ids():
+        existent = False
+        for group in merges:
+            if obj_id in group:
+                existent = True
+                break
+        if not existent:
+            merges.append([obj_id])
+
+    majority_mergelist = Mergelist()
+    obj_id = 1
+    for merge in merges:
+        coord = chunks[chunk_number].mass_center_of(merge[0])
+        majority_mergelist.seg_objects.append(SegObject(obj_id, 0, 1, coord, merge))
+        obj_id += 1
+    majority_mergelist.write(outputpath)
+
+
+def write_majority_vote_mergelist(chunk_number, mergelists, outputpath, min_vote=0):
     """
     Write a unified mergelist from all available mergelists to this chunk.
 
@@ -64,14 +135,15 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, outpu
      2. Test for each neighbor pair if it should be merged through majority vote with all available mergelists.
      3. Move resulting merge pairs into their respective connected components.
 
-    :param chunk_number: The chunk receiving a mergelist
+    :param chunk_number: The chunk for which to generate a majority voted mergelist
     :param mergelists: the input mergelists
-    :param path: absolute output path for majority vote mergelist
+    :param outputpath: absolute output path for majority vote mergelist
+    :param min_vote: minimum number of votes to accept a pair of supervoxels to merge
     """
     chunks = {chunk_number: Chunk(chunk_number)}
     neighbor_sets = {}
     for mergelist in mergelists:
-        with open("/home/knossos/chunk_neighbors/chunk_{0}.txt".format(mergelist[1]), 'r') as neighbor_file:
+        with open("/home/tieni/brainpuzzler/data/neighbors/chunk_{0}.txt".format(mergelist[1]), 'r') as neighbor_file:
             neighbor_set = set()
             for line in neighbor_file:
                 neighbor_set.add(frozenset([int(value) for value in line.split()]))
@@ -94,15 +166,14 @@ def write_majority_vote_mergelist(chunk_number, mergelists, include_solos, outpu
 
     merges = build_connected_components(merges)
 
-    if include_solos:  # add all unmerged subobjects too
-        for obj_id in chunks[chunk_number].ids():
-            existent = False
-            for group in merges:
-                if obj_id in group:
-                    existent = True
-                    break
-            if not existent:
-                merges.append([obj_id])
+    for obj_id in chunks[chunk_number].ids():
+        existent = False
+        for group in merges:
+            if obj_id in group:
+                existent = True
+                break
+        if not existent:
+            merges.append([obj_id])
 
     majority_mergelist = Mergelist()
     obj_id = 1
