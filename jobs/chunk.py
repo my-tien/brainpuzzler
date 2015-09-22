@@ -64,6 +64,9 @@ class Chunk:
         index = self.index_of(voxel_id)
         return self.mass_centers()[index][0]
 
+    def average_size(self):
+        return numpy.average(self.sizes())
+
     def coordinates(self):
         chunk_number = self.number + 1  # first chunk has number 0
         number_bars = math.ceil(chunk_number/chunks_in_z)
