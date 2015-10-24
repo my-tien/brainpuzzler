@@ -1,5 +1,5 @@
 __author__ = 'tieni'
-
+import cProfile
 import networkx as nx
 import numpy
 import os
@@ -10,6 +10,12 @@ from jobs.mergelist import Mergelist, SegObject
 min_secs_per_task = 4
 max_split_requests = 10
 
+from dataset_utils import knossosDataset
+
+barrier_dataset = knossosDataset()
+barrier_dataset.initialize_from_knossos_path("specify path to a dataset")
+
+basedir = "set basedir"
 
 def time(annotation):
     dom = minidom.parseString(annotation)
@@ -55,7 +61,39 @@ def build_connected_components(objects):
     return list(nx.connected_components(G))
 
 
-def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=None):
+def in_barrier(subobject_id, chunk, barrier_map):
+    area = numpy.where(chunk.seg() == subobject_id)
+    area2_isotrop = [elem/2 for elem in area[2]]
+    num_voxels = len(area[0])
+    if sum(barrier_map[area[0], area[1], area2_isotrop]) / num_voxels > .6:
+        return True
+    return False
+
+def sub_obj_barrier_prob_dict(chunk, barrier_map):
+    temp_dic = {}
+    keys = numpy.unique(chunk.seg()) # significantly faster than iterating over chunk.ids()
+    for k in keys:
+        temp_dic[k] = [0, 0] # {subobj_id : [sum_probabilities, num_voxels]}
+
+    length = [len(chunk.seg()), len(chunk.seg()[0]), len(chunk.seg()[0][0])]
+    ranges = (range(0, length[0]), range(0, length[1]), range(0, length[2]))
+    for x in ranges[0]:
+        xseg = chunk.seg()[x]
+        xbarrier = barrier_map[x]
+        for y in ranges[1]:
+            yseg = xseg[y]
+            ybarrier = xbarrier[y]
+            for z in ranges[2]:
+                probability = temp_dic[yseg[z]]
+                probability[0] += ybarrier[z / 2]
+                probability[1] += 1
+
+    result_dict = {}
+    for key, value in temp_dic.items():
+        result_dict[key] = value[0] / value[1] * 255.
+    return result_dict
+
+def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=None, include_unmerged_subobjects=False):
     """
     Write a unified mergelist from all available mergelists to this chunk.
 
@@ -73,12 +111,18 @@ def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=No
                           If no map is specified, the vote boundary is always 50%
     """
     chunks = {chunk_number: Chunk(chunk_number)}
+    barrier_map = barrier_dataset.from_cubes_to_matrix([140, 140, 69], chunks[chunk_number].coordinates(), type="raw")
     neighbor_sets = {}
     for mergelist in mergelists:
-        with open("/home/tieni/brainpuzzler/data/neighbors/chunk_{0}.txt".format(mergelist[1]), 'r') as neighbor_file:
+        curr_chunk = Chunk(mergelist[1])
+        barrier_probabilities = sub_obj_barrier_prob_dict(curr_chunk, barrier_map)
+        with open(basedir + "neighbors/chunk_{0}.txt".format(curr_chunk.number), 'r') as neighbor_file:
             neighbor_set = set()
             for line in neighbor_file:
-                neighbor_set.add(frozenset([int(value) for value in line.split()]))
+                neighbors = [int(elem) for elem in line.split()]
+                if barrier_probabilities[neighbors[0]] < 0.5 or barrier_probabilities[neighbors[1]] < 0.5:
+                    continue
+                neighbor_set.add(frozenset(neighbors))
         neighbor_sets[mergelist[1]] = neighbor_set
 
     if size_vote_map is None:
@@ -112,14 +156,15 @@ def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=No
 
     merges = build_connected_components(merges)
 
-    for obj_id in chunks[chunk_number].ids():
-        existent = False
-        for group in merges:
-            if obj_id in group:
-                existent = True
-                break
-        if not existent:
-            merges.append([obj_id])
+    if include_unmerged_subobjects:
+        for obj_id in chunks[chunk_number].ids():
+            existent = False
+            for group in merges:
+                if obj_id in group:
+                    existent = True
+                    break
+            if not existent:
+                merges.append([obj_id])
 
     majority_mergelist = Mergelist()
     obj_id = 1

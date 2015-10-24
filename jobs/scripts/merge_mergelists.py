@@ -6,12 +6,13 @@ import re
 
 from jobs.chunk import Chunk
 from jobs.mergelist import Mergelist
-from jobs.scripts.submission_validation import write_voted_mergelist
+from submission_validation import write_voted_mergelist
 
-Chunk.info_path = "/home/tieni/brainpuzzler/data/chunk_infos/"
-mergelist_input_path = "/home/tieni/brainpuzzler/data/hk_original_mergelists/"
-mergelist_output_path = "/home/tieni/brainpuzzler/data/hk_voted_respect_size_2/"
+basedir = "set basedir"
 
+Chunk.info_path = basedir +  "chunk_infos/"
+mergelist_input_path = basedir + "mw_original_mergelists/"
+mergelist_output_path = basedir + "mw_voted_respect_size_no_ecs/"
 
 def vote_for_chunk(chunk_range):
     print("chunks", len(chunk_range))
@@ -35,12 +36,12 @@ def vote_for_chunk(chunk_range):
 
 def create_mergelists():
     chunk_range = [num for num in range(2475) if os.path.isfile(mergelist_input_path + "mergelist_{0}.txt".format(num))]
-    num_workers = 4
+    num_workers = 8
     part_len = len(chunk_range)/float(num_workers)
     workloads = [chunk_range[int(round(part_len * i)): int(round(part_len * (i + 1)))] for i in range(num_workers)]
     print(workloads)
-    pool = Pool(processes=4)
-    print(pool.map(vote_for_chunk, [workloads[0], workloads[1], workloads[2], workloads[3]]))
+    pool = Pool(processes=8)
+    print(pool.map(vote_for_chunk, workloads))
 
 
 def merge_mergelists():
@@ -69,4 +70,7 @@ def center_cube_mergelist():
                 subobj_positions[ids[index]] = entry
     return subobj_positions
 
-cProfile.run("merge_mergelists()")
+def do():
+    create_mergelists()
+    merge_mergelists()
+cProfile.run("do()")
