@@ -80,11 +80,11 @@ class Chunk:
         # 980 == int(chunks_in_xy/2)*140
         y = 980 if y == 0 \
             else 0 if y < 1 \
-            else int(y/2) * 140 if y % 2 == 1 \
-            else y/2*140 - 70
+            else int(y/2) * 140 + 70 if y % 2 == 1 \
+            else y/2*140
         y += base_coords[1]
 
-        z = chunk_number % 11
+        z = chunk_number % chunks_in_z
         # 350 == int(chunks_in_z/2) * 70
         z = 350 if z == 0 \
             else 0 if z < 1 \
