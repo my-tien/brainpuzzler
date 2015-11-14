@@ -90,10 +90,10 @@ def sub_obj_barrier_prob_dict(chunk, barrier_map):
 
     result_dict = {}
     for key, value in temp_dic.items():
-        result_dict[key] = value[0] / value[1] * 255.
+        result_dict[key] = value[0] / (value[1] * 255.)
     return result_dict
 
-def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=None, include_unmerged_subobjects=False):
+def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=None, include_unmerged_subobjects=True):
     """
     Write a unified mergelist from all available mergelists to this chunk.
 
@@ -112,59 +112,66 @@ def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=No
     """
     chunks = {chunk_number: Chunk(chunk_number)}
     barrier_map = barrier_dataset.from_cubes_to_matrix([140, 140, 69], chunks[chunk_number].coordinates(), type="raw")
-    neighbor_sets = {}
+    neighbor_sets = dict()
+
     for mergelist in mergelists:
         curr_chunk = Chunk(mergelist[1])
-        barrier_probabilities = sub_obj_barrier_prob_dict(curr_chunk, barrier_map)
         with open(basedir + "neighbors/chunk_{0}.txt".format(curr_chunk.number), 'r') as neighbor_file:
             neighbor_set = set()
             for line in neighbor_file:
-                neighbors = [int(elem) for elem in line.split()]
-                if barrier_probabilities[neighbors[0]] < 0.5 or barrier_probabilities[neighbors[1]] < 0.5:
-                    continue
-                neighbor_set.add(frozenset(neighbors))
+                neighbor_set.add(frozenset([int(elem) for elem in line.split()]))
         neighbor_sets[mergelist[1]] = neighbor_set
 
     if size_vote_map is None:
         size_vote_map = {float("inf"): 0.5}
     sorted_keys = sorted(size_vote_map.keys())
+
     merges = []
+    barrier_probabilities = sub_obj_barrier_prob_dict(chunks[chunk_number], barrier_map)
+    solos = set()
     for neighbor_pair in neighbor_sets[chunk_number]:  # majority vote for merging the neighbor pair
         neighbors = list(neighbor_pair)
-        vote = 0
-        overlaps = 0
-        for mergelist in mergelists:
-            if neighbor_pair in neighbor_sets[mergelist[1]]:
-                ids1 = mergelist[0].contained_in(neighbors[0])
-                ids2 = mergelist[0].contained_in(neighbors[1])
-                overlaps += 1
-                vote += 1 if len(ids1 & ids2) > 0 else 0  # only mergelists containing both objects can participate
-        # determine minimum votes required based on size of smaller supervoxel
-        vote_boundary = 1
-        for key in sorted_keys:
-            if key > chunks[chunk_number].size_of(neighbors[0]) or key > chunks[chunk_number].size_of(neighbors[1]):
-                votes_required = size_vote_map[key]
-                vote_boundary = 1 if votes_required == "one" else votes_required * overlaps
-                break
-        try:
-            if vote >= vote_boundary:
-                print("overlaps: {0}, votes: {1}".format(overlaps, vote))
-                merges.append(neighbors)
-        except TypeError:
-            print('Invalid (size: vote) map. Allowed values are "one" or {n|n\xcf[0,1]}')
-            return
+        if barrier_probabilities[neighbors[0]] < 0.5 and barrier_probabilities[neighbors[1]] < 0.5:
+            vote = 0
+            overlaps = 0
+            for mergelist in mergelists:
+                if neighbor_pair in neighbor_sets[mergelist[1]]:
+                    ids1 = mergelist[0].contained_in(neighbors[0])
+                    ids2 = mergelist[0].contained_in(neighbors[1])
+                    overlaps += 1
+                    vote += 1 if len(ids1 & ids2) > 0 else 0  # only mergelists containing both objects can participate
+            # determine minimum votes required based on size of smaller supervoxel
+            vote_boundary = 1
+            for key in sorted_keys:
+                if key > chunks[chunk_number].size_of(neighbors[0]) or key > chunks[chunk_number].size_of(neighbors[1]):
+                    votes_required = size_vote_map[key]
+                    vote_boundary = 1 if votes_required == "one" else votes_required * overlaps
+                    break
+            try:
+                if vote >= vote_boundary:
+                    print("overlaps: {0}, votes: {1}".format(overlaps, vote))
+                    merges.append(neighbors)
+                    try:
+                        solos.remove(neighbors[0])
+                    except KeyError:
+                        pass
+                    try:
+                        solos.remove(neighbors[1])
+                    except KeyError:
+                        pass
+            except TypeError:
+                print('Invalid (size: vote) map. Allowed values are "one" or {n|n\xcf[0,1]}')
+                return
+
+        elif barrier_probabilities[neighbors[0]] < 0.5:
+            solos.add(neighbors[0])
+        elif barrier_probabilities[neighbors[1]] < 0.5:
+            solos.add(neighbors[1])
 
     merges = build_connected_components(merges)
 
     if include_unmerged_subobjects:
-        for obj_id in chunks[chunk_number].ids():
-            existent = False
-            for group in merges:
-                if obj_id in group:
-                    existent = True
-                    break
-            if not existent:
-                merges.append([obj_id])
+        merges += [set([solo]) for solo in solos]
 
     majority_mergelist = Mergelist()
     obj_id = 1
