@@ -110,46 +110,47 @@ def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=No
                           Allowed values: "one", {n|n\xcf[0,1]}
                           If no map is specified, the vote boundary is always 50%
     """
-    chunks = {chunk_number: Chunk(chunk_number)}
-    barrier_map = barrier_dataset.from_cubes_to_matrix([140, 140, 69], chunks[chunk_number].coordinates(), type="raw")
+    chunk_for_vote = Chunk(chunk_number)
+    barrier_map = barrier_dataset.from_cubes_to_matrix([140, 140, 69], chunk_for_vote.coordinates(), type="raw", show_progress=False)
     neighbor_sets = dict()
 
-    for mergelist in mergelists:
-        curr_chunk = Chunk(mergelist[1])
+    for curr_chunk_no in mergelists.keys():
+        curr_chunk = Chunk(curr_chunk_no)
         with open(basedir + "neighbors/chunk_{0}.txt".format(curr_chunk.number), 'r') as neighbor_file:
             neighbor_set = set()
             for line in neighbor_file:
                 neighbor_set.add(frozenset([int(elem) for elem in line.split()]))
-        neighbor_sets[mergelist[1]] = neighbor_set
+        neighbor_sets[curr_chunk_no] = neighbor_set
 
     if size_vote_map is None:
         size_vote_map = {float("inf"): 0.5}
     sorted_keys = sorted(size_vote_map.keys())
 
     merges = []
-    barrier_probabilities = sub_obj_barrier_prob_dict(chunks[chunk_number], barrier_map)
+    barrier_probabilities = sub_obj_barrier_prob_dict(chunk_for_vote, barrier_map)
     solos = set()
     for neighbor_pair in neighbor_sets[chunk_number]:  # majority vote for merging the neighbor pair
         neighbors = list(neighbor_pair)
         if barrier_probabilities[neighbors[0]] < 0.5 and barrier_probabilities[neighbors[1]] < 0.5:
             vote = 0
             overlaps = 0
-            for mergelist in mergelists:
-                if neighbor_pair in neighbor_sets[mergelist[1]]:
-                    ids1 = mergelist[0].contained_in(neighbors[0])
-                    ids2 = mergelist[0].contained_in(neighbors[1])
-                    overlaps += 1
-                    vote += 1 if len(ids1 & ids2) > 0 else 0  # only mergelists containing both objects can participate
+            for curr_chunk_no, mergelist_list in mergelists.items():
+                if neighbor_pair in neighbor_sets[curr_chunk_no]:
+                    for mergelist in mergelist_list:
+                        ids1 = mergelist.contained_in(neighbors[0])
+                        ids2 = mergelist.contained_in(neighbors[1])
+                        overlaps += 1
+                        vote += 1 if len(ids1 & ids2) > 0 else 0
             # determine minimum votes required based on size of smaller supervoxel
             vote_boundary = 1
             for key in sorted_keys:
-                if key > chunks[chunk_number].size_of(neighbors[0]) or key > chunks[chunk_number].size_of(neighbors[1]):
+                if key > chunk_for_vote.size_of(neighbors[0]) or key > chunk_for_vote.size_of(neighbors[1]):
                     votes_required = size_vote_map[key]
                     vote_boundary = 1 if votes_required == "one" else votes_required * overlaps
                     break
             try:
                 if vote >= vote_boundary:
-                    print("overlaps: {0}, votes: {1}".format(overlaps, vote))
+                    print(vote, overlaps)
                     merges.append(neighbors)
                     try:
                         solos.remove(neighbors[0])
@@ -171,12 +172,12 @@ def write_voted_mergelist(chunk_number, mergelists, outputpath, size_vote_map=No
     merges = build_connected_components(merges)
 
     if include_unmerged_subobjects:
-        merges += [set([solo]) for solo in solos]
+        merges += [{solo} for solo in solos]
 
     majority_mergelist = Mergelist()
     obj_id = 1
     for merge in merges:
-        coord = chunks[chunk_number].mass_center_of(next(iter(merge)))
+        coord = chunk_for_vote.mass_center_of(next(iter(merge)))
         majority_mergelist.seg_objects.append(SegObject(obj_id, 0, 1, coord, merge))
         obj_id += 1
     majority_mergelist.write(outputpath)

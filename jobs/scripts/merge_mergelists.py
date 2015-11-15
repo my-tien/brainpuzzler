@@ -11,40 +11,44 @@ from submission_validation import write_voted_mergelist
 basedir = "set basedir"
 
 Chunk.info_path = basedir +  "chunk_infos/"
-mergelist_input_path = basedir + "mw_original_mergelists/"
-mergelist_output_path = basedir + "mw_voted_respect_size_no_ecs/"
 
-def vote_for_chunk(chunk_range):
-    print("chunks", len(chunk_range))
-    for chunk_number in chunk_range:
+def vote_for_chunk(work_list, chunk_list, mergelist_input_paths, mergelist_output_path):
+    print("worker {0} has {1} items in work_list".format(os.getpid(), len(work_list)))
+    for idx, chunk_number in enumerate(work_list):
         chunk = Chunk(chunk_number)
-        overlap_mergelists = []
+        overlap_mergelists = dict()
         overlapping_chunks = chunk.get_overlapping_chunks()
-        available_chunks = set(overlapping_chunks) & set(chunk_range)
+        available_chunks = set(overlapping_chunks) & set(chunk_list)
+        num_overlapping_mergelists = 0
         for chunk_no in available_chunks:
-            mergelist = Mergelist(mergelist_input_path + "mergelist_{0}.txt".format(chunk_no))
-            if mergelist is not None:
-                overlap_mergelists.append((mergelist, chunk_no))
-        print("chunk {0}: {1} overlaps\n".format(chunk_number, len(overlap_mergelists)))
+            for mergelist_input_path in mergelist_input_paths:
+                mergelist = Mergelist(mergelist_input_path + "mergelist_{0}.txt".format(chunk_no))
+                if mergelist is not None:
+                    num_overlapping_mergelists += 1
+                    try:
+                        overlap_mergelists[chunk_no].append(mergelist)
+                    except KeyError:
+                        overlap_mergelists[chunk_no] = [mergelist]
+        print("worker {0} .. chunk {1} has {2} overlaps\n".format(os.getpid(), chunk_number, num_overlapping_mergelists))
 
-        print("Creating majority vote mergelist for {0}".format(chunk_number))
+        print("worker {0}.. Creating majority vote mergelist for {1} ({2}%)".format(os.getpid(), chunk_number, idx/len(work_list)))
         write_voted_mergelist(chunk_number, overlap_mergelists,
                               mergelist_output_path + "mergelist_{0}.txt".format(chunk_number),
                               {100: 1, 1000:  0.8, float("inf"): 0.5})
-    return "finished!"
+    return "worker {0} finished!".format(os.getpid())
 
 
-def create_mergelists():
-    chunk_range = [num for num in range(2475) if os.path.isfile(mergelist_input_path + "mergelist_{0}.txt".format(num))]
+def create_mergelists(mergelist_input_paths, mergelist_output_path):
+    chunk_range = [num for num in range(2475) if os.path.isfile(mergelist_input_paths[0] + "mergelist_{0}.txt".format(num))]
     num_workers = 8
     part_len = len(chunk_range)/float(num_workers)
-    workloads = [chunk_range[int(round(part_len * i)): int(round(part_len * (i + 1)))] for i in range(num_workers)]
+    workloads = [(chunk_range[int(round(part_len * i)): int(round(part_len * (i + 1)))], chunk_range, mergelist_input_paths, mergelist_output_path) for i in range(num_workers)]
     print(workloads)
-    pool = Pool(processes=8)
-    print(pool.map(vote_for_chunk, workloads))
+    with Pool(processes=8) as pool:
+        print(pool.starmap(vote_for_chunk, workloads))
 
 
-def merge_mergelists():
+def merge_mergelists(mergelist_output_path):
     objects = []
     for mergelist_file in os.listdir(mergelist_output_path):
         if re.match('mergelist_[0-9]+.txt', mergelist_file):
@@ -70,7 +74,14 @@ def center_cube_mergelist():
                 subobj_positions[ids[index]] = entry
     return subobj_positions
 
-def do():
-    create_mergelists()
-    merge_mergelists()
-cProfile.run("do()")
+
+def results(input_paths, output_path):
+    create_mergelists(input_paths, output_path)
+    # merge_mergelists(output_path)
+
+# cProfile.runctx('results([basedir + "hk_original_mergelists/"], basedir + "hk_voted_respect_size_no_ecs/")', globals(), locals())
+# cProfile.runctx('results([basedir + "mw_original_mergelists/"], basedir + "mw_voted_respect_size_no_ecs/")', globals(), locals())
+# cProfile.runctx('results([basedir + "mw_original_mergelists/", basedir + "hk_original_mergelists/"], basedir + "mw_hk_voted_respect_size_no_ecs/")', globals(), locals())
+chunk_range = [num for num in range(2475) if os.path.isfile(basedir + "mw_original_mergelists/mergelist_{0}.txt".format(num))]
+# vote_for_chunk([1340], chunk_range, [basedir + "mw_original_mergelists/", basedir + "hk_original_mergelists/"], basedir + "mw_hk_voted_respect_size_no_ecs/")
+vote_for_chunk([1340], chunk_range, [basedir + "hk_original_mergelists/"], basedir + "mw_hk_voted_respect_size_no_ecs/")
