@@ -53,7 +53,7 @@ class Chunk:
 
     def index_of(self, voxel_id):
         index = numpy.where(self.ids() == voxel_id)
-        return index if len(index[0]) > 0 else -1
+        return index if len(index[0]) > 0 else [-1]
 
     def size_of(self, voxel_id):
         index = self.index_of(voxel_id)
